@@ -3,20 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GROUP 03 • PE CULMINATING</title>
+  <title>GROUP 03 • PE TRACKER</title>
   
-  <!-- Modern Athletic Fonts: Space Grotesk + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Space+Grotesk:wght@500;700;800;900&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- html2canvas for 1-Click Group Chat Image Downloads -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-  <!-- Firebase Compat SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -27,391 +21,294 @@
       background-color: #0A0C10;
       color: #F3F4F6;
     }
-    .font-mono-custom {
-      font-family: 'JetBrains Mono', monospace;
+    .font-mono-custom { font-family: 'JetBrains Mono', monospace; }
+    
+    /* Background Pattern */
+    .bg-grid {
+      background-size: 40px 40px;
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
     }
-    /* Athletic Grid Background Texture */
-    .bg-grid-pattern {
-      background-size: 36px 36px;
-      background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    
+    /* Premium Blurs */
+    .glass {
+      background: rgba(15, 18, 25, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
     }
-    /* Stadium Spotlight Glows */
-    .glow-stadium-1 {
-      position: fixed;
-      top: -150px;
-      right: -100px;
-      width: 550px;
-      height: 550px;
-      background: radial-gradient(circle, rgba(249, 115, 22, 0.28) 0%, rgba(239, 68, 68, 0.15) 40%, transparent 70%);
-      filter: blur(80px);
-      pointer-events: none;
-      z-index: 0;
+
+    /* Staggered Load Animation */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .glow-stadium-2 {
-      position: fixed;
-      bottom: -150px;
-      left: -100px;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(16, 185, 129, 0.22) 0%, transparent 70%);
-      filter: blur(80px);
-      pointer-events: none;
-      z-index: 0;
+    .animate-item {
+      opacity: 0;
+      animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
-    /* Dark Frosted Glass */
-    .glass-athletic {
-      background: rgba(18, 22, 29, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-    .glass-athletic-card {
-      background: rgba(22, 27, 36, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.07);
-    }
-    /* Print Styles */
+
+    /* Data Bar Fill */
+    .data-bar-fill { transition: width 0.8s cubic-bezier(0.65, 0, 0.35, 1); }
+
+    /* Indicator Dots */
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
     @media print {
-      body {
-        background: #FFFFFF !important;
-        color: #000000 !important;
-      }
-      .no-print, header, nav, button, .glow-stadium-1, .glow-stadium-2 {
-        display: none !important;
-      }
-      #printArea {
-        display: block !important;
-      }
+      body { background: #fff !important; color: #000 !important; }
+      .no-print, header, section:not(#printArea), .bg-grid { display: none !important; }
+      #printArea { display: block !important; }
     }
   </style>
 </head>
-<body class="min-h-screen bg-grid-pattern relative selection:bg-orange-500 selection:text-black">
+<body class="min-h-screen bg-grid selection:bg-orange-500 selection:text-black">
 
-  <!-- Ambient Stadium Lighting -->
-  <div class="glow-stadium-1"></div>
-  <div class="glow-stadium-2"></div>
-
-  <!-- =================================================================== -->
-  <!-- VIEW 1: MINIMALIST LANDING PAGE (JUST 2 CHOICES)                    -->
-  <!-- =================================================================== -->
-  <section id="landingView" class="min-h-screen flex flex-col justify-between items-center p-6 relative z-10">
-    <div class="w-full flex justify-between items-center max-w-5xl">
-      <div class="flex items-center gap-2">
-        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-        <span class="text-xs uppercase font-mono-custom tracking-widest text-stone-400 font-bold">PE Culminating 2026</span>
-      </div>
-      <span class="text-xs font-mono-custom text-stone-500">SECTION // GROUP 03</span>
-    </div>
-
-    <!-- Center Hero + 2 Main Buttons -->
-    <div class="w-full max-w-xl text-center space-y-8 my-auto">
-      <div class="space-y-3">
-        <span class="inline-block px-3 py-1 rounded-full text-xs font-mono-custom font-bold uppercase tracking-widest bg-orange-500/10 text-orange-400 border border-orange-500/20">
-          Official Attendance Tracker
-        </span>
-        <h1 class="text-5xl sm:text-7xl font-black tracking-tighter uppercase text-white leading-none">
-          GROUP 03.
+  <!-- ========================================== -->
+  <!-- 1: MINIMAL LANDING                         -->
+  <!-- ========================================== -->
+  <section id="landingView" class="h-screen flex flex-col justify-center items-center relative z-10 px-6">
+    <div class="text-center space-y-8 max-w-lg">
+      <div>
+        <div class="inline-flex items-center gap-2 mb-2 font-mono-custom text-xs tracking-widest text-stone-500 uppercase">
+          <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+          GROUP 03
+        </div>
+        <h1 class="text-6xl sm:text-7xl font-black uppercase text-white tracking-tighter leading-none mb-4">
+          TRACKER
         </h1>
-        <p class="text-xs sm:text-sm font-mono-custom text-stone-400 max-w-md mx-auto">
-          3 LATES = 1 ABSENT &nbsp;•&nbsp; 3 ABSENTS = DROP &nbsp;•&nbsp; 20-MIN MAX
-        </p>
+        <div class="flex flex-wrap justify-center gap-3 text-[10px] font-mono-custom font-bold text-stone-400">
+          <span class="px-2 py-1 rounded bg-white/5 border border-white/10">3 LATES = 1 ABSENT</span>
+          <span class="px-2 py-1 rounded bg-white/5 border border-white/10">3 ABSENTS = DROP</span>
+          <span class="px-2 py-1 rounded bg-white/5 border border-white/10">20 MIN GRACE</span>
+        </div>
       </div>
 
-      <!-- THE TWO BUTTONS -->
-      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-2">
-        <button onclick="navigateTo('dashboard')" class="w-full sm:w-56 py-4 px-6 rounded-2xl bg-white hover:bg-stone-200 text-black font-extrabold uppercase tracking-wider text-sm transition transform active:scale-95 shadow-xl shadow-white/5 flex items-center justify-center gap-2">
-          <span>ENTER</span> ➔
+      <div class="flex gap-4 justify-center">
+        <button onclick="navigateTo('dashboard')" class="py-4 w-40 rounded-xl bg-white hover:bg-stone-200 text-black font-extrabold text-sm uppercase transition shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+          ENTER
         </button>
-        <button onclick="openAuthModal()" class="w-full sm:w-56 py-4 px-6 rounded-2xl glass-athletic hover:bg-white/10 text-white font-extrabold uppercase tracking-wider text-sm transition transform active:scale-95 border border-white/15 flex items-center justify-center gap-2">
-          <span>🔒 ADMIN ACCESS</span>
+        <button onclick="openAuthModal()" class="py-4 w-40 rounded-xl glass hover:bg-white/10 text-white font-extrabold text-sm uppercase transition border border-white/20">
+          ADMIN ACCESS
         </button>
       </div>
-    </div>
-
-    <div class="text-[11px] font-mono-custom text-stone-600 uppercase tracking-widest text-center">
-      Discipline & Movement • Physical Education Department
     </div>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- VIEW 2: MAIN DASHBOARD & MONITORING VIEW                           -->
-  <!-- =================================================================== -->
-  <section id="dashboardView" class="hidden min-h-screen relative z-10 pb-16">
-    <!-- Top Nav -->
-    <header class="glass-athletic border-b border-white/10 sticky top-0 z-30">
-      <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-        <button onclick="navigateTo('landing')" class="text-xs font-mono-custom font-bold text-stone-400 hover:text-white flex items-center gap-1.5 transition">
-          ← BACK HOME
+  <!-- ========================================== -->
+  <!-- 2: DASHBOARD (LIVE DATA)                   -->
+  <!-- ========================================== -->
+  <section id="dashboardView" class="hidden min-h-screen pb-16">
+    <header class="glass sticky top-0 z-30">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <button onclick="navigateTo('landing')" class="text-xs font-mono-custom font-bold text-stone-500 hover:text-white transition uppercase">
+          ← Back
         </button>
-        <div class="text-sm font-black tracking-tight text-white uppercase flex items-center gap-2">
-          <span>🏃‍♂️ GROUP 03</span>
-          <span class="hidden sm:inline text-xs font-mono-custom text-stone-500 font-normal">| ATTENDANCE DASHBOARD</span>
+        
+        <div class="flex items-center gap-3 font-mono-custom text-xs uppercase font-bold text-stone-300">
+          <!-- Legend -->
+          <div class="hidden sm:flex gap-3 px-4 py-1.5 rounded-md bg-black/40 border border-white/5">
+            <span class="flex items-center gap-1.5"><span class="dot bg-stone-500"></span>NONE</span>
+            <span class="flex items-center gap-1.5"><span class="dot bg-emerald-400"></span>OK</span>
+            <span class="flex items-center gap-1.5"><span class="dot bg-amber-400"></span>WARNING</span>
+            <span class="flex items-center gap-1.5"><span class="dot bg-rose-500 shadow-[0_0_8px_#f43f5e]"></span>DROPPED</span>
+          </div>
         </div>
+
         <div class="flex items-center gap-2">
-          <button onclick="openExportModal()" class="text-xs font-mono-custom font-bold px-3 py-1.5 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/30 hover:bg-orange-500/20 transition flex items-center gap-1.5">
-            📸 GC PICTURE / PRINT
-          </button>
-          <button id="navAdminBtn" onclick="openAuthModal()" class="text-xs font-mono-custom font-bold px-3 py-1.5 rounded-xl bg-white/10 text-stone-200 hover:bg-white/20 transition">
-            🔒 ADMIN
+          <!-- Layout Toggles -->
+          <div class="flex bg-black/50 border border-white/10 rounded-lg p-0.5">
+            <button id="btnGrid" onclick="toggleLayout('grid')" class="p-1.5 px-3 rounded text-white bg-white/10 text-xs font-mono-custom transition">GRID</button>
+            <button id="btnList" onclick="toggleLayout('list')" class="p-1.5 px-3 rounded text-stone-500 hover:text-white text-xs font-mono-custom transition">LIST</button>
+          </div>
+          <button onclick="openExportModal()" class="text-xs font-mono-custom font-bold px-4 py-2 rounded-lg bg-white text-black transition">
+            EXPORT 📸
           </button>
         </div>
       </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-6 space-y-6">
-
-      <!-- Policy Reminder & Status Legend -->
-      <div class="glass-athletic rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-l-4 border-l-orange-500">
-        <div>
-          <div class="text-[11px] font-mono-custom uppercase tracking-wider text-orange-400 font-bold">Policy Reminder</div>
-          <div class="text-sm font-bold text-stone-200">
-            3 Lates = 1 Absent &nbsp;|&nbsp; 3 Absents = Automatic Drop
-          </div>
-        </div>
-        <!-- Status Legends -->
-        <div class="flex flex-wrap gap-2 text-xs font-mono-custom">
-          <span class="px-2.5 py-1 rounded-lg bg-stone-800 text-stone-400 border border-stone-700">⚪ No Practice</span>
-          <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">🟢 In Good Standing</span>
-          <span class="px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/30">🟠 Warning (2 Absents)</span>
-          <span class="px-2.5 py-1 rounded-lg bg-rose-500/10 text-rose-400 border border-rose-500/30">🔴 Dropped (3 Absents)</span>
+    <main class="max-w-7xl mx-auto px-6 py-8 space-y-6">
+      <!-- Live Metrics Dashboard Header -->
+      <div class="flex justify-between items-end border-b border-white/10 pb-4">
+        <h2 class="text-3xl font-black uppercase tracking-tight text-white">Live Roster</h2>
+        <div id="rosterStatsBanner" class="text-xs font-mono-custom flex gap-4 text-stone-400 uppercase font-bold tracking-wider">
+          -- Data --
         </div>
       </div>
 
-      <!-- Quick Roster Stats Summary -->
-      <div id="rosterStatsBanner" class="text-xs font-mono-custom text-stone-400 bg-white/[0.02] p-3 rounded-xl border border-white/5 flex justify-between flex-wrap gap-2">
-        <span>Loading stats...</span>
-      </div>
-
-      <!-- Members Grid -->
-      <div id="membersGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Content Container -->
+      <div id="membersContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <!-- Rendered via JS -->
       </div>
     </main>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- VIEW 3: ADMIN CONSOLE (SHOWN WHEN LOGGED IN)                        -->
-  <!-- =================================================================== -->
-  <section id="adminView" class="hidden min-h-screen relative z-10 pb-16">
-    <header class="glass-athletic border-b border-white/10 sticky top-0 z-30">
-      <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-        <button onclick="navigateTo('dashboard')" class="text-xs font-mono-custom font-bold text-stone-400 hover:text-white flex items-center gap-1.5 transition">
-          ← VIEW DASHBOARD
+  <!-- ========================================== -->
+  <!-- 3: ADMIN CONSOLE                           -->
+  <!-- ========================================== -->
+  <section id="adminView" class="hidden min-h-screen pb-16">
+    <header class="glass sticky top-0 z-30">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <button onclick="navigateTo('dashboard')" class="text-xs font-mono-custom font-bold text-stone-400 hover:text-white uppercase transition">
+          ← DASHBOARD
         </button>
-        <span class="text-xs font-mono-custom uppercase bg-orange-500/20 text-orange-400 px-3 py-1 rounded-full border border-orange-500/30 font-bold">
-          ⚡ ADMIN Console 
+        <span class="text-xs font-mono-custom font-bold uppercase text-amber-400 tracking-widest bg-amber-500/10 px-3 py-1 rounded">
+          LEADER CONSOLE
         </span>
-        <button onclick="logoutAdmin()" class="text-xs font-mono-custom font-bold px-3 py-1.5 rounded-xl bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30 transition">
-          Logout
+        <button onclick="logoutAdmin()" class="text-xs font-mono-custom font-bold text-rose-400 uppercase hover:text-rose-300">
+          LOGOUT
         </button>
       </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-6 space-y-6">
-
-      <!-- Add Group Member -->
-      <div class="glass-athletic rounded-2xl p-5 space-y-3">
-        <h3 class="text-xs font-mono-custom uppercase tracking-wider text-stone-400 font-bold">1. Manage Members</h3>
-        <div class="flex gap-2">
-          <input id="newMemberName" type="text" placeholder="Add Member Full Name..." class="flex-1 bg-stone-900 border border-stone-700 px-4 py-2.5 rounded-xl text-sm text-white focus:outline-none focus:border-orange-500 font-mono-custom" />
-          <button onclick="addMember()" class="bg-white hover:bg-stone-200 text-black px-5 py-2.5 rounded-xl text-xs font-mono-custom font-extrabold uppercase transition">
-            + Add
-          </button>
-        </div>
-      </div>
-
-      <!-- Record New Practice Session -->
-      <div class="glass-athletic rounded-2xl p-5 space-y-4">
-        <div class="flex justify-between items-center flex-wrap gap-2">
-          <h3 class="text-xs font-mono-custom uppercase tracking-wider text-stone-400 font-bold">2. Log Practice Attendance</h3>
-          <button onclick="markAllPresent()" class="text-xs font-mono-custom font-bold text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 px-3 py-1.5 rounded-lg transition">
-            ⚡ Mark All Present (On Time)
+    <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
+      
+      <!-- Section 1: Session Log -->
+      <div class="glass rounded-xl p-6 space-y-5">
+        <div class="flex justify-between items-center">
+          <h3 class="font-bold uppercase tracking-tight text-white">Log Practice</h3>
+          <button onclick="markAllPresent()" class="text-xs font-mono-custom bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded uppercase font-bold transition hover:bg-emerald-500/20">
+            MARK ALL OK
           </button>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono-custom uppercase font-bold">
           <div>
-            <label class="text-[11px] font-mono-custom text-stone-400 block mb-1">Session Label</label>
-            <input id="sessionLabel" type="text" placeholder="e.g. Day 1 Practice" class="w-full bg-stone-900 border border-stone-700 px-3 py-2 rounded-lg text-sm text-white font-mono-custom" />
+            <label class="text-stone-500 mb-1 block">Label</label>
+            <input id="sessionLabel" type="text" placeholder="Day 1" class="w-full bg-black/50 border border-white/10 px-3 py-2 rounded text-white" />
           </div>
           <div>
-            <label class="text-[11px] font-mono-custom text-stone-400 block mb-1">Date</label>
-            <input id="sessionDate" type="date" class="w-full bg-stone-900 border border-stone-700 px-3 py-2 rounded-lg text-sm text-white font-mono-custom" />
+            <label class="text-stone-500 mb-1 block">Date</label>
+            <input id="sessionDate" type="date" class="w-full bg-black/50 border border-white/10 px-3 py-2 rounded text-white" />
           </div>
           <div>
-            <label class="text-[11px] font-mono-custom text-stone-400 block mb-1">Call Time (Start)</label>
-            <input id="sessionStart" type="time" value="16:00" class="w-full bg-stone-900 border border-stone-700 px-3 py-2 rounded-lg text-sm text-white font-mono-custom" />
+            <label class="text-stone-500 mb-1 block">Call Time</label>
+            <input id="sessionStart" type="time" value="16:00" class="w-full bg-black/50 border border-white/10 px-3 py-2 rounded text-white" />
           </div>
           <div>
-            <label class="text-[11px] font-mono-custom text-stone-400 block mb-1">Dismissal (End)</label>
-            <input id="sessionEnd" type="time" value="18:00" class="w-full bg-stone-900 border border-stone-700 px-3 py-2 rounded-lg text-sm text-white font-mono-custom" />
+            <label class="text-stone-500 mb-1 block">End Time</label>
+            <input id="sessionEnd" type="time" value="18:00" class="w-full bg-black/50 border border-white/10 px-3 py-2 rounded text-white" />
           </div>
         </div>
 
-        <!-- Attendance Sheet Table -->
-        <div class="overflow-x-auto pt-2">
-          <table class="w-full text-left text-sm">
-            <thead class="text-xs font-mono-custom text-stone-400 border-b border-white/10">
+        <div class="overflow-x-auto border border-white/5 rounded-lg">
+          <table class="w-full text-left text-xs font-mono-custom">
+            <thead class="text-stone-500 uppercase border-b border-white/5 bg-black/20">
               <tr>
-                <th class="py-2.5">Member</th>
-                <th class="py-2.5">Status</th>
-                <th class="py-2.5">Time Arrived</th>
+                <th class="p-3">Name</th>
+                <th class="p-3 w-40">Status</th>
+                <th class="p-3 w-32">Time In</th>
               </tr>
             </thead>
-            <tbody id="attendanceInputList" class="divide-y divide-white/5 font-mono-custom">
-              <!-- Rendered via JS -->
-            </tbody>
+            <tbody id="attendanceInputList" class="divide-y divide-white/5"></tbody>
           </table>
         </div>
 
-        <button onclick="savePracticeSession()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-extrabold uppercase tracking-wider py-3.5 rounded-xl transition shadow-lg text-xs font-mono-custom">
-          💾 Save Practice Session
+        <button onclick="savePracticeSession()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-extrabold uppercase py-3 rounded text-sm transition">
+          SAVE ATTENDANCE
         </button>
       </div>
 
-      <!-- Past Sessions (Retroactive Edit / Catch-up) -->
-      <div class="glass-athletic rounded-2xl p-5 space-y-3">
-        <h3 class="text-xs font-mono-custom uppercase tracking-wider text-stone-400 font-bold">3. Edit Past Sessions (Offline Catch-Up)</h3>
-        <p class="text-xs text-stone-400">If you had no Wi-Fi during practice, select a past session to adjust arrival times or statuses.</p>
-        <div id="pastSessionsList" class="space-y-2 pt-1">
-          <!-- Rendered via JS -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="glass rounded-xl p-5 space-y-3">
+          <h3 class="font-bold uppercase tracking-tight text-white">Add Member</h3>
+          <div class="flex gap-2">
+            <input id="newMemberName" type="text" placeholder="Name..." class="flex-1 bg-black/50 border border-white/10 px-3 rounded text-sm font-mono-custom text-white outline-none focus:border-stone-500" />
+            <button onclick="addMember()" class="bg-white text-black px-4 font-bold rounded uppercase text-xs">ADD</button>
+          </div>
+        </div>
+        
+        <div class="glass rounded-xl p-5 space-y-3">
+          <h3 class="font-bold uppercase tracking-tight text-white">Edit Records</h3>
+          <div id="pastSessionsList" class="space-y-1 h-32 overflow-y-auto pr-2"></div>
         </div>
       </div>
-
     </main>
   </section>
 
-  <!-- =================================================================== -->
-  <!-- MODAL: ONE-CLICK GROUP CHAT IMAGE & PRINT EXPORT                    -->
-  <!-- =================================================================== -->
-  <div id="exportModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-stone-900 border border-white/15 w-full max-w-2xl rounded-3xl p-6 space-y-5 max-h-[92vh] flex flex-col">
-      <div class="flex justify-between items-center border-b border-white/10 pb-3 no-print">
-        <div>
-          <h3 class="text-base font-bold text-white uppercase font-mono-custom">📸 Export Report for Group Chat</h3>
-          <p class="text-xs text-stone-400">Save as PNG image to send to GC, or print to PDF for professor</p>
-        </div>
-        <button onclick="closeExportModal()" class="text-stone-400 hover:text-white text-2xl font-mono-custom">&times;</button>
-      </div>
-
-      <div class="flex gap-2 no-print">
-        <select id="exportSessionSelector" onchange="generateExportCard()" class="flex-1 bg-stone-800 border border-stone-700 text-white text-xs font-mono-custom px-3 py-2 rounded-xl">
-          <option value="overall">📊 Overall Culminating Summary (All Practices)</option>
-          <!-- Individual sessions injected via JS -->
+  <!-- ========================================== -->
+  <!-- MODAL: EXPORT / GC SHARING                 -->
+  <!-- ========================================== -->
+  <div id="exportModal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="w-full max-w-2xl bg-black border border-white/15 p-1 rounded-2xl">
+      <div class="p-5 flex justify-between items-center border-b border-white/10">
+        <select id="exportSessionSelector" onchange="generateExportCard()" class="bg-stone-900 border border-white/10 text-white font-mono-custom text-xs px-3 py-1.5 rounded outline-none uppercase font-bold max-w-[200px]">
+          <option value="overall">SUMMARY ALL</option>
         </select>
-        <button onclick="downloadAsImage()" class="bg-orange-500 hover:bg-orange-600 text-black font-extrabold text-xs font-mono-custom px-4 py-2 rounded-xl flex items-center gap-1.5 transition">
-          📥 Download Image (.PNG)
-        </button>
-        <button onclick="window.print()" class="bg-white/10 hover:bg-white/20 text-white font-bold text-xs font-mono-custom px-3 py-2 rounded-xl">
-          📄 Print / PDF
-        </button>
+        <div class="flex gap-2">
+          <button onclick="downloadAsImage()" class="bg-emerald-500 text-black px-4 py-2 rounded text-xs font-mono-custom font-bold">⬇ .PNG (IMAGE)</button>
+          <button onclick="closeExportModal()" class="text-stone-500 hover:text-white px-2">X</button>
+        </div>
       </div>
-
-      <!-- THE CAPTURE CARD (Captured by html2canvas) -->
-      <div class="overflow-y-auto flex-1 p-2">
-        <div id="exportCardArea" class="bg-stone-950 p-6 rounded-2xl border border-stone-800 text-stone-200 space-y-4">
-          <div class="border-b border-stone-800 pb-3 flex justify-between items-end">
+      
+      <div class="p-4 overflow-y-auto max-h-[70vh]">
+        <div id="exportCardArea" class="bg-[#0f1115] border border-white/5 rounded-xl p-6 text-white">
+          <div class="border-b border-white/10 pb-4 mb-4 flex justify-between">
             <div>
-              <span class="text-[10px] font-mono-custom uppercase tracking-widest text-orange-400 font-bold">PE Culminating Practice Report</span>
-              <h2 id="exportTitle" class="text-2xl font-black uppercase tracking-tight text-white">GROUP 03 SUMMARY</h2>
-              <div id="exportMeta" class="text-xs font-mono-custom text-stone-400 mt-1">Rule: 3 Lates = 1 Absent | 3 Absents = Drop</div>
+              <div class="font-mono-custom text-[10px] text-stone-500 uppercase tracking-widest mb-1">GROUP 03 ATTENDANCE</div>
+              <h2 id="exportTitle" class="text-3xl font-black uppercase tracking-tight">SUMMARY</h2>
             </div>
-            <div id="exportTimestamp" class="text-[11px] font-mono-custom text-stone-500 text-right"></div>
+            <div id="exportTimestamp" class="font-mono-custom text-xs text-stone-500 text-right"></div>
           </div>
-
-          <!-- Dynamic Export Content -->
-          <div id="exportContentList" class="space-y-2 font-mono-custom text-xs">
-            <!-- Injected via JS -->
-          </div>
-
-          <div class="border-t border-stone-800 pt-3 text-[10px] font-mono-custom text-stone-500 flex justify-between">
-            <span>OFFICIAL GROUP 03 ROSTER</span>
-            <span>STATUS: CERTIFIED</span>
-          </div>
+          <div id="exportContentList" class="font-mono-custom text-xs space-y-[2px]"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- MODAL: MEMBER INDIVIDUAL TIMELINE RECEIPT                           -->
-  <!-- =================================================================== -->
-  <div id="receiptModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-stone-900 border border-white/15 w-full max-w-lg rounded-3xl p-6 space-y-5 max-h-[90vh] flex flex-col">
-      <div class="flex justify-between items-start border-b border-white/10 pb-3">
-        <div>
-          <span class="text-[10px] uppercase font-mono-custom tracking-widest text-orange-400 font-bold">Member Attendance Receipt</span>
-          <h3 id="receiptName" class="text-2xl font-black uppercase text-white tracking-tight">Name</h3>
-        </div>
-        <button onclick="closeReceiptModal()" class="text-stone-400 hover:text-white text-2xl font-mono-custom">&times;</button>
+  <!-- ========================================== -->
+  <!-- MODAL: RECEIPT (TIMELINE)                  -->
+  <!-- ========================================== -->
+  <div id="receiptModal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="glass w-full max-w-md rounded-2xl flex flex-col max-h-[85vh] border border-white/10 shadow-2xl">
+      <div class="p-5 flex justify-between border-b border-white/10">
+        <h3 id="receiptName" class="text-xl font-black uppercase tracking-tight">NAME</h3>
+        <button onclick="closeReceiptModal()" class="text-stone-500 font-bold hover:text-white">X</button>
       </div>
-
-      <!-- Quick Metrics -->
-      <div class="grid grid-cols-3 gap-2 text-center font-mono-custom">
-        <div class="bg-stone-800/80 border border-white/5 p-3 rounded-2xl">
-          <div class="text-[10px] text-stone-400">PRESENTS</div>
-          <div id="receiptPresents" class="text-xl font-black text-emerald-400">0</div>
+      
+      <div class="p-5 grid grid-cols-3 gap-2 font-mono-custom text-center">
+        <div class="bg-black/40 rounded p-2 border border-white/5">
+          <span class="block text-[10px] text-stone-500 mb-1">PRESENTS</span>
+          <span id="rPresents" class="text-xl text-emerald-400 font-bold">0</span>
         </div>
-        <div class="bg-stone-800/80 border border-white/5 p-3 rounded-2xl">
-          <div class="text-[10px] text-stone-400">LATES</div>
-          <div id="receiptLates" class="text-xl font-black text-amber-400">0</div>
+        <div class="bg-black/40 rounded p-2 border border-white/5">
+          <span class="block text-[10px] text-stone-500 mb-1">LATES</span>
+          <span id="rLates" class="text-xl text-amber-400 font-bold">0</span>
         </div>
-        <div class="bg-stone-800/80 border border-white/5 p-3 rounded-2xl">
-          <div class="text-[10px] text-stone-400">TOTAL ABSENTS</div>
-          <div id="receiptEffectiveAbsents" class="text-xl font-black text-rose-400">0</div>
+        <div class="bg-black/40 rounded p-2 border border-white/5">
+          <span class="block text-[10px] text-stone-500 mb-1">ABSENTS</span>
+          <span id="rAbsents" class="text-xl text-rose-500 font-bold shadow-[0_0_5px_rgba(244,63,94,0.5)]">0</span>
         </div>
       </div>
 
-      <!-- Strike Bar -->
-      <div id="receiptStrikeBox" class="p-3.5 rounded-2xl border font-mono-custom text-xs flex justify-between items-center font-bold">
-        <!-- Rendered via JS -->
-      </div>
-
-      <!-- Timeline Logs -->
-      <div class="space-y-2 flex-1 overflow-y-auto pr-1">
-        <div class="text-[11px] font-mono-custom uppercase tracking-wider text-stone-500">Practice History</div>
-        <div id="receiptTimeline" class="space-y-2 font-mono-custom text-xs">
-          <!-- Injected via JS -->
-        </div>
+      <div class="flex-1 overflow-y-auto px-5 pb-5">
+        <div id="receiptTimeline" class="space-y-1 font-mono-custom text-[11px] uppercase"></div>
       </div>
     </div>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- MODAL: ADMIN LOGIN                                                  -->
-  <!-- =================================================================== -->
-  <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-stone-900 border border-white/15 w-full max-w-sm rounded-3xl p-6 space-y-4">
-      <div class="flex justify-between items-center border-b border-white/10 pb-3">
-        <h3 class="text-sm font-bold uppercase tracking-wider text-white font-mono-custom">ADMIN Authentication</h3>
-        <button onclick="closeAuthModal()" class="text-stone-400 hover:text-white text-xl font-mono-custom">&times;</button>
+  <!-- ========================================== -->
+  <!-- MODAL: LOGIN                               -->
+  <!-- ========================================== -->
+  <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="glass border border-white/10 w-full max-w-sm p-6 rounded-2xl space-y-4 shadow-2xl">
+      <div class="flex justify-between text-white uppercase font-bold text-sm font-mono-custom mb-2">
+        <span>LEADER ACCESS</span>
+        <button onclick="closeAuthModal()" class="text-stone-500 hover:text-white">X</button>
       </div>
-      <div class="space-y-3 font-mono-custom text-xs">
-        <div>
-          <label class="text-stone-400 block mb-1">ADMIN Email</label>
-          <input id="loginEmail" type="email" placeholder="admin@group3.com" class="w-full bg-stone-800 border border-stone-700 px-3.5 py-2.5 rounded-xl text-white text-sm focus:outline-none focus:border-orange-500" />
-        </div>
-        <div>
-          <label class="text-stone-400 block mb-1">Password</label>
-          <input id="loginPassword" type="password" placeholder="••••••••" class="w-full bg-stone-800 border border-stone-700 px-3.5 py-2.5 rounded-xl text-white text-sm focus:outline-none focus:border-orange-500" />
-        </div>
-        <p id="loginError" class="text-rose-400 hidden"></p>
-        <button onclick="loginAdmin()" class="w-full bg-white hover:bg-stone-200 text-black font-extrabold uppercase py-3 rounded-xl transition text-xs">
-          Sign In as ADMIN
-        </button>
-      </div>
+      <input id="loginEmail" type="email" placeholder="EMAIL" class="w-full bg-black border border-white/10 p-3 text-xs font-mono-custom text-white outline-none rounded" />
+      <input id="loginPassword" type="password" placeholder="PASSWORD" class="w-full bg-black border border-white/10 p-3 text-xs font-mono-custom text-white outline-none rounded" />
+      <button onclick="loginAdmin()" class="w-full bg-white text-black font-extrabold uppercase py-3 rounded text-sm mt-2 transition shadow-md shadow-white/10">AUTHORIZE</button>
     </div>
   </div>
 
-  <!-- =================================================================== -->
-  <!-- JAVASCRIPT & FIREBASE LOGIC                                         -->
-  <!-- =================================================================== -->
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT & FIREBASE                      -->
+  <!-- ========================================== -->
   <script>
-    // -----------------------------------------------------------------
-    // 1. PASTE YOUR FIREBASE KEYS HERE
-    // -----------------------------------------------------------------
+    // ---------------------------------------------------------
+    // PASTE YOUR FIREBASE KEYS HERE
+    // ---------------------------------------------------------
     const firebaseConfig = {
   apiKey: "AIzaSyD29Zqlz1Oe9dNZuLX4h7jywOadUtJ5jOY",
   authDomain: "group-3-pe-attendance-sheet.firebaseapp.com",
@@ -425,498 +322,260 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    let members = [];
-    let sessions = [];
-    let attendance = [];
-    let currentUser = null;
+    let members = [], sessions = [], attendance = [];
+    let currentUser = null, currentLayout = 'grid';
 
     document.getElementById('sessionDate').valueAsDate = new Date();
 
-    // -----------------------------------------------------------------
-    // Navigation Routing (Landing -> Dashboard -> Admin)
-    // -----------------------------------------------------------------
+    // VIEW LOGIC
     function navigateTo(view) {
-      document.getElementById('landingView').classList.add('hidden');
-      document.getElementById('dashboardView').classList.add('hidden');
-      document.getElementById('adminView').classList.add('hidden');
-
-      if (view === 'landing') document.getElementById('landingView').classList.remove('hidden');
-      if (view === 'dashboard') document.getElementById('dashboardView').classList.remove('hidden');
-      if (view === 'admin') {
-        if (!currentUser) {
-          openAuthModal();
-        } else {
-          document.getElementById('adminView').classList.remove('hidden');
-        }
-      }
+      document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
+      if (view === 'admin' && !currentUser) return openAuthModal();
+      document.getElementById(view + 'View').classList.remove('hidden');
     }
 
-    // -----------------------------------------------------------------
-    // Authentication
-    // -----------------------------------------------------------------
-    auth.onAuthStateChanged(user => {
-      currentUser = user;
-      document.getElementById('navAdminBtn').innerText = user ? '⚡ ADMIN CONSOLE' : '🔒 ADMIN';
-    });
-
-    function openAuthModal() {
-      if (currentUser) {
-        navigateTo('admin');
-      } else {
-        document.getElementById('authModal').classList.remove('hidden');
-      }
-    }
-    function closeAuthModal() {
-      document.getElementById('authModal').classList.add('hidden');
-    }
-
+    // AUTH
+    auth.onAuthStateChanged(user => { currentUser = user; });
+    function openAuthModal() { currentUser ? navigateTo('admin') : document.getElementById('authModal').classList.remove('hidden'); }
+    function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
     async function loginAdmin() {
-      const email = document.getElementById('loginEmail').value.trim();
-      const pass = document.getElementById('loginPassword').value;
-      const err = document.getElementById('loginError');
-      err.classList.add('hidden');
-
       try {
-        await auth.signInWithEmailAndPassword(email, pass);
-        closeAuthModal();
-        navigateTo('admin');
-      } catch (e) {
-        err.innerText = e.message;
-        err.classList.remove('hidden');
-      }
+        await auth.signInWithEmailAndPassword(document.getElementById('loginEmail').value.trim(), document.getElementById('loginPassword').value);
+        closeAuthModal(); navigateTo('admin');
+      } catch (e) { alert("Auth Error: " + e.message); }
     }
+    function logoutAdmin() { auth.signOut(); navigateTo('landing'); }
 
-    function logoutAdmin() {
-      auth.signOut();
-      navigateTo('landing');
-    }
+    // DATABASE LISTENERS
+    db.collection('members').orderBy('name', 'asc').onSnapshot(s => { members = s.docs.map(d => ({id: d.id, ...d.data()})); renderUI(); });
+    db.collection('sessions').orderBy('date', 'desc').onSnapshot(s => { sessions = s.docs.map(d => ({id: d.id, ...d.data()})); renderUI(); renderPastSessions(); updateExportSelectors(); });
+    db.collection('attendance').onSnapshot(s => { attendance = s.docs.map(d => ({id: d.id, ...d.data()})); renderUI(); });
 
-    // -----------------------------------------------------------------
-    // Real-Time Listeners
-    // -----------------------------------------------------------------
-    db.collection('members').orderBy('name', 'asc').onSnapshot(snap => {
-      members = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    function renderUI() {
+      renderRoster();
       renderAttendanceForm();
-      renderRoster();
-      updateExportSelectors();
-    });
-
-    db.collection('sessions').orderBy('date', 'desc').onSnapshot(snap => {
-      sessions = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderPastSessions();
-      renderRoster();
-      updateExportSelectors();
-    });
-
-    db.collection('attendance').onSnapshot(snap => {
-      attendance = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderRoster();
-    });
-
-    // -----------------------------------------------------------------
-    // Member Operations
-    // -----------------------------------------------------------------
-    async function addMember() {
-      const input = document.getElementById('newMemberName');
-      const name = input.value.trim();
-      if (!name) return alert('Enter full name');
-
-      await db.collection('members').add({ name, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-      input.value = '';
     }
 
-    // -----------------------------------------------------------------
-    // Attendance Logging
-    // -----------------------------------------------------------------
-    function renderAttendanceForm() {
-      const tbody = document.getElementById('attendanceInputList');
-      if (members.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" class="py-3 text-stone-500 text-center text-xs">No members added yet. Add member names above.</td></tr>`;
-        return;
-      }
+    // MEMBER MGT
+    async function addMember() {
+      const name = document.getElementById('newMemberName').value.trim();
+      if (!name) return;
+      await db.collection('members').add({ name, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+      document.getElementById('newMemberName').value = '';
+    }
 
-      tbody.innerHTML = members.map(m => `
-        <tr class="hover:bg-white/[0.02]">
-          <td class="py-3 font-semibold text-white">${m.name}</td>
-          <td class="py-3">
-            <select id="status_${m.id}" onchange="handleStatusChange('${m.id}')" class="bg-stone-800 border border-stone-700 text-white text-xs px-2.5 py-1.5 rounded-lg">
-              <option value="present">🟢 Present (On Time)</option>
-              <option value="late">🟠 Late (>20 mins)</option>
-              <option value="absent">🔴 Absent</option>
+    // ADMIN - LOGGING (WITH 20 MIN AUTO-MATH)
+    function renderAttendanceForm() {
+      document.getElementById('attendanceInputList').innerHTML = members.map(m => `
+        <tr class="hover:bg-white/[0.03]">
+          <td class="p-3 text-stone-200">${m.name}</td>
+          <td class="p-3">
+            <select id="status_${m.id}" onchange="handleStatusChange('${m.id}')" class="w-full bg-black border border-white/20 text-white rounded p-1 outline-none font-bold">
+              <option value="present">🟢 OK</option>
+              <option value="late">🟠 LATE (>20M)</option>
+              <option value="absent">🔴 ABSENT</option>
             </select>
           </td>
-          <td class="py-3">
-            <input id="time_${m.id}" type="time" onchange="autoCalculateLate('${m.id}')" value="${document.getElementById('sessionStart').value}" class="bg-stone-800 border border-stone-700 text-white text-xs px-2.5 py-1.5 rounded-lg" />
+          <td class="p-3">
+            <input id="time_${m.id}" type="time" onchange="autoLateCheck('${m.id}')" value="${document.getElementById('sessionStart').value}" class="w-full bg-black border border-white/20 text-stone-300 rounded p-1 outline-none" />
           </td>
         </tr>
       `).join('');
     }
 
-    // Auto-detects if arrival is more than 20 minutes after call time
-    function autoCalculateLate(memberId) {
-      const startTime = document.getElementById('sessionStart').value;
-      const inTime = document.getElementById(`time_${memberId}`).value;
-      const select = document.getElementById(`status_${memberId}`);
-
-      if (select.value === 'absent' || !startTime || !inTime) return;
-
-      const [startH, startM] = startTime.split(':').map(Number);
-      const [inH, inM] = inTime.split(':').map(Number);
-
-      const startMinutes = startH * 60 + startM;
-      const inMinutes = inH * 60 + inM;
-      const diff = inMinutes - startMinutes;
-
-      // If more than 20 minutes late, flag as Late
-      if (diff > 20) {
-        select.value = 'late';
-      } else {
-        select.value = 'present';
-      }
+    function autoLateCheck(id) {
+      const start = document.getElementById('sessionStart').value;
+      const arr = document.getElementById('time_' + id).value;
+      const sel = document.getElementById('status_' + id);
+      if (sel.value === 'absent' || !start || !arr) return;
+      
+      const [sh, sm] = start.split(':').map(Number);
+      const [ah, am] = arr.split(':').map(Number);
+      const diff = (ah * 60 + am) - (sh * 60 + sm);
+      
+      sel.value = diff > 20 ? 'late' : 'present';
     }
 
-    function handleStatusChange(memberId) {
-      const status = document.getElementById(`status_${memberId}`).value;
-      const timeInput = document.getElementById(`time_${memberId}`);
-      if (status === 'absent') {
-        timeInput.disabled = true;
-        timeInput.value = '';
-      } else {
-        timeInput.disabled = false;
-        if (!timeInput.value) timeInput.value = document.getElementById('sessionStart').value;
-      }
+    function handleStatusChange(id) {
+      const t = document.getElementById('time_' + id);
+      if (document.getElementById('status_' + id).value === 'absent') { t.disabled = true; t.value = ''; }
+      else { t.disabled = false; if(!t.value) t.value = document.getElementById('sessionStart').value; }
     }
-
-    function markAllPresent() {
-      members.forEach(m => {
-        const sel = document.getElementById(`status_${m.id}`);
-        const time = document.getElementById(`time_${m.id}`);
-        if (sel) sel.value = 'present';
-        if (time) {
-          time.disabled = false;
-          time.value = document.getElementById('sessionStart').value;
-        }
-      });
-    }
+    
+    function markAllPresent() { members.forEach(m => { const s=document.getElementById('status_'+m.id), t=document.getElementById('time_'+m.id); if(s)s.value='present'; if(t){t.disabled=false; t.value=document.getElementById('sessionStart').value;} }); }
 
     async function savePracticeSession() {
-      const label = document.getElementById('sessionLabel').value.trim() || 'Practice Session';
-      const date = document.getElementById('sessionDate').value;
-      const startTime = document.getElementById('sessionStart').value;
-      const endTime = document.getElementById('sessionEnd').value;
-
-      if (!date) return alert('Select date');
-      if (members.length === 0) return alert('Add members first');
+      const label = document.getElementById('sessionLabel').value || 'PRACTICE';
+      const date = document.getElementById('sessionDate').value, st = document.getElementById('sessionStart').value, en = document.getElementById('sessionEnd').value;
+      if (!date || members.length===0) return;
 
       const batch = db.batch();
-      const sessionRef = db.collection('sessions').doc();
-
-      batch.set(sessionRef, {
-        label, date, startTime, endTime, createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
+      const sRef = db.collection('sessions').doc();
+      batch.set(sRef, { label, date, startTime: st, endTime: en });
 
       members.forEach(m => {
-        const status = document.getElementById(`status_${m.id}`).value;
-        const timeArrived = document.getElementById(`time_${m.id}`).value || 'N/A';
-
-        const attRef = db.collection('attendance').doc();
-        batch.set(attRef, {
-          sessionId: sessionRef.id,
-          sessionLabel: label,
-          date,
-          startTime,
-          endTime,
-          memberId: m.id,
-          memberName: m.name,
-          status,
-          timeArrived: status === 'absent' ? 'N/A' : timeArrived,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
+        const stat = document.getElementById('status_'+m.id).value;
+        const tm = document.getElementById('time_'+m.id).value || 'N/A';
+        batch.set(db.collection('attendance').doc(), { sessionId: sRef.id, sessionLabel: label, date, memberId: m.id, memberName: m.name, status: stat, timeArrived: stat === 'absent' ? 'N/A' : tm });
       });
-
-      await batch.commit();
-      alert('Practice session saved successfully!');
-      document.getElementById('sessionLabel').value = '';
+      await batch.commit(); alert('SAVED!');
     }
 
-    // -----------------------------------------------------------------
-    // Past Sessions / Offline Catch-Up
-    // -----------------------------------------------------------------
+    // ADMIN - PAST RECORDS
     function renderPastSessions() {
-      const container = document.getElementById('pastSessionsList');
-      if (sessions.length === 0) {
-        container.innerHTML = `<div class="text-xs text-stone-500 font-mono-custom">No recorded sessions yet.</div>`;
-        return;
-      }
-
-      container.innerHTML = sessions.slice(0, 6).map(s => `
-        <div class="flex justify-between items-center bg-stone-800/60 border border-white/5 p-3 rounded-xl font-mono-custom text-xs">
-          <div>
-            <span class="font-bold text-white">${s.label}</span>
-            <span class="text-stone-400">(${s.date} • ${s.startTime} - ${s.endTime})</span>
-          </div>
-          <button onclick="editSessionRecords('${s.id}')" class="text-orange-400 hover:underline font-bold">
-            Edit Records
-          </button>
+      document.getElementById('pastSessionsList').innerHTML = sessions.slice(0,5).map(s => `
+        <div class="flex justify-between items-center text-[10px] font-mono-custom uppercase bg-black/30 p-2 rounded border border-white/5">
+          <span class="text-stone-300">${s.date} : ${s.label}</span>
+          <button onclick="editRecords('${s.id}')" class="text-white bg-white/10 px-2 rounded hover:bg-white/20">EDIT</button>
         </div>
       `).join('');
     }
 
-    async function editSessionRecords(sessionId) {
-      const records = attendance.filter(a => a.sessionId === sessionId);
-      if (records.length === 0) return alert('No records found for session.');
-
-      const names = records.map(r => r.memberName).join('\n');
-      const targetName = prompt(`Enter member name to edit in this session:\n\n${names}`);
-      if (!targetName) return;
-
-      const record = records.find(r => r.memberName.toLowerCase() === targetName.toLowerCase().trim());
-      if (!record) return alert('Member not found.');
-
-      const newStatus = prompt(`Change status for ${record.memberName} (present / late / absent):`, record.status);
-      if (!newStatus || !['present', 'late', 'absent'].includes(newStatus.toLowerCase())) return alert('Invalid status');
-
-      let newTime = record.timeArrived;
-      if (newStatus !== 'absent') {
-        newTime = prompt(`Enter arrival time:`, record.timeArrived !== 'N/A' ? record.timeArrived : '16:00') || 'N/A';
-      } else {
-        newTime = 'N/A';
+    async function editRecords(sId) {
+      const target = prompt(`EDIT DATA.\nEnter MEMBER NAME:`).trim();
+      const rec = attendance.find(a => a.sessionId === sId && a.memberName.toLowerCase() === target.toLowerCase());
+      if (!rec) return alert('Member not found in session.');
+      const nS = prompt(`NEW STATUS (present / late / absent)`, rec.status);
+      const nT = nS !== 'absent' ? (prompt(`TIME IN`, rec.timeArrived) || 'N/A') : 'N/A';
+      if (['present','late','absent'].includes(nS.toLowerCase())) {
+        await db.collection('attendance').doc(rec.id).update({ status: nS, timeArrived: nT });
       }
-
-      await db.collection('attendance').doc(record.id).update({
-        status: newStatus.toLowerCase(),
-        timeArrived: newTime
-      });
-
-      alert('Updated successfully.');
     }
 
-    // -----------------------------------------------------------------
-    // Core Logic: 3 Lates = 1 Absent, 3 Absents = Drop
-    // -----------------------------------------------------------------
-    function getMemberStats(memberId) {
-      const logs = attendance.filter(a => a.memberId === memberId);
-      const presents = logs.filter(a => a.status === 'present').length;
-      const lates = logs.filter(a => a.status === 'late').length;
-      const directAbsents = logs.filter(a => a.status === 'absent').length;
+    // CORE: LIVE ROSTER VIEW & MATH
+    function getStats(mId) {
+      const logs = attendance.filter(a => a.memberId === mId);
+      const P = logs.filter(a => a.status === 'present').length, L = logs.filter(a => a.status === 'late').length, A = logs.filter(a => a.status === 'absent').length;
+      const totalA = A + Math.floor(L/3);
+      let s = sessions.length ? (totalA >= 3 ? 'drop' : (totalA === 2 ? 'warn' : 'ok')) : 'none';
+      return { P, L, totalA, status: s, logs };
+    }
 
-      const penaltyAbsents = Math.floor(lates / 3);
-      const effectiveAbsents = directAbsents + penaltyAbsents;
-
-      let status = 'none';
-      if (sessions.length > 0) {
-        if (effectiveAbsents >= 3) status = 'dropped';
-        else if (effectiveAbsents === 2) status = 'warning';
-        else status = 'ok';
-      }
-
-      return { presents, lates, directAbsents, penaltyAbsents, effectiveAbsents, status, logs };
+    function toggleLayout(type) {
+      currentLayout = type;
+      document.getElementById('btnGrid').className = type === 'grid' ? "p-1.5 px-3 rounded text-white bg-white/10 text-xs font-mono-custom transition" : "p-1.5 px-3 rounded text-stone-500 hover:text-white text-xs font-mono-custom transition";
+      document.getElementById('btnList').className = type === 'list' ? "p-1.5 px-3 rounded text-white bg-white/10 text-xs font-mono-custom transition" : "p-1.5 px-3 rounded text-stone-500 hover:text-white text-xs font-mono-custom transition";
+      
+      const cont = document.getElementById('membersContainer');
+      cont.className = type === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" : "flex flex-col gap-2 max-w-4xl mx-auto w-full";
+      renderRoster();
     }
 
     function renderRoster() {
-      const grid = document.getElementById('membersGrid');
-      const statsBar = document.getElementById('rosterStatsBanner');
+      const c = document.getElementById('membersContainer'), s = document.getElementById('rosterStatsBanner');
+      if (members.length === 0) return c.innerHTML = '', s.innerHTML = '';
+      let counts = {ok:0, warn:0, drop:0};
 
-      if (members.length === 0) {
-        grid.innerHTML = `<div class="col-span-full py-16 text-center text-stone-500 font-mono-custom text-xs">No members added yet. Sign into Admin to add your roster.</div>`;
-        statsBar.innerText = '0 Members Registered';
-        return;
-      }
+      c.innerHTML = members.map((m, i) => {
+        const st = getStats(m.id);
+        if(st.status==='ok')counts.ok++; if(st.status==='warn')counts.warn++; if(st.status==='drop')counts.drop++;
+        
+        let cClr='bg-stone-500', bar=0, txt="NONE";
+        if(st.status==='ok') {cClr='bg-emerald-400'; bar = st.totalA === 1 ? 33 : 0; txt="OK";}
+        if(st.status==='warn'){cClr='bg-amber-400'; bar=66; txt="WARNING";}
+        if(st.status==='drop'){cClr='bg-rose-500 shadow-[0_0_8px_#f43f5e]'; bar=100; txt="DROPPED";}
 
-      let countOk = 0, countWarn = 0, countDrop = 0;
-
-      grid.innerHTML = members.map(m => {
-        const stat = getMemberStats(m.id);
-        if (stat.status === 'ok') countOk++;
-        if (stat.status === 'warning') countWarn++;
-        if (stat.status === 'dropped') countDrop++;
-
-        let badgeHtml = '';
-        let strikeText = '';
-
-        if (stat.status === 'none') {
-          badgeHtml = `<span class="px-2.5 py-1 rounded-lg text-xs font-mono-custom bg-stone-800 text-stone-400 border border-stone-700">⚪ No Practice</span>`;
-          strikeText = `<span class="text-stone-500 font-mono-custom text-xs">[ ⚪ ⚪ ⚪ ] 0 Strikes</span>`;
-        } else if (stat.status === 'ok') {
-          badgeHtml = `<span class="px-2.5 py-1 rounded-lg text-xs font-mono-custom bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">🟢 In Good Standing</span>`;
-          strikeText = stat.effectiveAbsents === 1 
-            ? `<span class="text-amber-400 font-mono-custom text-xs">[ ❌ ⚪ ⚪ ] 1 Strike</span>`
-            : `<span class="text-emerald-400 font-mono-custom text-xs">[ ⚪ ⚪ ⚪ ] Clean Record</span>`;
-        } else if (stat.status === 'warning') {
-          badgeHtml = `<span class="px-2.5 py-1 rounded-lg text-xs font-mono-custom bg-amber-500/10 text-amber-400 border border-amber-500/30 font-bold">🟠 Warning</span>`;
-          strikeText = `<span class="text-amber-400 font-mono-custom text-xs font-bold">[ ❌ ❌ ⚪ ] 1 STRIKE AWAY FROM DROP!</span>`;
-        } else {
-          badgeHtml = `<span class="px-2.5 py-1 rounded-lg text-xs font-mono-custom bg-rose-500/10 text-rose-400 border border-rose-500/30 font-bold">🔴 Dropped</span>`;
-          strikeText = `<span class="text-rose-400 font-mono-custom text-xs font-bold">[ ❌ ❌ ❌ ] 3 Strikes • REMOVAL</span>`;
-        }
-
+        // LIST VIEW
+        if (currentLayout === 'list') {
+          return `
+            <div class="glass hover:bg-white/[0.05] p-3 rounded-lg flex items-center justify-between cursor-pointer animate-item border border-white/5 transition group" style="animation-delay: ${i*0.03}s" onclick="openRModal('${m.id}')">
+              <div class="flex items-center gap-4 min-w-[200px]">
+                <div class="dot ${cClr}"></div>
+                <div class="font-bold text-white uppercase text-sm">${m.name}</div>
+              </div>
+              <div class="hidden sm:flex gap-4 font-mono-custom text-xs">
+                <span class="text-stone-400">P:<span class="text-emerald-400 font-bold ml-1">${st.P}</span></span>
+                <span class="text-stone-400">L:<span class="text-amber-400 font-bold ml-1">${st.L}</span></span>
+              </div>
+              <div class="flex items-center gap-3 w-40 justify-end">
+                <div class="text-[10px] font-mono-custom font-bold text-white">${st.totalA}/3 <span class="text-stone-500">ABS</span></div>
+                <div class="w-16 h-1.5 bg-black rounded-full overflow-hidden border border-white/10"><div class="h-full bg-white transition-all" style="width:${bar}%"></div></div>
+              </div>
+            </div>`;
+        } 
+        
+        // GRID VIEW
         return `
-          <div onclick="openReceiptModal('${m.id}')" class="glass-athletic-card hover:border-white/20 cursor-pointer rounded-2xl p-5 space-y-4 transition shadow-md">
-            <div class="flex justify-between items-start">
-              <h3 class="text-base font-bold text-white tracking-tight">${m.name}</h3>
-              ${badgeHtml}
-            </div>
-
-            <div class="grid grid-cols-3 gap-2 text-center font-mono-custom py-1">
-              <div class="bg-stone-900 border border-white/5 rounded-xl p-2.5">
-                <span class="text-stone-500 block text-[9px]">PRESENTS</span>
-                <span class="font-black text-emerald-400 text-sm">${stat.presents}</span>
-              </div>
-              <div class="bg-stone-900 border border-white/5 rounded-xl p-2.5">
-                <span class="text-stone-500 block text-[9px]">LATES</span>
-                <span class="font-black text-amber-400 text-sm">${stat.lates}</span>
-              </div>
-              <div class="bg-stone-900 border border-white/5 rounded-xl p-2.5">
-                <span class="text-stone-500 block text-[9px]">ABSENTS</span>
-                <span class="font-black text-rose-400 text-sm">${stat.effectiveAbsents}</span>
+          <div class="glass rounded-xl p-5 hover:translate-y-[-4px] hover:shadow-2xl transition cursor-pointer animate-item group relative overflow-hidden" style="animation-delay: ${i*0.04}s" onclick="openRModal('${m.id}')">
+            <div class="absolute top-0 left-0 h-1 bg-white data-bar-fill opacity-20" style="width:${bar}%"></div>
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-lg font-black uppercase text-white tracking-tight break-all">${m.name}</h3>
+              <div class="px-2.5 py-1 rounded bg-black/40 border border-white/10 flex items-center gap-2 font-mono-custom text-[10px] font-bold tracking-wider">
+                <span class="dot ${cClr}"></span>${txt}
               </div>
             </div>
-
-            <div class="pt-2 border-t border-white/5 flex justify-between items-center">
-              ${strikeText}
-              <span class="text-[11px] font-mono-custom text-stone-500 font-bold">View Receipts →</span>
+            <div class="grid grid-cols-3 gap-2 text-center font-mono-custom">
+              <div class="bg-white/5 p-2 rounded">
+                <div class="text-[9px] text-stone-500">P</div><div class="text-sm font-bold text-emerald-400">${st.P}</div>
+              </div>
+              <div class="bg-white/5 p-2 rounded">
+                <div class="text-[9px] text-stone-500">L</div><div class="text-sm font-bold text-amber-400">${st.L}</div>
+              </div>
+              <div class="bg-white/5 p-2 rounded">
+                <div class="text-[9px] text-stone-500">ABS</div><div class="text-sm font-bold text-rose-500">${st.totalA}</div>
+              </div>
             </div>
-          </div>
-        `;
+          </div>`;
       }).join('');
 
-      statsBar.innerHTML = `
-        <span>👥 <strong>${members.length}</strong> Members</span>
-        <span>🏃 <strong>${sessions.length}</strong> Practices Held</span>
-        <span>🟢 <strong>${countOk}</strong> OK</span>
-        <span>🟠 <strong>${countWarn}</strong> Warning</span>
-        <span>🔴 <strong>${countDrop}</strong> Dropped</span>
-      `;
+      s.innerHTML = `<span>👥 ${members.length} MEM</span> <span class="text-emerald-400">🟢 ${counts.ok} OK</span> <span class="text-amber-400">🟠 ${counts.warn} WARN</span> <span class="text-rose-500">🔴 ${counts.drop} DROP</span>`;
     }
 
-    // -----------------------------------------------------------------
-    // Individual Member Modal
-    // -----------------------------------------------------------------
-    function openReceiptModal(memberId) {
-      const member = members.find(m => m.id === memberId);
-      if (!member) return;
-
-      const stat = getMemberStats(memberId);
-      document.getElementById('receiptName').innerText = member.name;
-      document.getElementById('receiptPresents').innerText = stat.presents;
-      document.getElementById('receiptLates').innerText = stat.lates;
-      document.getElementById('receiptEffectiveAbsents').innerText = stat.effectiveAbsents;
-
-      const box = document.getElementById('receiptStrikeBox');
-      if (stat.effectiveAbsents >= 3) {
-        box.className = "p-3.5 rounded-2xl border bg-rose-500/10 border-rose-500/30 text-rose-300 font-mono-custom text-xs flex justify-between items-center font-bold";
-        box.innerHTML = `<span>🔴 STATUS: DROPPED (3 Absents reached)</span><span>[ ❌ ❌ ❌ ]</span>`;
-      } else if (stat.effectiveAbsents === 2) {
-        box.className = "p-3.5 rounded-2xl border bg-amber-500/10 border-amber-500/30 text-amber-300 font-mono-custom text-xs flex justify-between items-center font-bold";
-        box.innerHTML = `<span>🟠 WARNING: 1 more absent = Drop</span><span>[ ❌ ❌ ⚪ ]</span>`;
-      } else {
-        box.className = "p-3.5 rounded-2xl border bg-emerald-500/10 border-emerald-500/30 text-emerald-300 font-mono-custom text-xs flex justify-between items-center font-bold";
-        box.innerHTML = `<span>🟢 IN GOOD STANDING</span><span>[ ${stat.effectiveAbsents === 1 ? '❌ ⚪ ⚪' : '⚪ ⚪ ⚪'} ]</span>`;
-      }
-
-      const list = document.getElementById('receiptTimeline');
-      const sortedLogs = stat.logs.sort((a,b) => new Date(b.date) - new Date(a.date));
-
-      if (sortedLogs.length === 0) {
-        list.innerHTML = `<div class="text-xs text-stone-500 py-4 text-center">No attendance recorded yet.</div>`;
-      } else {
-        list.innerHTML = sortedLogs.map(l => {
-          let badge = '';
-          if (l.status === 'present') badge = `<span class="text-emerald-400 font-bold">🟢 Present</span>`;
-          else if (l.status === 'late') badge = `<span class="text-amber-400 font-bold">🟠 Late (${l.timeArrived})</span>`;
-          else badge = `<span class="text-rose-400 font-bold">🔴 Absent</span>`;
-
-          return `
-            <div class="bg-stone-800/70 border border-white/5 p-3 rounded-xl flex justify-between items-center">
-              <div>
-                <div class="font-bold text-white">${l.sessionLabel} • ${l.date}</div>
-                <div class="text-stone-400 text-[11px]">Practice: ${l.startTime} - ${l.endTime} | Check-in: ${l.timeArrived}</div>
-              </div>
-              <div>${badge}</div>
-            </div>
-          `;
-        }).join('');
-      }
-
+    // INDIVIDUAL MODAL
+    function openRModal(id) {
+      const m = members.find(x => x.id === id); if(!m) return;
+      const s = getStats(id);
+      document.getElementById('receiptName').innerText = m.name;
+      document.getElementById('rPresents').innerText = s.P;
+      document.getElementById('rLates').innerText = s.L;
+      document.getElementById('rAbsents').innerText = s.totalA;
+      
+      const tl = document.getElementById('receiptTimeline');
+      tl.innerHTML = s.logs.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(l => `
+        <div class="flex justify-between border-b border-white/5 py-2">
+          <div class="text-stone-400">${l.date} <span class="text-white">${l.timeArrived !== 'N/A' ? '@'+l.timeArrived : ''}</span></div>
+          <div class="font-bold ${l.status==='present'?'text-emerald-400':(l.status==='late'?'text-amber-400':'text-rose-500')}">${l.status.toUpperCase()}</div>
+        </div>
+      `).join('');
       document.getElementById('receiptModal').classList.remove('hidden');
     }
+    function closeReceiptModal() { document.getElementById('receiptModal').classList.add('hidden'); }
 
-    function closeReceiptModal() {
-      document.getElementById('receiptModal').classList.add('hidden');
-    }
-
-    // -----------------------------------------------------------------
-    // Export (1-Click Group Chat Image PNG / PDF)
-    // -----------------------------------------------------------------
-    function openExportModal() {
-      updateExportSelectors();
-      generateExportCard();
-      document.getElementById('exportModal').classList.remove('hidden');
-    }
-
-    function closeExportModal() {
-      document.getElementById('exportModal').classList.add('hidden');
-    }
-
+    // EXPORT PNG
     function updateExportSelectors() {
-      const sel = document.getElementById('exportSessionSelector');
-      if (!sel) return;
-      sel.innerHTML = `<option value="overall">📊 Overall Culminating Summary (All Practices)</option>` +
-        sessions.map(s => `<option value="${s.id}">🏃 ${s.label} (${s.date})</option>`).join('');
+      const sel = document.getElementById('exportSessionSelector'); if(!sel) return;
+      sel.innerHTML = `<option value="overall">SUMMARY ALL</option>` + sessions.map(s => `<option value="${s.id}">${s.date} ${s.label}</option>`).join('');
     }
+    function openExportModal() { updateExportSelectors(); generateExportCard(); document.getElementById('exportModal').classList.remove('hidden'); }
+    function closeExportModal() { document.getElementById('exportModal').classList.add('hidden'); }
 
     function generateExportCard() {
-      const mode = document.getElementById('exportSessionSelector').value;
-      const title = document.getElementById('exportTitle');
-      const meta = document.getElementById('exportMeta');
-      const container = document.getElementById('exportContentList');
+      const id = document.getElementById('exportSessionSelector').value, el = document.getElementById('exportContentList');
       document.getElementById('exportTimestamp').innerText = new Date().toLocaleDateString();
 
-      if (mode === 'overall') {
-        title.innerText = 'GROUP 03 ROSTER SUMMARY';
-        meta.innerText = 'Cumulative Standing • 3 Lates = 1 Absent | 3 Absents = Drop';
-
-        container.innerHTML = members.map(m => {
-          const stat = getMemberStats(m.id);
-          let tag = stat.status === 'dropped' ? '🔴 DROPPED' : (stat.status === 'warning' ? '🟠 WARNING' : '🟢 OK');
-          return `
-            <div class="flex justify-between items-center p-2.5 bg-stone-900 rounded-lg border border-stone-800">
-              <span class="font-bold text-white">${m.name}</span>
-              <div class="flex gap-3 text-stone-400 text-[11px]">
-                <span>P: <strong class="text-emerald-400">${stat.presents}</strong></span>
-                <span>L: <strong class="text-amber-400">${stat.lates}</strong></span>
-                <span>Abs: <strong class="text-rose-400">${stat.effectiveAbsents}</strong></span>
-                <span class="font-bold">${tag}</span>
-              </div>
-            </div>
-          `;
+      if(id === 'overall') {
+        document.getElementById('exportTitle').innerText = 'SUMMARY RECORD';
+        el.innerHTML = members.map(m => {
+          const s = getStats(m.id);
+          let tag = s.status==='drop'?'🔴 DROP':(s.status==='warn'?'🟠 WARN':'🟢 OK');
+          return `<div class="flex justify-between p-2 bg-[#1a1d24] rounded text-white border border-white/5">
+            <span class="uppercase w-40 overflow-hidden text-ellipsis">${m.name}</span>
+            <div class="flex gap-4 w-40 text-[10px] text-stone-400"><span class="w-8">P:${s.P}</span><span class="w-8">L:${s.L}</span><span class="w-8 font-bold text-rose-500">A:${s.totalA}</span></div>
+            <span class="font-bold w-16 text-right">${tag}</span>
+          </div>`;
         }).join('');
       } else {
-        const s = sessions.find(x => x.id === mode);
-        if (!s) return;
-        title.innerText = `${s.label.toUpperCase()} REPORT`;
-        meta.innerText = `Date: ${s.date} • Practice Hours: ${s.startTime} - ${s.endTime}`;
-
-        const logs = attendance.filter(a => a.sessionId === s.id);
-        container.innerHTML = logs.map(l => {
-          let badge = l.status === 'present' ? '🟢 Present' : (l.status === 'late' ? `🟠 Late (${l.timeArrived})` : '🔴 Absent');
-          return `
-            <div class="flex justify-between items-center p-2.5 bg-stone-900 rounded-lg border border-stone-800">
-              <span class="font-bold text-white">${l.memberName}</span>
-              <span class="text-[11px]">${badge}</span>
-            </div>
-          `;
+        const ses = sessions.find(x => x.id === id); if(!ses) return;
+        document.getElementById('exportTitle').innerText = ses.date + ' ' + ses.label;
+        el.innerHTML = attendance.filter(a => a.sessionId === id).map(l => {
+          let b = l.status==='present'?'🟢 OK':(l.status==='late'?`🟠 LATE`:'🔴 ABSENT');
+          return `<div class="flex justify-between p-2 bg-[#1a1d24] rounded text-white border border-white/5"><span class="uppercase">${l.memberName}</span><div class="flex gap-2 items-center"><span class="text-[10px] text-stone-400 mr-2">${l.timeArrived !== 'N/A' ? '@'+l.timeArrived : ''}</span><span class="font-bold">${b}</span></div></div>`;
         }).join('');
       }
     }
-
     function downloadAsImage() {
-      const card = document.getElementById('exportCardArea');
-      html2canvas(card, { backgroundColor: '#0c0a09', scale: 2 }).then(canvas => {
-        const link = document.createElement('a');
-        link.download = `Group3_Attendance_${Date.now()}.png`;
-        link.href = canvas.toDataURL();
-        link.click();
+      html2canvas(document.getElementById('exportCardArea'), { backgroundColor: '#0f1115', scale: 2 }).then(canvas => {
+        const link = document.createElement('a'); link.download = `Record_${Date.now()}.png`; link.href = canvas.toDataURL(); link.click();
       });
     }
   </script>
