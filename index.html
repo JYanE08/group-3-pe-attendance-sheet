@@ -3,312 +3,227 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GROUP 03 • PE TRACKER</title>
+  <title>GROUP 03</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Space+Grotesk:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
+  <!-- Chart.js for Live Data -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <style>
-    body {
-      font-family: 'Space Grotesk', sans-serif;
-      background-color: #0A0C10;
-      color: #F3F4F6;
-    }
+    body { font-family: 'Inter', sans-serif; background-color: #0c0d10; color: #e5e7eb; overflow-x: hidden; }
     .font-mono-custom { font-family: 'JetBrains Mono', monospace; }
     
-    /* Background Pattern */
-    .bg-grid {
-      background-size: 40px 40px;
-      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-    }
+    /* Sleek Background & Glowing accents */
+    .bg-grid-glow { background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px); background-size: 24px 24px; }
+    .glass-dark { background: rgba(20, 24, 30, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); }
+    .glass-card { background: rgba(26, 31, 40, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.04); transition: transform 0.2s, border 0.2s; }
+    .glass-card:hover { border: 1px solid rgba(255, 255, 255, 0.15); transform: translateY(-2px); }
     
-    /* Premium Blurs */
-    .glass {
-      background: rgba(15, 18, 25, 0.7);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-    }
+    /* Status Legends Indicators */
+    .status-ok { background: #064e3b; color: #34d399; border: 1px solid #059669; }
+    .status-warning { background: #451a03; color: #fbbf24; border: 1px solid #d97706; }
+    .status-dropped { background: #4c0519; color: #f87171; border: 1px solid #e11d48; }
 
-    /* Staggered Load Animation */
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(20px); }
+    /* Silky Intro Animations */
+    @keyframes slide-up {
+      from { opacity: 0; transform: translateY(15px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .animate-item {
-      opacity: 0;
-      animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    /* Data Bar Fill */
-    .data-bar-fill { transition: width 0.8s cubic-bezier(0.65, 0, 0.35, 1); }
-
-    /* Indicator Dots */
-    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-
+    .animate-item { opacity: 0; animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    
     @media print {
-      body { background: #fff !important; color: #000 !important; }
-      .no-print, header, section:not(#printArea), .bg-grid { display: none !important; }
-      #printArea { display: block !important; }
+      body { background: white !important; color: black !important; }
+      .no-print { display: none !important; }
+      .glass-card { background: white !important; border: 1px solid #ccc !important; box-shadow: none !important; transform: none !important;}
     }
   </style>
 </head>
-<body class="min-h-screen bg-grid selection:bg-orange-500 selection:text-black">
+<body class="min-h-screen bg-grid-glow relative selection:bg-white selection:text-black">
 
-  <!-- ========================================== -->
-  <!-- 1: MINIMAL LANDING                         -->
-  <!-- ========================================== -->
-  <section id="landingView" class="h-screen flex flex-col justify-center items-center relative z-10 px-6">
-    <div class="text-center space-y-8 max-w-lg">
-      <div>
-        <div class="inline-flex items-center gap-2 mb-2 font-mono-custom text-xs tracking-widest text-stone-500 uppercase">
-          <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-          GROUP 03
-        </div>
-        <h1 class="text-6xl sm:text-7xl font-black uppercase text-white tracking-tighter leading-none mb-4">
-          TRACKER
-        </h1>
-        <div class="flex flex-wrap justify-center gap-3 text-[10px] font-mono-custom font-bold text-stone-400">
-          <span class="px-2 py-1 rounded bg-white/5 border border-white/10">3 LATES = 1 ABSENT</span>
-          <span class="px-2 py-1 rounded bg-white/5 border border-white/10">3 ABSENTS = DROP</span>
-          <span class="px-2 py-1 rounded bg-white/5 border border-white/10">20 MIN GRACE</span>
+  <!-- ================= LANDING ================= -->
+  <section id="landingView" class="min-h-screen flex flex-col justify-center items-center relative z-10 animate-item">
+    <div class="text-center space-y-12">
+      <div class="space-y-4">
+        <h1 class="text-7xl md:text-[7rem] font-black tracking-tighter uppercase text-white leading-none">GROUP 03</h1>
+        <div class="flex items-center justify-center gap-4 text-xs font-mono-custom font-bold text-stone-400">
+          <span class="tracking-widest">3 LATES = 1 ABSENT</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-white/20"></span>
+          <span class="tracking-widest">3 ABSENTS = DROP</span>
         </div>
       </div>
-
       <div class="flex gap-4 justify-center">
-        <button onclick="navigateTo('dashboard')" class="py-4 w-40 rounded-xl bg-white hover:bg-stone-200 text-black font-extrabold text-sm uppercase transition shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+        <button onclick="navigateTo('dashboard')" class="px-10 py-4 rounded-xl bg-white hover:bg-stone-200 text-black font-extrabold uppercase tracking-widest text-sm transition">
           ENTER
         </button>
-        <button onclick="openAuthModal()" class="py-4 w-40 rounded-xl glass hover:bg-white/10 text-white font-extrabold text-sm uppercase transition border border-white/20">
+        <button onclick="openAuthModal()" class="px-10 py-4 rounded-xl glass-dark hover:bg-white/10 text-white font-extrabold uppercase tracking-widest text-sm transition">
           ADMIN ACCESS
         </button>
       </div>
     </div>
   </section>
 
-  <!-- ========================================== -->
-  <!-- 2: DASHBOARD (LIVE DATA)                   -->
-  <!-- ========================================== -->
-  <section id="dashboardView" class="hidden min-h-screen pb-16">
-    <header class="glass sticky top-0 z-30">
-      <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <button onclick="navigateTo('landing')" class="text-xs font-mono-custom font-bold text-stone-500 hover:text-white transition uppercase">
-          ← Back
+  <!-- ================= DASHBOARD ================= -->
+  <section id="dashboardView" class="hidden min-h-screen relative z-10 pb-16">
+    <header class="glass-dark border-b border-white/5 sticky top-0 z-30">
+      <div class="max-w-6xl mx-auto px-4 py-3.5 flex justify-between items-center">
+        <button onclick="navigateTo('landing')" class="text-[10px] uppercase font-mono-custom font-bold text-stone-500 hover:text-white transition">
+          ← BACK
         </button>
-        
-        <div class="flex items-center gap-3 font-mono-custom text-xs uppercase font-bold text-stone-300">
-          <!-- Legend -->
-          <div class="hidden sm:flex gap-3 px-4 py-1.5 rounded-md bg-black/40 border border-white/5">
-            <span class="flex items-center gap-1.5"><span class="dot bg-stone-500"></span>NONE</span>
-            <span class="flex items-center gap-1.5"><span class="dot bg-emerald-400"></span>OK</span>
-            <span class="flex items-center gap-1.5"><span class="dot bg-amber-400"></span>WARNING</span>
-            <span class="flex items-center gap-1.5"><span class="dot bg-rose-500 shadow-[0_0_8px_#f43f5e]"></span>DROPPED</span>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <!-- Layout Toggles -->
-          <div class="flex bg-black/50 border border-white/10 rounded-lg p-0.5">
-            <button id="btnGrid" onclick="toggleLayout('grid')" class="p-1.5 px-3 rounded text-white bg-white/10 text-xs font-mono-custom transition">GRID</button>
-            <button id="btnList" onclick="toggleLayout('list')" class="p-1.5 px-3 rounded text-stone-500 hover:text-white text-xs font-mono-custom transition">LIST</button>
-          </div>
-          <button onclick="openExportModal()" class="text-xs font-mono-custom font-bold px-4 py-2 rounded-lg bg-white text-black transition">
-            EXPORT 📸
-          </button>
+        <div class="flex items-center gap-3">
+          <button onclick="openExportModal()" class="text-[10px] font-mono-custom font-bold px-3 py-1.5 rounded bg-white/5 text-white hover:bg-white/10 transition">📸 GC PICTURE / PRINT</button>
+          <button onclick="openAuthModal()" class="text-[10px] font-mono-custom font-bold px-3 py-1.5 rounded bg-white text-black hover:bg-stone-300 transition">🔒 ADMIN</button>
         </div>
       </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-6 py-8 space-y-6">
-      <!-- Live Metrics Dashboard Header -->
-      <div class="flex justify-between items-end border-b border-white/10 pb-4">
-        <h2 class="text-3xl font-black uppercase tracking-tight text-white">Live Roster</h2>
-        <div id="rosterStatsBanner" class="text-xs font-mono-custom flex gap-4 text-stone-400 uppercase font-bold tracking-wider">
-          -- Data --
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-6">
+      
+      <!-- Legends & Tools Bar -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 animate-item" style="animation-delay: 0.1s">
+        <div class="flex flex-wrap gap-2 text-[10px] font-mono-custom font-bold uppercase tracking-widest">
+          <span class="px-2.5 py-1 rounded bg-stone-800 text-stone-400 border border-stone-700">⚪ NONE</span>
+          <span class="px-2.5 py-1 rounded status-ok">🟢 OK</span>
+          <span class="px-2.5 py-1 rounded status-warning">🟠 WARNING</span>
+          <span class="px-2.5 py-1 rounded status-dropped">🔴 DROPPED</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="toggleLayoutMode('grid')" id="btnGrid" class="text-xs p-2 rounded bg-white/10 text-white hover:bg-white/20">⊞</button>
+          <button onclick="toggleLayoutMode('list')" id="btnList" class="text-xs p-2 rounded glass-dark text-stone-400 hover:text-white">⊟</button>
         </div>
       </div>
 
-      <!-- Content Container -->
-      <div id="membersContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- Live Chart & Data Stats -->
+      <div id="chartContainer" class="hidden glass-card rounded-xl p-4 sm:p-6 w-full animate-item" style="animation-delay: 0.15s">
+        <div class="flex justify-between items-end mb-4">
+          <h3 class="text-xs font-mono-custom font-bold text-stone-400 uppercase tracking-widest">Attendance Trend</h3>
+          <div id="rosterStatsBanner" class="text-xs font-mono-custom font-bold">--</div>
+        </div>
+        <div class="relative h-48 w-full">
+          <canvas id="attendanceChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Member Render Area -->
+      <div id="membersContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
         <!-- Rendered via JS -->
       </div>
     </main>
   </section>
 
-  <!-- ========================================== -->
-  <!-- 3: ADMIN CONSOLE                           -->
-  <!-- ========================================== -->
-  <section id="adminView" class="hidden min-h-screen pb-16">
-    <header class="glass sticky top-0 z-30">
-      <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <button onclick="navigateTo('dashboard')" class="text-xs font-mono-custom font-bold text-stone-400 hover:text-white uppercase transition">
-          ← DASHBOARD
-        </button>
-        <span class="text-xs font-mono-custom font-bold uppercase text-amber-400 tracking-widest bg-amber-500/10 px-3 py-1 rounded">
-          LEADER CONSOLE
-        </span>
-        <button onclick="logoutAdmin()" class="text-xs font-mono-custom font-bold text-rose-400 uppercase hover:text-rose-300">
-          LOGOUT
-        </button>
+  <!-- ================= ADMIN ================= -->
+  <section id="adminView" class="hidden min-h-screen relative z-10 pb-16 animate-item">
+    <header class="glass-dark border-b border-white/5 sticky top-0 z-30">
+      <div class="max-w-6xl mx-auto px-4 py-3.5 flex justify-between items-center">
+        <button onclick="navigateTo('dashboard')" class="text-[10px] uppercase font-mono-custom font-bold text-stone-500 hover:text-white transition">← DASHBOARD</button>
+        <span class="text-[10px] font-mono-custom uppercase bg-white text-black px-2 py-1 rounded font-bold">ADMIN ACTIVE</span>
+        <button onclick="logoutAdmin()" class="text-[10px] font-mono-custom font-bold px-3 py-1.5 rounded bg-rose-950 text-rose-400 hover:bg-rose-900 border border-rose-900 transition">LOGOUT</button>
       </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-6 py-8 space-y-6">
+    <main class="max-w-4xl mx-auto px-4 py-6 space-y-6">
       
-      <!-- Section 1: Session Log -->
-      <div class="glass rounded-xl p-6 space-y-5">
+      <div class="glass-card p-6 rounded-xl space-y-4 border border-white/10">
         <div class="flex justify-between items-center">
-          <h3 class="font-bold uppercase tracking-tight text-white">Log Practice</h3>
-          <button onclick="markAllPresent()" class="text-xs font-mono-custom bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded uppercase font-bold transition hover:bg-emerald-500/20">
-            MARK ALL OK
-          </button>
+          <h3 class="text-xs font-mono-custom font-bold uppercase tracking-widest text-white">Log Practice (Grace: 20m)</h3>
+          <button onclick="markAllPresent()" class="text-[10px] font-mono-custom font-bold text-emerald-400 border border-emerald-900 bg-emerald-950 px-2 py-1 rounded">ALL PRESENT</button>
         </div>
-
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs font-mono-custom uppercase font-bold">
-          <div>
-            <label class="text-stone-500 mb-1 block">Label</label>
-            <input id="sessionLabel" type="text" placeholder="Day 1" class="w-full bg-black/50 border border-white/10 px-3 py-2 rounded text-white" />
-          </div>
-          <div>
-            <label class="text-stone-500 mb-1 block">Date</label>
-            <input id="sessionDate" type="date" class="w-full bg-black/50 border border-white/10 px-3 py-2 rounded text-white" />
-          </div>
-          <div>
-            <label class="text-stone-500 mb-1 block">Call Time</label>
-            <input id="sessionStart" type="time" value="16:00" class="w-full bg-black/50 border border-white/10 px-3 py-2 rounded text-white" />
-          </div>
-          <div>
-            <label class="text-stone-500 mb-1 block">End Time</label>
-            <input id="sessionEnd" type="time" value="18:00" class="w-full bg-black/50 border border-white/10 px-3 py-2 rounded text-white" />
-          </div>
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs font-mono-custom">
+          <input id="sessionLabel" type="text" placeholder="Title" class="bg-black border border-white/10 p-2 rounded text-white" />
+          <input id="sessionDate" type="date" class="bg-black border border-white/10 p-2 rounded text-white" />
+          <input id="sessionStart" type="time" value="16:00" class="bg-black border border-white/10 p-2 rounded text-white" />
+          <input id="sessionEnd" type="time" value="18:00" class="bg-black border border-white/10 p-2 rounded text-white" />
         </div>
-
-        <div class="overflow-x-auto border border-white/5 rounded-lg">
-          <table class="w-full text-left text-xs font-mono-custom">
-            <thead class="text-stone-500 uppercase border-b border-white/5 bg-black/20">
-              <tr>
-                <th class="p-3">Name</th>
-                <th class="p-3 w-40">Status</th>
-                <th class="p-3 w-32">Time In</th>
-              </tr>
-            </thead>
-            <tbody id="attendanceInputList" class="divide-y divide-white/5"></tbody>
-          </table>
-        </div>
-
-        <button onclick="savePracticeSession()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-extrabold uppercase py-3 rounded text-sm transition">
-          SAVE ATTENDANCE
-        </button>
+        <div class="overflow-x-auto text-sm font-mono-custom text-stone-300"><table class="w-full text-left"><tbody id="attendanceInputList"></tbody></table></div>
+        <button onclick="savePracticeSession()" class="w-full bg-white text-black font-extrabold uppercase py-3 rounded text-sm transition shadow-lg hover:scale-[1.01]">Save Log</button>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div class="glass rounded-xl p-5 space-y-3">
-          <h3 class="font-bold uppercase tracking-tight text-white">Add Member</h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="glass-card p-6 rounded-xl space-y-4">
+          <h3 class="text-xs font-mono-custom font-bold uppercase tracking-widest text-white">Roster Edit</h3>
           <div class="flex gap-2">
-            <input id="newMemberName" type="text" placeholder="Name..." class="flex-1 bg-black/50 border border-white/10 px-3 rounded text-sm font-mono-custom text-white outline-none focus:border-stone-500" />
-            <button onclick="addMember()" class="bg-white text-black px-4 font-bold rounded uppercase text-xs">ADD</button>
+            <input id="newMemberName" type="text" placeholder="Name" class="w-full bg-black border border-white/10 p-2 rounded text-white font-mono-custom text-sm" />
+            <button onclick="addMember()" class="bg-white text-black px-4 rounded text-xs font-extrabold uppercase transition">+ Add</button>
           </div>
         </div>
-        
-        <div class="glass rounded-xl p-5 space-y-3">
-          <h3 class="font-bold uppercase tracking-tight text-white">Edit Records</h3>
-          <div id="pastSessionsList" class="space-y-1 h-32 overflow-y-auto pr-2"></div>
+        <div class="glass-card p-6 rounded-xl space-y-2">
+          <h3 class="text-xs font-mono-custom font-bold uppercase tracking-widest text-white">Past Records</h3>
+          <div id="pastSessionsList" class="space-y-2 max-h-40 overflow-y-auto pr-2"></div>
         </div>
       </div>
     </main>
   </section>
 
-  <!-- ========================================== -->
-  <!-- MODAL: EXPORT / GC SHARING                 -->
-  <!-- ========================================== -->
-  <div id="exportModal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm">
-    <div class="w-full max-w-2xl bg-black border border-white/15 p-1 rounded-2xl">
-      <div class="p-5 flex justify-between items-center border-b border-white/10">
-        <select id="exportSessionSelector" onchange="generateExportCard()" class="bg-stone-900 border border-white/10 text-white font-mono-custom text-xs px-3 py-1.5 rounded outline-none uppercase font-bold max-w-[200px]">
-          <option value="overall">SUMMARY ALL</option>
+  <!-- ================= RECEIPT MODAL ================= -->
+  <div id="receiptModal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-stone-950 border border-white/10 w-full max-w-lg rounded-2xl p-6 space-y-5 flex flex-col h-[80vh] sm:h-auto sm:max-h-[85vh]">
+      <div class="flex justify-between items-start">
+        <h3 id="receiptName" class="text-3xl font-black uppercase text-white tracking-tighter">NAME</h3>
+        <button onclick="closeReceiptModal()" class="text-stone-500 hover:text-white text-2xl">×</button>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-center font-mono-custom">
+        <div class="border border-white/5 p-3 rounded"><div class="text-[10px] text-stone-500">PRESENTS</div><div id="receiptPresents" class="text-2xl font-bold text-white">0</div></div>
+        <div class="border border-white/5 p-3 rounded"><div class="text-[10px] text-stone-500">LATES</div><div id="receiptLates" class="text-2xl font-bold text-white">0</div></div>
+        <div class="border border-white/5 p-3 rounded"><div class="text-[10px] text-stone-500">ABSENTS</div><div id="receiptEffectiveAbsents" class="text-2xl font-bold text-rose-500">0</div></div>
+      </div>
+      <div id="receiptTimeline" class="space-y-2 overflow-y-auto flex-1 font-mono-custom text-xs"></div>
+    </div>
+  </div>
+
+  <!-- ================= GC/PRINT EXPORT ================= -->
+  <div id="exportModal" class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4">
+    <div class="bg-[#0c0d10] border border-white/5 w-full max-w-3xl rounded-xl p-4 sm:p-6 space-y-4 max-h-[90vh] flex flex-col">
+      <div class="flex justify-between items-center border-b border-white/5 pb-2 no-print">
+        <select id="exportSessionSelector" onchange="generateExportCard()" class="bg-black border border-white/10 text-white text-xs font-mono-custom px-3 py-1.5 rounded focus:outline-none">
+          <option value="overall">Summary</option>
         </select>
         <div class="flex gap-2">
-          <button onclick="downloadAsImage()" class="bg-emerald-500 text-black px-4 py-2 rounded text-xs font-mono-custom font-bold">⬇ .PNG (IMAGE)</button>
-          <button onclick="closeExportModal()" class="text-stone-500 hover:text-white px-2">X</button>
+          <button onclick="downloadAsImage()" class="bg-white hover:bg-stone-300 text-black font-extrabold text-[10px] uppercase font-mono-custom px-3 py-1.5 rounded">PNG Image</button>
+          <button onclick="closeExportModal()" class="text-stone-400 font-bold px-3">×</button>
         </div>
       </div>
-      
-      <div class="p-4 overflow-y-auto max-h-[70vh]">
-        <div id="exportCardArea" class="bg-[#0f1115] border border-white/5 rounded-xl p-6 text-white">
-          <div class="border-b border-white/10 pb-4 mb-4 flex justify-between">
+      <div class="overflow-y-auto flex-1 p-0 sm:p-2 flex justify-center">
+        <div id="exportCardArea" class="bg-[#0c0d10] p-6 rounded-lg w-full max-w-2xl text-stone-200 border border-white/5 shadow-2xl">
+          <div class="border-b border-stone-800 pb-3 flex justify-between items-end mb-4">
             <div>
-              <div class="font-mono-custom text-[10px] text-stone-500 uppercase tracking-widest mb-1">GROUP 03 ATTENDANCE</div>
-              <h2 id="exportTitle" class="text-3xl font-black uppercase tracking-tight">SUMMARY</h2>
+              <h2 id="exportTitle" class="text-3xl font-black uppercase tracking-tight text-white leading-none">GROUP 03 SUMMARY</h2>
+              <div id="exportMeta" class="text-[10px] font-mono-custom text-stone-500 mt-2"></div>
             </div>
-            <div id="exportTimestamp" class="font-mono-custom text-xs text-stone-500 text-right"></div>
+            <div id="exportTimestamp" class="text-[10px] font-mono-custom text-stone-500 text-right uppercase"></div>
           </div>
-          <div id="exportContentList" class="font-mono-custom text-xs space-y-[2px]"></div>
+          <div id="exportContentList" class="font-mono-custom text-xs"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- MODAL: RECEIPT (TIMELINE)                  -->
-  <!-- ========================================== -->
-  <div id="receiptModal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm">
-    <div class="glass w-full max-w-md rounded-2xl flex flex-col max-h-[85vh] border border-white/10 shadow-2xl">
-      <div class="p-5 flex justify-between border-b border-white/10">
-        <h3 id="receiptName" class="text-xl font-black uppercase tracking-tight">NAME</h3>
-        <button onclick="closeReceiptModal()" class="text-stone-500 font-bold hover:text-white">X</button>
+  <!-- ================= AUTH ================= -->
+  <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur flex items-center justify-center p-4">
+    <div class="bg-stone-950 border border-white/10 w-full max-w-sm rounded-xl p-6 space-y-4">
+      <div class="flex justify-between border-b border-white/10 pb-2">
+        <h3 class="text-xs font-bold text-white font-mono-custom">ADMIN LOGIN</h3>
+        <button onclick="closeAuthModal()" class="text-stone-500 hover:text-white">×</button>
       </div>
-      
-      <div class="p-5 grid grid-cols-3 gap-2 font-mono-custom text-center">
-        <div class="bg-black/40 rounded p-2 border border-white/5">
-          <span class="block text-[10px] text-stone-500 mb-1">PRESENTS</span>
-          <span id="rPresents" class="text-xl text-emerald-400 font-bold">0</span>
-        </div>
-        <div class="bg-black/40 rounded p-2 border border-white/5">
-          <span class="block text-[10px] text-stone-500 mb-1">LATES</span>
-          <span id="rLates" class="text-xl text-amber-400 font-bold">0</span>
-        </div>
-        <div class="bg-black/40 rounded p-2 border border-white/5">
-          <span class="block text-[10px] text-stone-500 mb-1">ABSENTS</span>
-          <span id="rAbsents" class="text-xl text-rose-500 font-bold shadow-[0_0_5px_rgba(244,63,94,0.5)]">0</span>
-        </div>
-      </div>
-
-      <div class="flex-1 overflow-y-auto px-5 pb-5">
-        <div id="receiptTimeline" class="space-y-1 font-mono-custom text-[11px] uppercase"></div>
+      <div class="space-y-3 font-mono-custom text-xs">
+        <input id="loginEmail" type="email" placeholder="Email" class="w-full bg-black border border-white/10 px-3 py-2 rounded text-white" />
+        <input id="loginPassword" type="password" placeholder="Password" class="w-full bg-black border border-white/10 px-3 py-2 rounded text-white" />
+        <button onclick="loginAdmin()" class="w-full bg-white text-black font-extrabold uppercase py-2 rounded transition">LOGIN</button>
       </div>
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- MODAL: LOGIN                               -->
-  <!-- ========================================== -->
-  <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 backdrop-blur-sm">
-    <div class="glass border border-white/10 w-full max-w-sm p-6 rounded-2xl space-y-4 shadow-2xl">
-      <div class="flex justify-between text-white uppercase font-bold text-sm font-mono-custom mb-2">
-        <span>LEADER ACCESS</span>
-        <button onclick="closeAuthModal()" class="text-stone-500 hover:text-white">X</button>
-      </div>
-      <input id="loginEmail" type="email" placeholder="EMAIL" class="w-full bg-black border border-white/10 p-3 text-xs font-mono-custom text-white outline-none rounded" />
-      <input id="loginPassword" type="password" placeholder="PASSWORD" class="w-full bg-black border border-white/10 p-3 text-xs font-mono-custom text-white outline-none rounded" />
-      <button onclick="loginAdmin()" class="w-full bg-white text-black font-extrabold uppercase py-3 rounded text-sm mt-2 transition shadow-md shadow-white/10">AUTHORIZE</button>
-    </div>
-  </div>
-
-  <!-- ========================================== -->
-  <!-- JAVASCRIPT & FIREBASE                      -->
-  <!-- ========================================== -->
   <script>
-    // ---------------------------------------------------------
-    // PASTE YOUR FIREBASE KEYS HERE
-    // ---------------------------------------------------------
+    // -------------------------------------------------------------
+    // PASTE FIREBASE KEYS
+    // -------------------------------------------------------------
     const firebaseConfig = {
   apiKey: "AIzaSyD29Zqlz1Oe9dNZuLX4h7jywOadUtJ5jOY",
   authDomain: "group-3-pe-attendance-sheet.firebaseapp.com",
@@ -322,262 +237,207 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    let members = [], sessions = [], attendance = [];
-    let currentUser = null, currentLayout = 'grid';
+    let members = [];
+    let sessions = [];
+    let attendance = [];
+    let currentUser = null;
+    let layoutMode = 'grid'; // Grid or List view state
+    let chartInstance = null; // Store chart instance
 
     document.getElementById('sessionDate').valueAsDate = new Date();
 
-    // VIEW LOGIC
+    // -- Routing & Auth --
     function navigateTo(view) {
-      document.querySelectorAll('section').forEach(s => s.classList.add('hidden'));
-      if (view === 'admin' && !currentUser) return openAuthModal();
-      document.getElementById(view + 'View').classList.remove('hidden');
+      document.getElementById('landingView').classList.add('hidden');
+      document.getElementById('dashboardView').classList.add('hidden');
+      document.getElementById('adminView').classList.add('hidden');
+      if(view === 'landing') document.getElementById('landingView').classList.remove('hidden');
+      if(view === 'dashboard') document.getElementById('dashboardView').classList.remove('hidden');
+      if(view === 'admin') currentUser ? document.getElementById('adminView').classList.remove('hidden') : openAuthModal();
     }
-
-    // AUTH
-    auth.onAuthStateChanged(user => { currentUser = user; });
-    function openAuthModal() { currentUser ? navigateTo('admin') : document.getElementById('authModal').classList.remove('hidden'); }
-    function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
+    
+    auth.onAuthStateChanged(user => currentUser = user);
+    const openAuthModal = () => currentUser ? navigateTo('admin') : document.getElementById('authModal').classList.remove('hidden');
+    const closeAuthModal = () => document.getElementById('authModal').classList.add('hidden');
     async function loginAdmin() {
       try {
         await auth.signInWithEmailAndPassword(document.getElementById('loginEmail').value.trim(), document.getElementById('loginPassword').value);
         closeAuthModal(); navigateTo('admin');
-      } catch (e) { alert("Auth Error: " + e.message); }
+      } catch (e) { alert("Failed: Check credentials."); }
     }
-    function logoutAdmin() { auth.signOut(); navigateTo('landing'); }
+    const logoutAdmin = () => { auth.signOut(); navigateTo('landing'); };
 
-    // DATABASE LISTENERS
-    db.collection('members').orderBy('name', 'asc').onSnapshot(s => { members = s.docs.map(d => ({id: d.id, ...d.data()})); renderUI(); });
-    db.collection('sessions').orderBy('date', 'desc').onSnapshot(s => { sessions = s.docs.map(d => ({id: d.id, ...d.data()})); renderUI(); renderPastSessions(); updateExportSelectors(); });
-    db.collection('attendance').onSnapshot(s => { attendance = s.docs.map(d => ({id: d.id, ...d.data()})); renderUI(); });
+    // -- Live Sync Listeners --
+    db.collection('members').orderBy('name', 'asc').onSnapshot(s => { members = s.docs.map(d => ({id:d.id,...d.data()})); refreshApp(); });
+    db.collection('sessions').orderBy('date', 'desc').onSnapshot(s => { sessions = s.docs.map(d => ({id:d.id,...d.data()})); refreshApp(); });
+    db.collection('attendance').onSnapshot(s => { attendance = s.docs.map(d => ({id:d.id,...d.data()})); refreshApp(); });
 
-    function renderUI() {
-      renderRoster();
-      renderAttendanceForm();
+    function refreshApp() {
+      renderAttendanceForm(); renderPastSessions(); renderRoster(); updateExportSelectors(); updateChart();
     }
 
-    // MEMBER MGT
+    // -- Member & Attendance Add/Edit Logic --
     async function addMember() {
-      const name = document.getElementById('newMemberName').value.trim();
-      if (!name) return;
-      await db.collection('members').add({ name, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+      const v = document.getElementById('newMemberName').value.trim();
+      if(!v) return;
+      await db.collection('members').add({ name: v, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
       document.getElementById('newMemberName').value = '';
     }
 
-    // ADMIN - LOGGING (WITH 20 MIN AUTO-MATH)
-    function renderAttendanceForm() {
-      document.getElementById('attendanceInputList').innerHTML = members.map(m => `
-        <tr class="hover:bg-white/[0.03]">
-          <td class="p-3 text-stone-200">${m.name}</td>
-          <td class="p-3">
-            <select id="status_${m.id}" onchange="handleStatusChange('${m.id}')" class="w-full bg-black border border-white/20 text-white rounded p-1 outline-none font-bold">
-              <option value="present">🟢 OK</option>
-              <option value="late">🟠 LATE (>20M)</option>
-              <option value="absent">🔴 ABSENT</option>
-            </select>
-          </td>
-          <td class="p-3">
-            <input id="time_${m.id}" type="time" onchange="autoLateCheck('${m.id}')" value="${document.getElementById('sessionStart').value}" class="w-full bg-black border border-white/20 text-stone-300 rounded p-1 outline-none" />
-          </td>
-        </tr>
-      `).join('');
-    }
-
-    function autoLateCheck(id) {
-      const start = document.getElementById('sessionStart').value;
-      const arr = document.getElementById('time_' + id).value;
-      const sel = document.getElementById('status_' + id);
-      if (sel.value === 'absent' || !start || !arr) return;
-      
-      const [sh, sm] = start.split(':').map(Number);
-      const [ah, am] = arr.split(':').map(Number);
-      const diff = (ah * 60 + am) - (sh * 60 + sm);
-      
+    // > AUTOMATIC 20-MIN GRACE CALCULATOR
+    function autoCalculateLate(mId) {
+      const sStart = document.getElementById('sessionStart').value, tIn = document.getElementById(`time_${mId}`).value, sel = document.getElementById(`status_${mId}`);
+      if(sel.value === 'absent' || !sStart || !tIn) return;
+      const m1 = sStart.split(':'), m2 = tIn.split(':');
+      const diff = (+m2[0]*60 + +m2[1]) - (+m1[0]*60 + +m1[1]);
       sel.value = diff > 20 ? 'late' : 'present';
     }
 
-    function handleStatusChange(id) {
-      const t = document.getElementById('time_' + id);
-      if (document.getElementById('status_' + id).value === 'absent') { t.disabled = true; t.value = ''; }
-      else { t.disabled = false; if(!t.value) t.value = document.getElementById('sessionStart').value; }
+    function renderAttendanceForm() {
+      document.getElementById('attendanceInputList').innerHTML = members.length ? members.map(m => `
+        <tr class="border-b border-white/5"><td class="py-3 px-1">${m.name}</td>
+        <td class="py-3 px-1"><select id="status_${m.id}" onchange="if(this.value==='absent') document.getElementById('time_${m.id}').disabled=true; else document.getElementById('time_${m.id}').disabled=false; autoCalculateLate('${m.id}')" class="bg-black border border-white/10 rounded p-1 text-xs">
+          <option value="present">Present (On Time)</option><option value="late">Late (>20m)</option><option value="absent">Absent</option>
+        </select></td>
+        <td class="py-3 px-1"><input id="time_${m.id}" type="time" onchange="autoCalculateLate('${m.id}')" value="${document.getElementById('sessionStart').value}" class="bg-black border border-white/10 rounded p-1 text-xs"/></td></tr>
+      `).join('') : '';
     }
-    
-    function markAllPresent() { members.forEach(m => { const s=document.getElementById('status_'+m.id), t=document.getElementById('time_'+m.id); if(s)s.value='present'; if(t){t.disabled=false; t.value=document.getElementById('sessionStart').value;} }); }
+
+    const markAllPresent = () => members.forEach(m => { 
+      let s = document.getElementById(`status_${m.id}`), t = document.getElementById(`time_${m.id}`);
+      if(s) s.value='present'; if(t) { t.disabled=false; t.value=document.getElementById('sessionStart').value; } 
+    });
 
     async function savePracticeSession() {
-      const label = document.getElementById('sessionLabel').value || 'PRACTICE';
-      const date = document.getElementById('sessionDate').value, st = document.getElementById('sessionStart').value, en = document.getElementById('sessionEnd').value;
-      if (!date || members.length===0) return;
-
-      const batch = db.batch();
-      const sRef = db.collection('sessions').doc();
-      batch.set(sRef, { label, date, startTime: st, endTime: en });
-
+      const d = document.getElementById('sessionDate').value, b = db.batch(), sRef = db.collection('sessions').doc();
+      if(!d || !members.length) return alert('Date or members missing');
+      b.set(sRef, { label: document.getElementById('sessionLabel').value||'Practice', date:d, startTime: document.getElementById('sessionStart').value, endTime: document.getElementById('sessionEnd').value, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
       members.forEach(m => {
-        const stat = document.getElementById('status_'+m.id).value;
-        const tm = document.getElementById('time_'+m.id).value || 'N/A';
-        batch.set(db.collection('attendance').doc(), { sessionId: sRef.id, sessionLabel: label, date, memberId: m.id, memberName: m.name, status: stat, timeArrived: stat === 'absent' ? 'N/A' : tm });
+        let st = document.getElementById(`status_${m.id}`).value;
+        b.set(db.collection('attendance').doc(), { sessionId: sRef.id, sessionLabel: document.getElementById('sessionLabel').value||'Practice', date: d, startTime: document.getElementById('sessionStart').value, endTime: document.getElementById('sessionEnd').value, memberId: m.id, memberName: m.name, status: st, timeArrived: st === 'absent' ? 'N/A' : document.getElementById(`time_${m.id}`).value });
       });
-      await batch.commit(); alert('SAVED!');
+      await b.commit(); alert('Saved.'); document.getElementById('sessionLabel').value='';
     }
 
-    // ADMIN - PAST RECORDS
     function renderPastSessions() {
       document.getElementById('pastSessionsList').innerHTML = sessions.slice(0,5).map(s => `
-        <div class="flex justify-between items-center text-[10px] font-mono-custom uppercase bg-black/30 p-2 rounded border border-white/5">
-          <span class="text-stone-300">${s.date} : ${s.label}</span>
-          <button onclick="editRecords('${s.id}')" class="text-white bg-white/10 px-2 rounded hover:bg-white/20">EDIT</button>
-        </div>
-      `).join('');
+        <div class="flex justify-between items-center text-xs p-2 bg-black rounded border border-white/5"><span>${s.label} (${s.date})</span>
+        <button onclick="editSession('${s.id}')" class="text-white hover:underline uppercase">Edit</button></div>`).join('');
+    }
+    
+    async function editSession(sid) {
+      let r = attendance.filter(a => a.sessionId === sid), name = prompt("Enter Member Name exact match to Edit:\n"+r.map(x=>x.memberName).join(', '));
+      let target = r.find(x => x.memberName.toLowerCase() === name?.toLowerCase().trim()); if(!target) return alert('Not found');
+      let ns = prompt('Status (present, late, absent):', target.status), nt = ns !== 'absent' ? prompt('Time:', target.timeArrived) : 'N/A';
+      if(!['present','late','absent'].includes(ns)) return alert('Invalid');
+      await db.collection('attendance').doc(target.id).update({status:ns, timeArrived:nt}); alert('Updated');
     }
 
-    async function editRecords(sId) {
-      const target = prompt(`EDIT DATA.\nEnter MEMBER NAME:`).trim();
-      const rec = attendance.find(a => a.sessionId === sId && a.memberName.toLowerCase() === target.toLowerCase());
-      if (!rec) return alert('Member not found in session.');
-      const nS = prompt(`NEW STATUS (present / late / absent)`, rec.status);
-      const nT = nS !== 'absent' ? (prompt(`TIME IN`, rec.timeArrived) || 'N/A') : 'N/A';
-      if (['present','late','absent'].includes(nS.toLowerCase())) {
-        await db.collection('attendance').doc(rec.id).update({ status: nS, timeArrived: nT });
-      }
+    // -- Live Calculations & Roster Output --
+    function getStats(id) {
+      let l = attendance.filter(a => a.memberId === id), p = l.filter(x => x.status === 'present').length;
+      let late = l.filter(x => x.status === 'late').length, a = l.filter(x => x.status === 'absent').length;
+      let e = a + Math.floor(late/3); 
+      let st = sessions.length === 0 ? 'none' : (e >= 3 ? 'dropped' : (e === 2 ? 'warning' : 'ok'));
+      return { p, late, a, e, st, l };
     }
 
-    // CORE: LIVE ROSTER VIEW & MATH
-    function getStats(mId) {
-      const logs = attendance.filter(a => a.memberId === mId);
-      const P = logs.filter(a => a.status === 'present').length, L = logs.filter(a => a.status === 'late').length, A = logs.filter(a => a.status === 'absent').length;
-      const totalA = A + Math.floor(L/3);
-      let s = sessions.length ? (totalA >= 3 ? 'drop' : (totalA === 2 ? 'warn' : 'ok')) : 'none';
-      return { P, L, totalA, status: s, logs };
-    }
-
-    function toggleLayout(type) {
-      currentLayout = type;
-      document.getElementById('btnGrid').className = type === 'grid' ? "p-1.5 px-3 rounded text-white bg-white/10 text-xs font-mono-custom transition" : "p-1.5 px-3 rounded text-stone-500 hover:text-white text-xs font-mono-custom transition";
-      document.getElementById('btnList').className = type === 'list' ? "p-1.5 px-3 rounded text-white bg-white/10 text-xs font-mono-custom transition" : "p-1.5 px-3 rounded text-stone-500 hover:text-white text-xs font-mono-custom transition";
-      
-      const cont = document.getElementById('membersContainer');
-      cont.className = type === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" : "flex flex-col gap-2 max-w-4xl mx-auto w-full";
+    function toggleLayoutMode(mode) {
+      layoutMode = mode; 
+      document.getElementById('btnGrid').className = mode==='grid' ? "text-xs p-2 rounded bg-white/20 text-white" : "text-xs p-2 rounded glass-dark text-stone-400 hover:text-white";
+      document.getElementById('btnList').className = mode==='list' ? "text-xs p-2 rounded bg-white/20 text-white" : "text-xs p-2 rounded glass-dark text-stone-400 hover:text-white";
       renderRoster();
     }
 
-    function renderRoster() {
-      const c = document.getElementById('membersContainer'), s = document.getElementById('rosterStatsBanner');
-      if (members.length === 0) return c.innerHTML = '', s.innerHTML = '';
-      let counts = {ok:0, warn:0, drop:0};
+    function updateChart() {
+      const chC = document.getElementById('chartContainer');
+      if (sessions.length === 0) return chC.classList.add('hidden');
+      chC.classList.remove('hidden');
 
-      c.innerHTML = members.map((m, i) => {
-        const st = getStats(m.id);
-        if(st.status==='ok')counts.ok++; if(st.status==='warn')counts.warn++; if(st.status==='drop')counts.drop++;
-        
-        let cClr='bg-stone-500', bar=0, txt="NONE";
-        if(st.status==='ok') {cClr='bg-emerald-400'; bar = st.totalA === 1 ? 33 : 0; txt="OK";}
-        if(st.status==='warn'){cClr='bg-amber-400'; bar=66; txt="WARNING";}
-        if(st.status==='drop'){cClr='bg-rose-500 shadow-[0_0_8px_#f43f5e]'; bar=100; txt="DROPPED";}
-
-        // LIST VIEW
-        if (currentLayout === 'list') {
-          return `
-            <div class="glass hover:bg-white/[0.05] p-3 rounded-lg flex items-center justify-between cursor-pointer animate-item border border-white/5 transition group" style="animation-delay: ${i*0.03}s" onclick="openRModal('${m.id}')">
-              <div class="flex items-center gap-4 min-w-[200px]">
-                <div class="dot ${cClr}"></div>
-                <div class="font-bold text-white uppercase text-sm">${m.name}</div>
-              </div>
-              <div class="hidden sm:flex gap-4 font-mono-custom text-xs">
-                <span class="text-stone-400">P:<span class="text-emerald-400 font-bold ml-1">${st.P}</span></span>
-                <span class="text-stone-400">L:<span class="text-amber-400 font-bold ml-1">${st.L}</span></span>
-              </div>
-              <div class="flex items-center gap-3 w-40 justify-end">
-                <div class="text-[10px] font-mono-custom font-bold text-white">${st.totalA}/3 <span class="text-stone-500">ABS</span></div>
-                <div class="w-16 h-1.5 bg-black rounded-full overflow-hidden border border-white/10"><div class="h-full bg-white transition-all" style="width:${bar}%"></div></div>
-              </div>
-            </div>`;
-        } 
-        
-        // GRID VIEW
-        return `
-          <div class="glass rounded-xl p-5 hover:translate-y-[-4px] hover:shadow-2xl transition cursor-pointer animate-item group relative overflow-hidden" style="animation-delay: ${i*0.04}s" onclick="openRModal('${m.id}')">
-            <div class="absolute top-0 left-0 h-1 bg-white data-bar-fill opacity-20" style="width:${bar}%"></div>
-            <div class="flex justify-between items-start mb-4">
-              <h3 class="text-lg font-black uppercase text-white tracking-tight break-all">${m.name}</h3>
-              <div class="px-2.5 py-1 rounded bg-black/40 border border-white/10 flex items-center gap-2 font-mono-custom text-[10px] font-bold tracking-wider">
-                <span class="dot ${cClr}"></span>${txt}
-              </div>
-            </div>
-            <div class="grid grid-cols-3 gap-2 text-center font-mono-custom">
-              <div class="bg-white/5 p-2 rounded">
-                <div class="text-[9px] text-stone-500">P</div><div class="text-sm font-bold text-emerald-400">${st.P}</div>
-              </div>
-              <div class="bg-white/5 p-2 rounded">
-                <div class="text-[9px] text-stone-500">L</div><div class="text-sm font-bold text-amber-400">${st.L}</div>
-              </div>
-              <div class="bg-white/5 p-2 rounded">
-                <div class="text-[9px] text-stone-500">ABS</div><div class="text-sm font-bold text-rose-500">${st.totalA}</div>
-              </div>
-            </div>
-          </div>`;
-      }).join('');
-
-      s.innerHTML = `<span>👥 ${members.length} MEM</span> <span class="text-emerald-400">🟢 ${counts.ok} OK</span> <span class="text-amber-400">🟠 ${counts.warn} WARN</span> <span class="text-rose-500">🔴 ${counts.drop} DROP</span>`;
-    }
-
-    // INDIVIDUAL MODAL
-    function openRModal(id) {
-      const m = members.find(x => x.id === id); if(!m) return;
-      const s = getStats(id);
-      document.getElementById('receiptName').innerText = m.name;
-      document.getElementById('rPresents').innerText = s.P;
-      document.getElementById('rLates').innerText = s.L;
-      document.getElementById('rAbsents').innerText = s.totalA;
+      const labels = sessions.slice().reverse().map((s,i) => `S${i+1}`); // chronological Left to Right
+      const dataArr = sessions.slice().reverse().map(s => attendance.filter(a => a.sessionId === s.id && (a.status === 'present' || a.status === 'late')).length);
       
-      const tl = document.getElementById('receiptTimeline');
-      tl.innerHTML = s.logs.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(l => `
-        <div class="flex justify-between border-b border-white/5 py-2">
-          <div class="text-stone-400">${l.date} <span class="text-white">${l.timeArrived !== 'N/A' ? '@'+l.timeArrived : ''}</span></div>
-          <div class="font-bold ${l.status==='present'?'text-emerald-400':(l.status==='late'?'text-amber-400':'text-rose-500')}">${l.status.toUpperCase()}</div>
-        </div>
-      `).join('');
-      document.getElementById('receiptModal').classList.remove('hidden');
-    }
-    function closeReceiptModal() { document.getElementById('receiptModal').classList.add('hidden'); }
-
-    // EXPORT PNG
-    function updateExportSelectors() {
-      const sel = document.getElementById('exportSessionSelector'); if(!sel) return;
-      sel.innerHTML = `<option value="overall">SUMMARY ALL</option>` + sessions.map(s => `<option value="${s.id}">${s.date} ${s.label}</option>`).join('');
-    }
-    function openExportModal() { updateExportSelectors(); generateExportCard(); document.getElementById('exportModal').classList.remove('hidden'); }
-    function closeExportModal() { document.getElementById('exportModal').classList.add('hidden'); }
-
-    function generateExportCard() {
-      const id = document.getElementById('exportSessionSelector').value, el = document.getElementById('exportContentList');
-      document.getElementById('exportTimestamp').innerText = new Date().toLocaleDateString();
-
-      if(id === 'overall') {
-        document.getElementById('exportTitle').innerText = 'SUMMARY RECORD';
-        el.innerHTML = members.map(m => {
-          const s = getStats(m.id);
-          let tag = s.status==='drop'?'🔴 DROP':(s.status==='warn'?'🟠 WARN':'🟢 OK');
-          return `<div class="flex justify-between p-2 bg-[#1a1d24] rounded text-white border border-white/5">
-            <span class="uppercase w-40 overflow-hidden text-ellipsis">${m.name}</span>
-            <div class="flex gap-4 w-40 text-[10px] text-stone-400"><span class="w-8">P:${s.P}</span><span class="w-8">L:${s.L}</span><span class="w-8 font-bold text-rose-500">A:${s.totalA}</span></div>
-            <span class="font-bold w-16 text-right">${tag}</span>
-          </div>`;
-        }).join('');
-      } else {
-        const ses = sessions.find(x => x.id === id); if(!ses) return;
-        document.getElementById('exportTitle').innerText = ses.date + ' ' + ses.label;
-        el.innerHTML = attendance.filter(a => a.sessionId === id).map(l => {
-          let b = l.status==='present'?'🟢 OK':(l.status==='late'?`🟠 LATE`:'🔴 ABSENT');
-          return `<div class="flex justify-between p-2 bg-[#1a1d24] rounded text-white border border-white/5"><span class="uppercase">${l.memberName}</span><div class="flex gap-2 items-center"><span class="text-[10px] text-stone-400 mr-2">${l.timeArrived !== 'N/A' ? '@'+l.timeArrived : ''}</span><span class="font-bold">${b}</span></div></div>`;
-        }).join('');
-      }
-    }
-    function downloadAsImage() {
-      html2canvas(document.getElementById('exportCardArea'), { backgroundColor: '#0f1115', scale: 2 }).then(canvas => {
-        const link = document.createElement('a'); link.download = `Record_${Date.now()}.png`; link.href = canvas.toDataURL(); link.click();
+      if(chartInstance) chartInstance.destroy();
+      const ctx = document.getElementById('attendanceChart').getContext('2d');
+      chartInstance = new Chart(ctx, {
+        type: 'line', data: { labels: labels, datasets: [{ label: 'Attendees (Present+Late)', data: dataArr, borderColor: '#fff', backgroundColor: 'rgba(255,255,255,0.1)', tension: 0.3, fill: true, pointBackgroundColor: '#f97316' }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks:{color:'#6b7280', precision:0} }, x: { grid: { display: false }, ticks:{color:'#6b7280'} } } }
       });
     }
+
+    function renderRoster() {
+      let grid = document.getElementById('membersContainer'), banner = document.getElementById('rosterStatsBanner');
+      grid.className = layoutMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" : "flex flex-col gap-2";
+      if (!members.length) return grid.innerHTML = `<div class="text-stone-500 text-xs">0 Members. Use Admin Access.</div>`;
+
+      let cok = 0, cw = 0, cd = 0;
+      grid.innerHTML = members.map((m, idx) => {
+        let stat = getStats(m.id);
+        if(stat.st === 'ok') cok++; if(stat.st === 'warning') cw++; if(stat.st === 'dropped') cd++;
+        
+        let tag = stat.st==='none'? '<span class="text-stone-400 border border-stone-800 px-2 rounded uppercase text-[9px] bg-stone-900 py-0.5">NONE</span>' : 
+                  (stat.st==='ok' ? '<span class="status-ok px-2 py-0.5 rounded text-[9px] uppercase font-bold">OK</span>' :
+                  (stat.st==='warning' ? '<span class="status-warning px-2 py-0.5 rounded text-[9px] uppercase font-bold">WARNING</span>' : 
+                  '<span class="status-dropped px-2 py-0.5 rounded text-[9px] uppercase font-bold animate-pulse">DROPPED</span>'));
+
+        if(layoutMode === 'grid') {
+          return `<div onclick="openReceiptModal('${m.id}')" class="glass-card p-4 rounded-xl cursor-pointer animate-item flex flex-col justify-between h-full" style="animation-delay: ${idx*0.03}s">
+            <div class="flex justify-between items-start mb-4"><div class="font-black text-white leading-tight uppercase truncate mr-2">${m.name}</div><div>${tag}</div></div>
+            <div class="flex gap-4 text-[11px] font-mono-custom border-t border-white/5 pt-3 mt-auto">
+              <div><span class="block text-stone-500">PRESENTS</span><span class="text-emerald-400 font-bold">${stat.p}</span></div>
+              <div><span class="block text-stone-500">LATES</span><span class="text-amber-400 font-bold">${stat.late}</span></div>
+              <div><span class="block text-stone-500">ABSENTS</span><span class="text-rose-400 font-bold">${stat.e}</span></div>
+            </div>
+          </div>`;
+        } else {
+          return `<div onclick="openReceiptModal('${m.id}')" class="glass-card px-4 py-3 rounded-xl cursor-pointer animate-item flex items-center justify-between" style="animation-delay: ${idx*0.02}s">
+            <div class="w-1/3 font-bold text-white uppercase truncate text-sm">${m.name}</div>
+            <div class="hidden sm:flex gap-6 text-[10px] font-mono-custom w-1/3 justify-center text-center">
+              <div>P <span class="text-emerald-400 ml-1 font-bold">${stat.p}</span></div><div>L <span class="text-amber-400 ml-1 font-bold">${stat.late}</span></div><div>A <span class="text-rose-400 ml-1 font-bold">${stat.e}</span></div>
+            </div>
+            <div class="w-1/3 flex justify-end">${tag}</div>
+          </div>`;
+        }
+      }).join('');
+      banner.innerHTML = `<span class="text-white">${members.length} ROSTER &nbsp;•&nbsp; ${sessions.length} SESSIONS</span>`;
+    }
+
+    function openReceiptModal(mid) {
+      let m = members.find(x => x.id === mid), st = getStats(mid);
+      document.getElementById('receiptName').innerText = m.name;
+      document.getElementById('receiptPresents').innerText = st.p; document.getElementById('receiptLates').innerText = st.late; document.getElementById('receiptEffectiveAbsents').innerText = st.e;
+      document.getElementById('receiptTimeline').innerHTML = st.l.length ? st.l.map(x => `<div class="flex justify-between items-center py-2 border-b border-white/5 uppercase"><div class="flex flex-col"><span class="text-white">${x.sessionLabel}</span><span class="text-[9px] text-stone-500">${x.date} // IN: ${x.timeArrived}</span></div> <span class="${x.status==='present'?'text-emerald-400':(x.status==='late'?'text-amber-400':'text-rose-400')} font-bold text-[10px] bg-white/5 px-2 py-1 rounded">${x.status}</span></div>`).join('') : '<div class="py-4 text-center text-stone-500">0 LOGS</div>';
+      document.getElementById('receiptModal').classList.remove('hidden');
+    }
+    const closeReceiptModal = () => document.getElementById('receiptModal').classList.add('hidden');
+
+    function openExportModal() { document.getElementById('exportModal').classList.remove('hidden'); }
+    function closeExportModal() { document.getElementById('exportModal').classList.add('hidden'); }
+    function updateExportSelectors() {
+      let s = document.getElementById('exportSessionSelector'); if(!s) return;
+      s.innerHTML = `<option value="overall">Summary View</option>` + sessions.map(x => `<option value="${x.id}">${x.label} (${x.date})</option>`).join('');
+      generateExportCard();
+    }
+
+    function generateExportCard() {
+      let v = document.getElementById('exportSessionSelector').value, t = document.getElementById('exportTitle'), c = document.getElementById('exportContentList');
+      document.getElementById('exportTimestamp').innerText = "GENERATED " + new Date().toLocaleDateString();
+      if(v === 'overall') {
+        t.innerText = "OVERALL RECORD"; document.getElementById('exportMeta').innerText = "3 Lates = 1 Absent | 3 Absents = DROP";
+        c.innerHTML = `<table class="w-full text-left mt-4 border-collapse border border-white/10"><thead class="bg-white/10 uppercase"><tr class="text-[10px] text-stone-300"><th class="p-2 border border-white/10">Member</th><th class="p-2 border border-white/10 text-center">OK</th><th class="p-2 border border-white/10 text-center">Warn</th><th class="p-2 border border-white/10 text-center">Drop</th></tr></thead><tbody>` + members.map(m => {
+          let s = getStats(m.id);
+          return `<tr class="border-b border-white/5 uppercase"><td class="p-2 font-bold">${m.name}</td>
+          <td class="p-2 text-center text-stone-400 font-bold ${s.st==='ok'?'text-white':''}">${s.st==='ok'?'✓':'-'}</td>
+          <td class="p-2 text-center text-amber-500 font-bold ${s.st==='warning'?'bg-amber-500/10':''}">${s.st==='warning'?'✓':'-'}</td>
+          <td class="p-2 text-center text-rose-500 font-bold ${s.st==='dropped'?'bg-rose-500/10':''}">${s.st==='dropped'?'✗':'-'}</td></tr>`;
+        }).join('') + `</tbody></table>`;
+      } else {
+        let ss = sessions.find(x => x.id === v); t.innerText = `${ss.label.toUpperCase()}`; document.getElementById('exportMeta').innerText = `DATE: ${ss.date} | TIME: ${ss.startTime} - ${ss.endTime}`;
+        let l = attendance.filter(a => a.sessionId === v);
+        c.innerHTML = l.map(a => `<div class="flex justify-between py-1.5 border-b border-white/5 uppercase items-center font-bold text-[11px]"><span class="text-white truncate">${a.memberName}</span><span class="${a.status==='present'?'text-emerald-400':(a.status==='late'?'text-amber-400':'text-rose-400')}">${a.status}</span></div>`).join('');
+      }
+    }
+    const downloadAsImage = () => html2canvas(document.getElementById('exportCardArea'), {backgroundColor: '#0c0d10', scale: 2}).then(c => { let l=document.createElement('a'); l.download='Roster.png'; l.href=c.toDataURL(); l.click(); });
   </script>
 </body>
 </html>
