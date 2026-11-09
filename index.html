@@ -3,228 +3,427 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GROUP 03</title>
+  <title>GROUP 03 • PE CULMINATING</title>
   
+  <!-- Fonts: Syne + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
   
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <!-- Chart.js for Live Data -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- html2canvas for GC Screenshots -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <!-- Firebase Compat SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <style>
-    body { font-family: 'Inter', sans-serif; background-color: #0c0d10; color: #e5e7eb; overflow-x: hidden; }
-    .font-mono-custom { font-family: 'JetBrains Mono', monospace; }
-    
-    /* Sleek Background & Glowing accents */
-    .bg-grid-glow { background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px); background-size: 24px 24px; }
-    .glass-dark { background: rgba(20, 24, 30, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); }
-    .glass-card { background: rgba(26, 31, 40, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.04); transition: transform 0.2s, border 0.2s; }
-    .glass-card:hover { border: 1px solid rgba(255, 255, 255, 0.15); transform: translateY(-2px); }
-    
-    /* Status Legends Indicators */
-    .status-ok { background: #064e3b; color: #34d399; border: 1px solid #059669; }
-    .status-warning { background: #451a03; color: #fbbf24; border: 1px solid #d97706; }
-    .status-dropped { background: #4c0519; color: #f87171; border: 1px solid #e11d48; }
-
-    /* Silky Intro Animations */
-    @keyframes slide-up {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background-color: #07090C;
+      color: #E2E8F0;
     }
-    .animate-item { opacity: 0; animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .font-syne {
+      font-family: 'Syne', sans-serif;
+    }
     
-    @media print {
-      body { background: white !important; color: black !important; }
-      .no-print { display: none !important; }
-      .glass-card { background: white !important; border: 1px solid #ccc !important; box-shadow: none !important; transform: none !important;}
+    /* Background Canvas Grids */
+    .telemetry-grid {
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.12) 0%, transparent 60%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 28px 28px, 28px 28px;
+    }
+
+    /* Tactile Glass Panels */
+    .hud-card {
+      background: linear-gradient(135deg, rgba(22, 27, 36, 0.75) 0%, rgba(12, 15, 20, 0.85) 100%);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+    .hud-card:hover {
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    /* 3D Spheres (Matching your exact reference) */
+    .sphere-grey {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ffffff, #9ca3af 60%, #4b5563);
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+    }
+    .sphere-green {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #6ee7b7, #10b981 60%, #047857);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.7);
+    }
+    .sphere-amber {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fde68a, #f59e0b 60%, #b45309);
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.7);
+    }
+    .sphere-rose {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fca5a5, #ef4444 60%, #991b1b);
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.7);
+    }
+
+    /* LED Segmented Strike Bar */
+    .strike-slot {
+      height: 6px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.08);
+      transition: all 0.3s ease;
+    }
+    .strike-slot.filled-warn {
+      background: #F59E0B;
+      box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
+    }
+    .strike-slot.filled-danger {
+      background: #EF4444;
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
     }
   </style>
 </head>
-<body class="min-h-screen bg-grid-glow relative selection:bg-white selection:text-black">
+<body class="min-h-screen telemetry-grid selection:bg-orange-500 selection:text-black antialiased">
 
-  <!-- ================= LANDING ================= -->
-  <section id="landingView" class="min-h-screen flex flex-col justify-center items-center relative z-10 animate-item">
-    <div class="text-center space-y-12">
-      <div class="space-y-4">
-        <h1 class="text-7xl md:text-[7rem] font-black tracking-tighter uppercase text-white leading-none">GROUP 03</h1>
-        <div class="flex items-center justify-center gap-4 text-xs font-mono-custom font-bold text-stone-400">
-          <span class="tracking-widest">3 LATES = 1 ABSENT</span>
-          <span class="w-1.5 h-1.5 rounded-full bg-white/20"></span>
-          <span class="tracking-widest">3 ABSENTS = DROP</span>
+  <!-- =================================================================== -->
+  <!-- VIEW 1: MINIMALIST LANDING PAGE (EXACTLY 2 CHOICES)                 -->
+  <!-- =================================================================== -->
+  <section id="landingView" class="min-h-screen flex flex-col justify-between items-center p-6 relative z-10">
+    <div class="w-full flex justify-between items-center max-w-5xl text-xs">
+      <span class="tracking-widest text-stone-500 font-bold">PE CULMINATING</span>
+      <span class="text-stone-600">GROUP 03</span>
+    </div>
+
+    <div class="w-full max-w-md text-center space-y-8 my-auto">
+      <div class="space-y-3">
+        <h1 class="text-6xl sm:text-7xl font-syne font-black tracking-tighter uppercase text-white leading-none">
+          GROUP 03
+        </h1>
+        <div class="inline-block px-3 py-1 rounded-full text-[11px] font-bold tracking-widest text-orange-400 bg-orange-500/10 border border-orange-500/20">
+          3 LATES = 1 ABSENT • 3 ABSENTS = DROP • >20M = LATE
         </div>
       </div>
-      <div class="flex gap-4 justify-center">
-        <button onclick="navigateTo('dashboard')" class="px-10 py-4 rounded-xl bg-white hover:bg-stone-200 text-black font-extrabold uppercase tracking-widest text-sm transition">
+
+      <!-- EXACT 2 BUTTONS -->
+      <div class="flex flex-col gap-3 justify-center items-center w-full">
+        <button onclick="navigateTo('dashboard')" class="w-full py-4 rounded-xl bg-white hover:bg-stone-200 text-black font-extrabold text-sm tracking-widest uppercase transition-all transform active:scale-95 shadow-lg shadow-white/5">
           ENTER
         </button>
-        <button onclick="openAuthModal()" class="px-10 py-4 rounded-xl glass-dark hover:bg-white/10 text-white font-extrabold uppercase tracking-widest text-sm transition">
+        <button onclick="openAuthModal()" class="w-full py-4 rounded-xl hud-card hover:bg-white/10 text-stone-300 font-extrabold text-sm tracking-widest uppercase transition-all transform active:scale-95 border border-white/10">
           ADMIN ACCESS
         </button>
       </div>
     </div>
+
+    <div class="text-[11px] text-stone-600 tracking-widest">
+      ATTENDANCE MONITOR
+    </div>
   </section>
 
-  <!-- ================= DASHBOARD ================= -->
-  <section id="dashboardView" class="hidden min-h-screen relative z-10 pb-16">
-    <header class="glass-dark border-b border-white/5 sticky top-0 z-30">
-      <div class="max-w-6xl mx-auto px-4 py-3.5 flex justify-between items-center">
-        <button onclick="navigateTo('landing')" class="text-[10px] uppercase font-mono-custom font-bold text-stone-500 hover:text-white transition">
+  <!-- =================================================================== -->
+  <!-- VIEW 2: HIGH-TECH DASHBOARD                                         -->
+  <!-- =================================================================== -->
+  <section id="dashboardView" class="hidden min-h-screen relative z-10 pb-20">
+    
+    <!-- Top Action Bar -->
+    <header class="hud-card border-b border-white/5 sticky top-0 z-30">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center text-xs">
+        <button onclick="navigateTo('landing')" class="text-stone-400 hover:text-white transition flex items-center gap-1">
           ← BACK
         </button>
-        <div class="flex items-center gap-3">
-          <button onclick="openExportModal()" class="text-[10px] font-mono-custom font-bold px-3 py-1.5 rounded bg-white/5 text-white hover:bg-white/10 transition">📸 GC PICTURE / PRINT</button>
-          <button onclick="openAuthModal()" class="text-[10px] font-mono-custom font-bold px-3 py-1.5 rounded bg-white text-black hover:bg-stone-300 transition">🔒 ADMIN</button>
+        <div class="font-bold tracking-widest text-white uppercase flex items-center gap-2">
+          <span>GROUP 03</span>
+          <span class="text-stone-600">•</span>
+          <span class="text-orange-400">TELEMETRY</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="openExportModal()" class="font-bold px-3 py-1.5 rounded-lg bg-orange-500/10 text-orange-400 border border-orange-500/30 hover:bg-orange-500/20 transition">
+            📸 EXPORT / PRINT
+          </button>
+          <button id="navAdminBtn" onclick="openAuthModal()" class="font-bold px-3 py-1.5 rounded-lg bg-white/5 text-stone-300 hover:bg-white/15 transition border border-white/10">
+            🔒 ADMIN
+          </button>
         </div>
       </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-8 space-y-6">
-      
-      <!-- Legends & Tools Bar -->
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 animate-item" style="animation-delay: 0.1s">
-        <div class="flex flex-wrap gap-2 text-[10px] font-mono-custom font-bold uppercase tracking-widest">
-          <span class="px-2.5 py-1 rounded bg-stone-800 text-stone-400 border border-stone-700">⚪ NONE</span>
-          <span class="px-2.5 py-1 rounded status-ok">🟢 OK</span>
-          <span class="px-2.5 py-1 rounded status-warning">🟠 WARNING</span>
-          <span class="px-2.5 py-1 rounded status-dropped">🔴 DROPPED</span>
+    <main class="max-w-6xl mx-auto px-4 py-6 space-y-6">
+
+      <!-- EXACT SCREENSHOT STATUS LEGEND PILLS -->
+      <div class="flex flex-wrap items-center gap-2 pt-1 text-xs">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#151314] border border-[#2e262a] text-stone-300">
+          <span class="sphere-grey"></span> No Practice
         </div>
-        <div class="flex items-center gap-2">
-          <button onclick="toggleLayoutMode('grid')" id="btnGrid" class="text-xs p-2 rounded bg-white/10 text-white hover:bg-white/20">⊞</button>
-          <button onclick="toggleLayoutMode('list')" id="btnList" class="text-xs p-2 rounded glass-dark text-stone-400 hover:text-white">⊟</button>
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#0e1f18] border border-[#1b4332] text-emerald-400 font-medium">
+          <span class="sphere-green"></span> In Good Standing
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#231a0e] border border-[#4d381c] text-amber-400 font-bold">
+          <span class="sphere-amber"></span> Warning (2 Absents)
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#251015] border border-[#4c1d27] text-rose-400 font-bold">
+          <span class="sphere-rose"></span> Dropped (3 Absents)
         </div>
       </div>
 
-      <!-- Live Chart & Data Stats -->
-      <div id="chartContainer" class="hidden glass-card rounded-xl p-4 sm:p-6 w-full animate-item" style="animation-delay: 0.15s">
-        <div class="flex justify-between items-end mb-4">
-          <h3 class="text-xs font-mono-custom font-bold text-stone-400 uppercase tracking-widest">Attendance Trend</h3>
-          <div id="rosterStatsBanner" class="text-xs font-mono-custom font-bold">--</div>
+      <!-- Live Quick-Stats Telemetry HUD -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+        <div class="hud-card p-4 rounded-2xl space-y-1">
+          <span class="text-stone-500 text-[10px] block uppercase tracking-wider">TOTAL PRACTICES</span>
+          <span id="statPractices" class="text-2xl font-black text-white font-syne">0</span>
         </div>
-        <div class="relative h-48 w-full">
+        <div class="hud-card p-4 rounded-2xl space-y-1">
+          <span class="text-stone-500 text-[10px] block uppercase tracking-wider">ATTENDANCE RATE</span>
+          <span id="statTurnout" class="text-2xl font-black text-emerald-400 font-syne">100%</span>
+        </div>
+        <div class="hud-card p-4 rounded-2xl space-y-1">
+          <span class="text-stone-500 text-[10px] block uppercase tracking-wider">ACTIVE WARNINGS</span>
+          <span id="statWarnings" class="text-2xl font-black text-amber-400 font-syne">0</span>
+        </div>
+        <div class="hud-card p-4 rounded-2xl space-y-1">
+          <span class="text-stone-500 text-[10px] block uppercase tracking-wider">DROPPED</span>
+          <span id="statDropped" class="text-2xl font-black text-rose-400 font-syne">0</span>
+        </div>
+      </div>
+
+      <!-- Live Trend Area Graph -->
+      <div class="hud-card p-5 rounded-2xl space-y-3">
+        <div class="flex justify-between items-center text-xs">
+          <span class="text-stone-400 font-bold tracking-wider uppercase">PRACTICE ATTENDANCE TREND</span>
+          <span id="graphStateText" class="text-stone-500 text-[11px]">Awaiting Practice Data</span>
+        </div>
+        <div class="relative h-44 w-full">
           <canvas id="attendanceChart"></canvas>
         </div>
       </div>
 
-      <!-- Member Render Area -->
-      <div id="membersContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-        <!-- Rendered via JS -->
+      <!-- Search, Status Filter & Layout Switcher Controls -->
+      <div class="space-y-3">
+        <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+          <!-- Search Input -->
+          <div class="relative flex-1 max-w-sm">
+            <input id="searchInput" oninput="handleSearch()" type="text" placeholder="Search member name..." class="w-full bg-stone-900/80 border border-white/10 px-3.5 py-2 rounded-xl text-xs text-white placeholder-stone-600 focus:outline-none focus:border-orange-500" />
+          </div>
+
+          <!-- Status Filters -->
+          <div class="flex flex-wrap gap-1.5 text-xs">
+            <button onclick="setFilter('all')" id="filterAll" class="px-2.5 py-1.5 rounded-lg bg-white/20 text-white font-bold transition">ALL</button>
+            <button onclick="setFilter('ok')" id="filterOk" class="px-2.5 py-1.5 rounded-lg bg-white/5 text-emerald-400 hover:bg-emerald-500/10 transition border border-emerald-500/20">🟢 OK</button>
+            <button onclick="setFilter('warning')" id="filterWarn" class="px-2.5 py-1.5 rounded-lg bg-white/5 text-amber-400 hover:bg-amber-500/10 transition border border-amber-500/20">🟠 WARN</button>
+            <button onclick="setFilter('dropped')" id="filterDrop" class="px-2.5 py-1.5 rounded-lg bg-white/5 text-rose-400 hover:bg-rose-500/10 transition border border-rose-500/20">🔴 DROP</button>
+          </div>
+
+          <!-- Layout Switcher -->
+          <div class="flex gap-1 text-xs">
+            <button onclick="setLayout('grid')" id="layoutBtnGrid" class="px-3 py-1.5 rounded-lg bg-white/20 text-white font-bold transition">⊞ Grid</button>
+            <button onclick="setLayout('table')" id="layoutBtnTable" class="px-3 py-1.5 rounded-lg bg-white/5 text-stone-400 hover:text-white transition">☰ Table</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dynamic Roster Container -->
+      <div id="rosterContainer">
+        <!-- Injected via JS -->
       </div>
     </main>
   </section>
 
-  <!-- ================= ADMIN ================= -->
-  <section id="adminView" class="hidden min-h-screen relative z-10 pb-16 animate-item">
-    <header class="glass-dark border-b border-white/5 sticky top-0 z-30">
-      <div class="max-w-6xl mx-auto px-4 py-3.5 flex justify-between items-center">
-        <button onclick="navigateTo('dashboard')" class="text-[10px] uppercase font-mono-custom font-bold text-stone-500 hover:text-white transition">← DASHBOARD</button>
-        <span class="text-[10px] font-mono-custom uppercase bg-white text-black px-2 py-1 rounded font-bold">ADMIN ACTIVE</span>
-        <button onclick="logoutAdmin()" class="text-[10px] font-mono-custom font-bold px-3 py-1.5 rounded bg-rose-950 text-rose-400 hover:bg-rose-900 border border-rose-900 transition">LOGOUT</button>
+  <!-- =================================================================== -->
+  <!-- VIEW 3: ADMIN CONSOLE                                               -->
+  <!-- =================================================================== -->
+  <section id="adminView" class="hidden min-h-screen relative z-10 pb-20">
+    <header class="hud-card border-b border-white/5 sticky top-0 z-30">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center text-xs">
+        <button onclick="navigateTo('dashboard')" class="text-stone-400 hover:text-white transition">
+          ← DASHBOARD
+        </button>
+        <span class="text-orange-400 font-bold uppercase tracking-widest">
+          LEADER CONSOLE
+        </span>
+        <button onclick="logoutAdmin()" class="text-rose-400 hover:underline">
+          Logout
+        </button>
       </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4 py-6 space-y-6">
-      
-      <div class="glass-card p-6 rounded-xl space-y-4 border border-white/10">
-        <div class="flex justify-between items-center">
-          <h3 class="text-xs font-mono-custom font-bold uppercase tracking-widest text-white">Log Practice (Grace: 20m)</h3>
-          <button onclick="markAllPresent()" class="text-[10px] font-mono-custom font-bold text-emerald-400 border border-emerald-900 bg-emerald-950 px-2 py-1 rounded">ALL PRESENT</button>
+    <main class="max-w-6xl mx-auto px-4 py-6 space-y-6 text-xs">
+
+      <!-- Add Member -->
+      <div class="hud-card rounded-2xl p-4 space-y-2">
+        <span class="text-stone-400 font-bold uppercase tracking-wider block">1. ADD MEMBER</span>
+        <div class="flex gap-2">
+          <input id="newMemberName" type="text" placeholder="Full Name..." class="flex-1 bg-stone-900 border border-stone-700 px-3 py-2 rounded-xl text-white focus:outline-none focus:border-orange-500" />
+          <button onclick="addMember()" class="bg-white hover:bg-stone-200 text-black px-4 py-2 rounded-xl font-bold uppercase">
+            + Add
+          </button>
         </div>
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs font-mono-custom">
-          <input id="sessionLabel" type="text" placeholder="Title" class="bg-black border border-white/10 p-2 rounded text-white" />
-          <input id="sessionDate" type="date" class="bg-black border border-white/10 p-2 rounded text-white" />
-          <input id="sessionStart" type="time" value="16:00" class="bg-black border border-white/10 p-2 rounded text-white" />
-          <input id="sessionEnd" type="time" value="18:00" class="bg-black border border-white/10 p-2 rounded text-white" />
-        </div>
-        <div class="overflow-x-auto text-sm font-mono-custom text-stone-300"><table class="w-full text-left"><tbody id="attendanceInputList"></tbody></table></div>
-        <button onclick="savePracticeSession()" class="w-full bg-white text-black font-extrabold uppercase py-3 rounded text-sm transition shadow-lg hover:scale-[1.01]">Save Log</button>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div class="glass-card p-6 rounded-xl space-y-4">
-          <h3 class="text-xs font-mono-custom font-bold uppercase tracking-widest text-white">Roster Edit</h3>
-          <div class="flex gap-2">
-            <input id="newMemberName" type="text" placeholder="Name" class="w-full bg-black border border-white/10 p-2 rounded text-white font-mono-custom text-sm" />
-            <button onclick="addMember()" class="bg-white text-black px-4 rounded text-xs font-extrabold uppercase transition">+ Add</button>
+      <!-- Record Practice -->
+      <div class="hud-card rounded-2xl p-5 space-y-4">
+        <div class="flex justify-between items-center">
+          <span class="text-stone-400 font-bold uppercase tracking-wider">2. LOG PRACTICE SESSION</span>
+          <button onclick="markAllPresent()" class="text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-lg">
+            ⚡ Mark All Present
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+          <div>
+            <label class="text-stone-500 block mb-1">Session Label</label>
+            <input id="sessionLabel" type="text" placeholder="Day 1 Practice" class="w-full bg-stone-900 border border-stone-700 px-3 py-2 rounded-lg text-white" />
+          </div>
+          <div>
+            <label class="text-stone-500 block mb-1">Date</label>
+            <input id="sessionDate" type="date" class="w-full bg-stone-900 border border-stone-700 px-3 py-2 rounded-lg text-white" />
+          </div>
+          <div>
+            <label class="text-stone-500 block mb-1">Call Time</label>
+            <input id="sessionStart" type="time" value="16:00" class="w-full bg-stone-900 border border-stone-700 px-3 py-2 rounded-lg text-white" />
+          </div>
+          <div>
+            <label class="text-stone-500 block mb-1">Dismissal</label>
+            <input id="sessionEnd" type="time" value="18:00" class="w-full bg-stone-900 border border-stone-700 px-3 py-2 rounded-lg text-white" />
           </div>
         </div>
-        <div class="glass-card p-6 rounded-xl space-y-2">
-          <h3 class="text-xs font-mono-custom font-bold uppercase tracking-widest text-white">Past Records</h3>
-          <div id="pastSessionsList" class="space-y-2 max-h-40 overflow-y-auto pr-2"></div>
+
+        <!-- Attendance List -->
+        <div class="overflow-x-auto pt-2">
+          <table class="w-full text-left">
+            <thead class="text-stone-500 border-b border-white/10">
+              <tr>
+                <th class="py-2">Member</th>
+                <th class="py-2">Status</th>
+                <th class="py-2">Arrival (>20m = Late)</th>
+              </tr>
+            </thead>
+            <tbody id="attendanceInputList" class="divide-y divide-white/5"></tbody>
+          </table>
         </div>
+
+        <button onclick="savePracticeSession()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-extrabold uppercase py-3 rounded-xl transition">
+          💾 Save Practice Session
+        </button>
+      </div>
+
+      <!-- Past Sessions -->
+      <div class="hud-card rounded-2xl p-4 space-y-2">
+        <span class="text-stone-400 font-bold uppercase tracking-wider block">3. EDIT PAST SESSIONS</span>
+        <div id="pastSessionsList" class="space-y-2"></div>
       </div>
     </main>
   </section>
 
-  <!-- ================= RECEIPT MODAL ================= -->
-  <div id="receiptModal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="bg-stone-950 border border-white/10 w-full max-w-lg rounded-2xl p-6 space-y-5 flex flex-col h-[80vh] sm:h-auto sm:max-h-[85vh]">
-      <div class="flex justify-between items-start">
-        <h3 id="receiptName" class="text-3xl font-black uppercase text-white tracking-tighter">NAME</h3>
-        <button onclick="closeReceiptModal()" class="text-stone-500 hover:text-white text-2xl">×</button>
+  <!-- =================================================================== -->
+  <!-- MODAL: ONE-CLICK GC IMAGE & PRINT EXPORT                            -->
+  <!-- =================================================================== -->
+  <div id="exportModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="hud-card bg-stone-950 w-full max-w-xl rounded-2xl p-5 space-y-4 max-h-[92vh] flex flex-col text-xs">
+      <div class="flex justify-between items-center border-b border-white/10 pb-3">
+        <span class="font-bold text-white uppercase tracking-wider">📸 GC PICTURE & PRINT</span>
+        <button onclick="closeExportModal()" class="text-stone-400 hover:text-white text-base">&times;</button>
       </div>
-      <div class="grid grid-cols-3 gap-2 text-center font-mono-custom">
-        <div class="border border-white/5 p-3 rounded"><div class="text-[10px] text-stone-500">PRESENTS</div><div id="receiptPresents" class="text-2xl font-bold text-white">0</div></div>
-        <div class="border border-white/5 p-3 rounded"><div class="text-[10px] text-stone-500">LATES</div><div id="receiptLates" class="text-2xl font-bold text-white">0</div></div>
-        <div class="border border-white/5 p-3 rounded"><div class="text-[10px] text-stone-500">ABSENTS</div><div id="receiptEffectiveAbsents" class="text-2xl font-bold text-rose-500">0</div></div>
-      </div>
-      <div id="receiptTimeline" class="space-y-2 overflow-y-auto flex-1 font-mono-custom text-xs"></div>
-    </div>
-  </div>
 
-  <!-- ================= GC/PRINT EXPORT ================= -->
-  <div id="exportModal" class="hidden fixed inset-0 z-50 bg-black/95 backdrop-blur-xl flex items-center justify-center p-4">
-    <div class="bg-[#0c0d10] border border-white/5 w-full max-w-3xl rounded-xl p-4 sm:p-6 space-y-4 max-h-[90vh] flex flex-col">
-      <div class="flex justify-between items-center border-b border-white/5 pb-2 no-print">
-        <select id="exportSessionSelector" onchange="generateExportCard()" class="bg-black border border-white/10 text-white text-xs font-mono-custom px-3 py-1.5 rounded focus:outline-none">
-          <option value="overall">Summary</option>
+      <div class="flex gap-2">
+        <select id="exportSessionSelector" onchange="generateExportCard()" class="flex-1 bg-stone-900 border border-stone-700 text-white px-2.5 py-2 rounded-lg">
+          <option value="overall">Overall Summary (All Practices)</option>
         </select>
-        <div class="flex gap-2">
-          <button onclick="downloadAsImage()" class="bg-white hover:bg-stone-300 text-black font-extrabold text-[10px] uppercase font-mono-custom px-3 py-1.5 rounded">PNG Image</button>
-          <button onclick="closeExportModal()" class="text-stone-400 font-bold px-3">×</button>
-        </div>
+        <button onclick="downloadAsImage()" class="bg-orange-500 hover:bg-orange-600 text-black font-extrabold px-3 py-2 rounded-lg">
+          Save PNG
+        </button>
+        <button onclick="window.print()" class="bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-lg">
+          Print
+        </button>
       </div>
-      <div class="overflow-y-auto flex-1 p-0 sm:p-2 flex justify-center">
-        <div id="exportCardArea" class="bg-[#0c0d10] p-6 rounded-lg w-full max-w-2xl text-stone-200 border border-white/5 shadow-2xl">
-          <div class="border-b border-stone-800 pb-3 flex justify-between items-end mb-4">
+
+      <div class="overflow-y-auto flex-1 p-1">
+        <div id="exportCardArea" class="bg-stone-950 p-5 rounded-xl border border-stone-800 space-y-3">
+          <div class="border-b border-stone-800 pb-2 flex justify-between items-end">
             <div>
-              <h2 id="exportTitle" class="text-3xl font-black uppercase tracking-tight text-white leading-none">GROUP 03 SUMMARY</h2>
-              <div id="exportMeta" class="text-[10px] font-mono-custom text-stone-500 mt-2"></div>
+              <div id="exportTitle" class="text-lg font-syne font-black text-white uppercase">GROUP 03 SUMMARY</div>
+              <div id="exportMeta" class="text-[10px] text-stone-500">3 Lates = 1 Absent | 3 Absents = Drop</div>
             </div>
-            <div id="exportTimestamp" class="text-[10px] font-mono-custom text-stone-500 text-right uppercase"></div>
+            <div id="exportTimestamp" class="text-[10px] text-stone-600"></div>
           </div>
-          <div id="exportContentList" class="font-mono-custom text-xs"></div>
+          <div id="exportContentList" class="space-y-1 text-xs"></div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ================= AUTH ================= -->
-  <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/90 backdrop-blur flex items-center justify-center p-4">
-    <div class="bg-stone-950 border border-white/10 w-full max-w-sm rounded-xl p-6 space-y-4">
-      <div class="flex justify-between border-b border-white/10 pb-2">
-        <h3 class="text-xs font-bold text-white font-mono-custom">ADMIN LOGIN</h3>
-        <button onclick="closeAuthModal()" class="text-stone-500 hover:text-white">×</button>
+  <!-- =================================================================== -->
+  <!-- MODAL: MEMBER TIMELINE RECEIPT                                      -->
+  <!-- =================================================================== -->
+  <div id="receiptModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="hud-card bg-stone-950 w-full max-w-md rounded-2xl p-5 space-y-4 max-h-[90vh] flex flex-col text-xs">
+      <div class="flex justify-between items-start border-b border-white/10 pb-2">
+        <div>
+          <span class="text-[9px] uppercase text-stone-500 font-bold">RECEIPT RECORD</span>
+          <h3 id="receiptName" class="text-xl font-syne font-black uppercase text-white">Name</h3>
+        </div>
+        <button onclick="closeReceiptModal()" class="text-stone-400 text-lg">&times;</button>
       </div>
-      <div class="space-y-3 font-mono-custom text-xs">
-        <input id="loginEmail" type="email" placeholder="Email" class="w-full bg-black border border-white/10 px-3 py-2 rounded text-white" />
-        <input id="loginPassword" type="password" placeholder="Password" class="w-full bg-black border border-white/10 px-3 py-2 rounded text-white" />
-        <button onclick="loginAdmin()" class="w-full bg-white text-black font-extrabold uppercase py-2 rounded transition">LOGIN</button>
+
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="bg-stone-900 p-2.5 rounded-xl border border-white/5">
+          <span class="text-[9px] text-stone-500 block">PRESENT</span>
+          <span id="receiptPresents" class="text-lg font-bold text-emerald-400">0</span>
+        </div>
+        <div class="bg-stone-900 p-2.5 rounded-xl border border-white/5">
+          <span class="text-[9px] text-stone-500 block">LATE</span>
+          <span id="receiptLates" class="text-lg font-bold text-amber-400">0</span>
+        </div>
+        <div class="bg-stone-900 p-2.5 rounded-xl border border-white/5">
+          <span class="text-[9px] text-stone-500 block">ABSENTS</span>
+          <span id="receiptEffectiveAbsents" class="text-lg font-bold text-rose-400">0</span>
+        </div>
+      </div>
+
+      <div id="receiptStrikeBox" class="p-3 rounded-xl border text-xs flex justify-between items-center font-bold"></div>
+
+      <div class="space-y-1.5 flex-1 overflow-y-auto pr-1">
+        <span class="text-[10px] uppercase text-stone-500">Timeline Logs</span>
+        <div id="receiptTimeline" class="space-y-1.5"></div>
       </div>
     </div>
   </div>
 
+  <!-- =================================================================== -->
+  <!-- MODAL: ADMIN LOGIN                                                  -->
+  <!-- =================================================================== -->
+  <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="hud-card bg-stone-950 w-full max-w-xs rounded-2xl p-5 space-y-3 text-xs">
+      <div class="flex justify-between items-center border-b border-white/10 pb-2">
+        <span class="font-bold text-white uppercase">LEADER LOGIN</span>
+        <button onclick="closeAuthModal()" class="text-stone-400">&times;</button>
+      </div>
+      <input id="loginEmail" type="email" placeholder="admin@group3.com" class="w-full bg-stone-900 border border-stone-700 px-3 py-2 rounded-lg text-white" />
+      <input id="loginPassword" type="password" placeholder="••••••••" class="w-full bg-stone-900 border border-stone-700 px-3 py-2 rounded-lg text-white" />
+      <p id="loginError" class="text-rose-400 hidden"></p>
+      <button onclick="loginAdmin()" class="w-full bg-white hover:bg-stone-200 text-black font-extrabold uppercase py-2.5 rounded-lg transition">
+        Sign In
+      </button>
+    </div>
+  </div>
+
+  <!-- =================================================================== -->
+  <!-- JAVASCRIPT & FIREBASE ENGINE                                        -->
+  <!-- =================================================================== -->
   <script>
-    // -------------------------------------------------------------
-    // PASTE FIREBASE KEYS
-    // -------------------------------------------------------------
-    const firebaseConfig = {
+    // -----------------------------------------------------------------
+    // 1. FIREBASE CONFIG KEYS
+    // -----------------------------------------------------------------
+   const firebaseConfig = {
   apiKey: "AIzaSyD29Zqlz1Oe9dNZuLX4h7jywOadUtJ5jOY",
   authDomain: "group-3-pe-attendance-sheet.firebaseapp.com",
   projectId: "group-3-pe-attendance-sheet",
@@ -241,203 +440,652 @@
     let sessions = [];
     let attendance = [];
     let currentUser = null;
-    let layoutMode = 'grid'; // Grid or List view state
-    let chartInstance = null; // Store chart instance
+    let currentLayout = 'grid'; // 'grid' or 'table'
+    let currentFilter = 'all';  // 'all', 'ok', 'warning', 'dropped'
+    let trendChart = null;
 
     document.getElementById('sessionDate').valueAsDate = new Date();
 
-    // -- Routing & Auth --
+    // -----------------------------------------------------------------
+    // Routing & Filters
+    // -----------------------------------------------------------------
     function navigateTo(view) {
       document.getElementById('landingView').classList.add('hidden');
       document.getElementById('dashboardView').classList.add('hidden');
       document.getElementById('adminView').classList.add('hidden');
-      if(view === 'landing') document.getElementById('landingView').classList.remove('hidden');
-      if(view === 'dashboard') document.getElementById('dashboardView').classList.remove('hidden');
-      if(view === 'admin') currentUser ? document.getElementById('adminView').classList.remove('hidden') : openAuthModal();
-    }
-    
-    auth.onAuthStateChanged(user => currentUser = user);
-    const openAuthModal = () => currentUser ? navigateTo('admin') : document.getElementById('authModal').classList.remove('hidden');
-    const closeAuthModal = () => document.getElementById('authModal').classList.add('hidden');
-    async function loginAdmin() {
-      try {
-        await auth.signInWithEmailAndPassword(document.getElementById('loginEmail').value.trim(), document.getElementById('loginPassword').value);
-        closeAuthModal(); navigateTo('admin');
-      } catch (e) { alert("Failed: Check credentials."); }
-    }
-    const logoutAdmin = () => { auth.signOut(); navigateTo('landing'); };
 
-    // -- Live Sync Listeners --
-    db.collection('members').orderBy('name', 'asc').onSnapshot(s => { members = s.docs.map(d => ({id:d.id,...d.data()})); refreshApp(); });
-    db.collection('sessions').orderBy('date', 'desc').onSnapshot(s => { sessions = s.docs.map(d => ({id:d.id,...d.data()})); refreshApp(); });
-    db.collection('attendance').onSnapshot(s => { attendance = s.docs.map(d => ({id:d.id,...d.data()})); refreshApp(); });
-
-    function refreshApp() {
-      renderAttendanceForm(); renderPastSessions(); renderRoster(); updateExportSelectors(); updateChart();
+      if (view === 'landing') document.getElementById('landingView').classList.remove('hidden');
+      if (view === 'dashboard') {
+        document.getElementById('dashboardView').classList.remove('hidden');
+        renderChart();
+      }
+      if (view === 'admin') {
+        if (!currentUser) openAuthModal();
+        else document.getElementById('adminView').classList.remove('hidden');
+      }
     }
 
-    // -- Member & Attendance Add/Edit Logic --
-    async function addMember() {
-      const v = document.getElementById('newMemberName').value.trim();
-      if(!v) return;
-      await db.collection('members').add({ name: v, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-      document.getElementById('newMemberName').value = '';
-    }
-
-    // > AUTOMATIC 20-MIN GRACE CALCULATOR
-    function autoCalculateLate(mId) {
-      const sStart = document.getElementById('sessionStart').value, tIn = document.getElementById(`time_${mId}`).value, sel = document.getElementById(`status_${mId}`);
-      if(sel.value === 'absent' || !sStart || !tIn) return;
-      const m1 = sStart.split(':'), m2 = tIn.split(':');
-      const diff = (+m2[0]*60 + +m2[1]) - (+m1[0]*60 + +m1[1]);
-      sel.value = diff > 20 ? 'late' : 'present';
-    }
-
-    function renderAttendanceForm() {
-      document.getElementById('attendanceInputList').innerHTML = members.length ? members.map(m => `
-        <tr class="border-b border-white/5"><td class="py-3 px-1">${m.name}</td>
-        <td class="py-3 px-1"><select id="status_${m.id}" onchange="if(this.value==='absent') document.getElementById('time_${m.id}').disabled=true; else document.getElementById('time_${m.id}').disabled=false; autoCalculateLate('${m.id}')" class="bg-black border border-white/10 rounded p-1 text-xs">
-          <option value="present">Present (On Time)</option><option value="late">Late (>20m)</option><option value="absent">Absent</option>
-        </select></td>
-        <td class="py-3 px-1"><input id="time_${m.id}" type="time" onchange="autoCalculateLate('${m.id}')" value="${document.getElementById('sessionStart').value}" class="bg-black border border-white/10 rounded p-1 text-xs"/></td></tr>
-      `).join('') : '';
-    }
-
-    const markAllPresent = () => members.forEach(m => { 
-      let s = document.getElementById(`status_${m.id}`), t = document.getElementById(`time_${m.id}`);
-      if(s) s.value='present'; if(t) { t.disabled=false; t.value=document.getElementById('sessionStart').value; } 
-    });
-
-    async function savePracticeSession() {
-      const d = document.getElementById('sessionDate').value, b = db.batch(), sRef = db.collection('sessions').doc();
-      if(!d || !members.length) return alert('Date or members missing');
-      b.set(sRef, { label: document.getElementById('sessionLabel').value||'Practice', date:d, startTime: document.getElementById('sessionStart').value, endTime: document.getElementById('sessionEnd').value, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-      members.forEach(m => {
-        let st = document.getElementById(`status_${m.id}`).value;
-        b.set(db.collection('attendance').doc(), { sessionId: sRef.id, sessionLabel: document.getElementById('sessionLabel').value||'Practice', date: d, startTime: document.getElementById('sessionStart').value, endTime: document.getElementById('sessionEnd').value, memberId: m.id, memberName: m.name, status: st, timeArrived: st === 'absent' ? 'N/A' : document.getElementById(`time_${m.id}`).value });
-      });
-      await b.commit(); alert('Saved.'); document.getElementById('sessionLabel').value='';
-    }
-
-    function renderPastSessions() {
-      document.getElementById('pastSessionsList').innerHTML = sessions.slice(0,5).map(s => `
-        <div class="flex justify-between items-center text-xs p-2 bg-black rounded border border-white/5"><span>${s.label} (${s.date})</span>
-        <button onclick="editSession('${s.id}')" class="text-white hover:underline uppercase">Edit</button></div>`).join('');
-    }
-    
-    async function editSession(sid) {
-      let r = attendance.filter(a => a.sessionId === sid), name = prompt("Enter Member Name exact match to Edit:\n"+r.map(x=>x.memberName).join(', '));
-      let target = r.find(x => x.memberName.toLowerCase() === name?.toLowerCase().trim()); if(!target) return alert('Not found');
-      let ns = prompt('Status (present, late, absent):', target.status), nt = ns !== 'absent' ? prompt('Time:', target.timeArrived) : 'N/A';
-      if(!['present','late','absent'].includes(ns)) return alert('Invalid');
-      await db.collection('attendance').doc(target.id).update({status:ns, timeArrived:nt}); alert('Updated');
-    }
-
-    // -- Live Calculations & Roster Output --
-    function getStats(id) {
-      let l = attendance.filter(a => a.memberId === id), p = l.filter(x => x.status === 'present').length;
-      let late = l.filter(x => x.status === 'late').length, a = l.filter(x => x.status === 'absent').length;
-      let e = a + Math.floor(late/3); 
-      let st = sessions.length === 0 ? 'none' : (e >= 3 ? 'dropped' : (e === 2 ? 'warning' : 'ok'));
-      return { p, late, a, e, st, l };
-    }
-
-    function toggleLayoutMode(mode) {
-      layoutMode = mode; 
-      document.getElementById('btnGrid').className = mode==='grid' ? "text-xs p-2 rounded bg-white/20 text-white" : "text-xs p-2 rounded glass-dark text-stone-400 hover:text-white";
-      document.getElementById('btnList').className = mode==='list' ? "text-xs p-2 rounded bg-white/20 text-white" : "text-xs p-2 rounded glass-dark text-stone-400 hover:text-white";
+    function setLayout(layout) {
+      currentLayout = layout;
+      document.getElementById('layoutBtnGrid').className = layout === 'grid' 
+        ? 'px-3 py-1.5 rounded-lg bg-white/20 text-white font-bold transition' 
+        : 'px-3 py-1.5 rounded-lg bg-white/5 text-stone-400 hover:text-white transition';
+      document.getElementById('layoutBtnTable').className = layout === 'table' 
+        ? 'px-3 py-1.5 rounded-lg bg-white/20 text-white font-bold transition' 
+        : 'px-3 py-1.5 rounded-lg bg-white/5 text-stone-400 hover:text-white transition';
       renderRoster();
     }
 
-    function updateChart() {
-      const chC = document.getElementById('chartContainer');
-      if (sessions.length === 0) return chC.classList.add('hidden');
-      chC.classList.remove('hidden');
+    function setFilter(filter) {
+      currentFilter = filter;
+      const btns = { all: 'filterAll', ok: 'filterOk', warning: 'filterWarn', dropped: 'filterDrop' };
+      Object.keys(btns).forEach(k => {
+        const el = document.getElementById(btns[k]);
+        if (k === filter) {
+          el.className = 'px-2.5 py-1.5 rounded-lg bg-white/20 text-white font-bold transition';
+        } else {
+          el.className = 'px-2.5 py-1.5 rounded-lg bg-white/5 text-stone-400 hover:text-white transition border border-white/5';
+        }
+      });
+      renderRoster();
+    }
 
-      const labels = sessions.slice().reverse().map((s,i) => `S${i+1}`); // chronological Left to Right
-      const dataArr = sessions.slice().reverse().map(s => attendance.filter(a => a.sessionId === s.id && (a.status === 'present' || a.status === 'late')).length);
-      
-      if(chartInstance) chartInstance.destroy();
-      const ctx = document.getElementById('attendanceChart').getContext('2d');
-      chartInstance = new Chart(ctx, {
-        type: 'line', data: { labels: labels, datasets: [{ label: 'Attendees (Present+Late)', data: dataArr, borderColor: '#fff', backgroundColor: 'rgba(255,255,255,0.1)', tension: 0.3, fill: true, pointBackgroundColor: '#f97316' }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks:{color:'#6b7280', precision:0} }, x: { grid: { display: false }, ticks:{color:'#6b7280'} } } }
+    function handleSearch() {
+      renderRoster();
+    }
+
+    // -----------------------------------------------------------------
+    // Authentication
+    // -----------------------------------------------------------------
+    auth.onAuthStateChanged(user => {
+      currentUser = user;
+      document.getElementById('navAdminBtn').innerText = user ? '⚡ CONSOLE' : '🔒 ADMIN';
+    });
+
+    function openAuthModal() {
+      if (currentUser) navigateTo('admin');
+      else document.getElementById('authModal').classList.remove('hidden');
+    }
+    function closeAuthModal() {
+      document.getElementById('authModal').classList.add('hidden');
+    }
+
+    async function loginAdmin() {
+      const email = document.getElementById('loginEmail').value.trim();
+      const pass = document.getElementById('loginPassword').value;
+      const err = document.getElementById('loginError');
+      err.classList.add('hidden');
+
+      try {
+        await auth.signInWithEmailAndPassword(email, pass);
+        closeAuthModal();
+        navigateTo('admin');
+      } catch (e) {
+        err.innerText = e.message;
+        err.classList.remove('hidden');
+      }
+    }
+
+    function logoutAdmin() {
+      auth.signOut();
+      navigateTo('landing');
+    }
+
+    // -----------------------------------------------------------------
+    // Realtime Sync
+    // -----------------------------------------------------------------
+    db.collection('members').orderBy('name', 'asc').onSnapshot(snap => {
+      members = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderAttendanceForm();
+      renderRoster();
+      updateExportSelectors();
+      updateHUD();
+      renderChart();
+    });
+
+    db.collection('sessions').orderBy('date', 'asc').onSnapshot(snap => {
+      sessions = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderPastSessions();
+      renderRoster();
+      updateExportSelectors();
+      updateHUD();
+      renderChart();
+    });
+
+    db.collection('attendance').onSnapshot(snap => {
+      attendance = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderRoster();
+      updateHUD();
+      renderChart();
+    });
+
+    // -----------------------------------------------------------------
+    // Member Operations
+    // -----------------------------------------------------------------
+    async function addMember() {
+      const input = document.getElementById('newMemberName');
+      const name = input.value.trim();
+      if (!name) return alert('Enter name');
+
+      await db.collection('members').add({ name, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+      input.value = '';
+    }
+
+    // -----------------------------------------------------------------
+    // Practice Logging (20m Grace Period)
+    // -----------------------------------------------------------------
+    function renderAttendanceForm() {
+      const tbody = document.getElementById('attendanceInputList');
+      if (members.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="3" class="py-3 text-stone-500 text-center">No members registered.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = members.map(m => `
+        <tr class="hover:bg-white/[0.02]">
+          <td class="py-2.5 font-bold text-white">${m.name}</td>
+          <td class="py-2.5">
+            <select id="status_${m.id}" onchange="handleStatusChange('${m.id}')" class="bg-stone-800 border border-stone-700 text-white text-xs px-2.5 py-1.5 rounded-lg">
+              <option value="present">🟢 Present</option>
+              <option value="late">🟠 Late (>20m)</option>
+              <option value="absent">🔴 Absent</option>
+            </select>
+          </td>
+          <td class="py-2.5">
+            <input id="time_${m.id}" type="time" onchange="autoCalculateLate('${m.id}')" value="${document.getElementById('sessionStart').value}" class="bg-stone-800 border border-stone-700 text-white text-xs px-2 py-1 rounded-lg" />
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function autoCalculateLate(memberId) {
+      const startTime = document.getElementById('sessionStart').value;
+      const inTime = document.getElementById(`time_${memberId}`).value;
+      const select = document.getElementById(`status_${memberId}`);
+
+      if (select.value === 'absent' || !startTime || !inTime) return;
+
+      const [startH, startM] = startTime.split(':').map(Number);
+      const [inH, inM] = inTime.split(':').map(Number);
+      const diff = (inH * 60 + inM) - (startH * 60 + startM);
+
+      select.value = diff > 20 ? 'late' : 'present';
+    }
+
+    function handleStatusChange(memberId) {
+      const status = document.getElementById(`status_${memberId}`).value;
+      const timeInput = document.getElementById(`time_${memberId}`);
+      if (status === 'absent') {
+        timeInput.disabled = true;
+        timeInput.value = '';
+      } else {
+        timeInput.disabled = false;
+        if (!timeInput.value) timeInput.value = document.getElementById('sessionStart').value;
+      }
+    }
+
+    function markAllPresent() {
+      members.forEach(m => {
+        const sel = document.getElementById(`status_${m.id}`);
+        const time = document.getElementById(`time_${m.id}`);
+        if (sel) sel.value = 'present';
+        if (time) {
+          time.disabled = false;
+          time.value = document.getElementById('sessionStart').value;
+        }
       });
     }
 
-    function renderRoster() {
-      let grid = document.getElementById('membersContainer'), banner = document.getElementById('rosterStatsBanner');
-      grid.className = layoutMode === 'grid' ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" : "flex flex-col gap-2";
-      if (!members.length) return grid.innerHTML = `<div class="text-stone-500 text-xs">0 Members. Use Admin Access.</div>`;
+    async function savePracticeSession() {
+      const label = document.getElementById('sessionLabel').value.trim() || 'Practice Session';
+      const date = document.getElementById('sessionDate').value;
+      const startTime = document.getElementById('sessionStart').value;
+      const endTime = document.getElementById('sessionEnd').value;
 
-      let cok = 0, cw = 0, cd = 0;
-      grid.innerHTML = members.map((m, idx) => {
-        let stat = getStats(m.id);
-        if(stat.st === 'ok') cok++; if(stat.st === 'warning') cw++; if(stat.st === 'dropped') cd++;
-        
-        let tag = stat.st==='none'? '<span class="text-stone-400 border border-stone-800 px-2 rounded uppercase text-[9px] bg-stone-900 py-0.5">NONE</span>' : 
-                  (stat.st==='ok' ? '<span class="status-ok px-2 py-0.5 rounded text-[9px] uppercase font-bold">OK</span>' :
-                  (stat.st==='warning' ? '<span class="status-warning px-2 py-0.5 rounded text-[9px] uppercase font-bold">WARNING</span>' : 
-                  '<span class="status-dropped px-2 py-0.5 rounded text-[9px] uppercase font-bold animate-pulse">DROPPED</span>'));
+      if (!date) return alert('Select date');
+      if (members.length === 0) return alert('Add members first');
 
-        if(layoutMode === 'grid') {
-          return `<div onclick="openReceiptModal('${m.id}')" class="glass-card p-4 rounded-xl cursor-pointer animate-item flex flex-col justify-between h-full" style="animation-delay: ${idx*0.03}s">
-            <div class="flex justify-between items-start mb-4"><div class="font-black text-white leading-tight uppercase truncate mr-2">${m.name}</div><div>${tag}</div></div>
-            <div class="flex gap-4 text-[11px] font-mono-custom border-t border-white/5 pt-3 mt-auto">
-              <div><span class="block text-stone-500">PRESENTS</span><span class="text-emerald-400 font-bold">${stat.p}</span></div>
-              <div><span class="block text-stone-500">LATES</span><span class="text-amber-400 font-bold">${stat.late}</span></div>
-              <div><span class="block text-stone-500">ABSENTS</span><span class="text-rose-400 font-bold">${stat.e}</span></div>
-            </div>
-          </div>`;
-        } else {
-          return `<div onclick="openReceiptModal('${m.id}')" class="glass-card px-4 py-3 rounded-xl cursor-pointer animate-item flex items-center justify-between" style="animation-delay: ${idx*0.02}s">
-            <div class="w-1/3 font-bold text-white uppercase truncate text-sm">${m.name}</div>
-            <div class="hidden sm:flex gap-6 text-[10px] font-mono-custom w-1/3 justify-center text-center">
-              <div>P <span class="text-emerald-400 ml-1 font-bold">${stat.p}</span></div><div>L <span class="text-amber-400 ml-1 font-bold">${stat.late}</span></div><div>A <span class="text-rose-400 ml-1 font-bold">${stat.e}</span></div>
-            </div>
-            <div class="w-1/3 flex justify-end">${tag}</div>
-          </div>`;
-        }
-      }).join('');
-      banner.innerHTML = `<span class="text-white">${members.length} ROSTER &nbsp;•&nbsp; ${sessions.length} SESSIONS</span>`;
+      const batch = db.batch();
+      const sessionRef = db.collection('sessions').doc();
+
+      batch.set(sessionRef, {
+        label, date, startTime, endTime, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      members.forEach(m => {
+        const status = document.getElementById(`status_${m.id}`).value;
+        const timeArrived = document.getElementById(`time_${m.id}`).value || 'N/A';
+
+        const attRef = db.collection('attendance').doc();
+        batch.set(attRef, {
+          sessionId: sessionRef.id,
+          sessionLabel: label,
+          date,
+          startTime,
+          endTime,
+          memberId: m.id,
+          memberName: m.name,
+          status,
+          timeArrived: status === 'absent' ? 'N/A' : timeArrived,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      });
+
+      await batch.commit();
+      alert('Practice session saved.');
+      document.getElementById('sessionLabel').value = '';
     }
 
-    function openReceiptModal(mid) {
-      let m = members.find(x => x.id === mid), st = getStats(mid);
-      document.getElementById('receiptName').innerText = m.name;
-      document.getElementById('receiptPresents').innerText = st.p; document.getElementById('receiptLates').innerText = st.late; document.getElementById('receiptEffectiveAbsents').innerText = st.e;
-      document.getElementById('receiptTimeline').innerHTML = st.l.length ? st.l.map(x => `<div class="flex justify-between items-center py-2 border-b border-white/5 uppercase"><div class="flex flex-col"><span class="text-white">${x.sessionLabel}</span><span class="text-[9px] text-stone-500">${x.date} // IN: ${x.timeArrived}</span></div> <span class="${x.status==='present'?'text-emerald-400':(x.status==='late'?'text-amber-400':'text-rose-400')} font-bold text-[10px] bg-white/5 px-2 py-1 rounded">${x.status}</span></div>`).join('') : '<div class="py-4 text-center text-stone-500">0 LOGS</div>';
+    // -----------------------------------------------------------------
+    // Past Sessions / Catch Up
+    // -----------------------------------------------------------------
+    function renderPastSessions() {
+      const container = document.getElementById('pastSessionsList');
+      if (sessions.length === 0) {
+        container.innerHTML = `<div class="text-xs text-stone-500">No recorded sessions.</div>`;
+        return;
+      }
+
+      container.innerHTML = sessions.slice(-5).reverse().map(s => `
+        <div class="flex justify-between items-center bg-stone-900 p-2.5 rounded-xl border border-white/5">
+          <div>
+            <span class="font-bold text-white">${s.label}</span>
+            <span class="text-stone-500">(${s.date})</span>
+          </div>
+          <button onclick="editSessionRecords('${s.id}')" class="text-orange-400 hover:underline">
+            Edit
+          </button>
+        </div>
+      `).join('');
+    }
+
+    async function editSessionRecords(sessionId) {
+      const records = attendance.filter(a => a.sessionId === sessionId);
+      if (records.length === 0) return alert('No records found.');
+
+      const names = records.map(r => r.memberName).join('\n');
+      const targetName = prompt(`Enter member name to edit:\n\n${names}`);
+      if (!targetName) return;
+
+      const record = records.find(r => r.memberName.toLowerCase() === targetName.toLowerCase().trim());
+      if (!record) return alert('Member not found.');
+
+      const newStatus = prompt(`Change status (present / late / absent):`, record.status);
+      if (!newStatus || !['present', 'late', 'absent'].includes(newStatus.toLowerCase())) return;
+
+      let newTime = record.timeArrived;
+      if (newStatus !== 'absent') {
+        newTime = prompt(`Arrival time:`, record.timeArrived !== 'N/A' ? record.timeArrived : '16:00') || 'N/A';
+      } else {
+        newTime = 'N/A';
+      }
+
+      await db.collection('attendance').doc(record.id).update({
+        status: newStatus.toLowerCase(),
+        timeArrived: newTime
+      });
+      alert('Updated.');
+    }
+
+    // -----------------------------------------------------------------
+    // Math & Stats Engine
+    // -----------------------------------------------------------------
+    function getMemberStats(memberId) {
+      const logs = attendance.filter(a => a.memberId === memberId);
+      const presents = logs.filter(a => a.status === 'present').length;
+      const lates = logs.filter(a => a.status === 'late').length;
+      const directAbsents = logs.filter(a => a.status === 'absent').length;
+
+      const penaltyAbsents = Math.floor(lates / 3);
+      const effectiveAbsents = directAbsents + penaltyAbsents;
+
+      let status = 'none';
+      if (sessions.length > 0) {
+        if (effectiveAbsents >= 3) status = 'dropped';
+        else if (effectiveAbsents === 2) status = 'warning';
+        else status = 'ok';
+      }
+
+      return { presents, lates, directAbsents, penaltyAbsents, effectiveAbsents, status, logs };
+    }
+
+    function updateHUD() {
+      document.getElementById('statPractices').innerText = sessions.length;
+
+      let warnings = 0, dropped = 0, totalAttended = 0, totalLogs = attendance.length;
+
+      members.forEach(m => {
+        const stat = getMemberStats(m.id);
+        if (stat.status === 'warning') warnings++;
+        if (stat.status === 'dropped') dropped++;
+        totalAttended += (stat.presents + stat.lates);
+      });
+
+      document.getElementById('statWarnings').innerText = warnings;
+      document.getElementById('statDropped').innerText = dropped;
+
+      const turnout = totalLogs > 0 ? Math.round((totalAttended / totalLogs) * 100) : 100;
+      document.getElementById('statTurnout').innerText = `${turnout}%`;
+    }
+
+    // -----------------------------------------------------------------
+    // Dynamic Roster Render
+    // -----------------------------------------------------------------
+    function renderRoster() {
+      const container = document.getElementById('rosterContainer');
+      const searchVal = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+
+      if (members.length === 0) {
+        container.innerHTML = `<div class="py-12 text-center text-stone-500 text-xs">No members registered yet.</div>`;
+        return;
+      }
+
+      // Filter logic
+      const filtered = members.filter(m => {
+        const stat = getMemberStats(m.id);
+        const matchName = m.name.toLowerCase().includes(searchVal);
+        if (currentFilter === 'all') return matchName;
+        return matchName && stat.status === currentFilter;
+      });
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="py-8 text-center text-stone-500 text-xs">No members match your search or filter.</div>`;
+        return;
+      }
+
+      const getBadge = (status) => {
+        if (status === 'none') return `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#151314] border border-[#2e262a] text-[11px] text-stone-300"><span class="sphere-grey"></span> No Practice</div>`;
+        if (status === 'ok') return `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#0e1f18] border border-[#1b4332] text-[11px] text-emerald-400 font-medium"><span class="sphere-green"></span> In Good Standing</div>`;
+        if (status === 'warning') return `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#231a0e] border border-[#4d381c] text-[11px] text-amber-400 font-bold"><span class="sphere-amber"></span> Warning (2 Absents)</div>`;
+        return `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#251015] border border-[#4c1d27] text-[11px] text-rose-400 font-bold"><span class="sphere-rose"></span> Dropped (3 Absents)</div>`;
+      };
+
+      const getStrikeSlots = (abs) => {
+        const s1 = abs >= 1 ? (abs >= 3 ? 'filled-danger' : 'filled-warn') : '';
+        const s2 = abs >= 2 ? (abs >= 3 ? 'filled-danger' : 'filled-warn') : '';
+        const s3 = abs >= 3 ? 'filled-danger' : '';
+        return `
+          <div class="grid grid-cols-3 gap-1 w-20">
+            <div class="strike-slot ${s1}"></div>
+            <div class="strike-slot ${s2}"></div>
+            <div class="strike-slot ${s3}"></div>
+          </div>
+        `;
+      };
+
+      if (currentLayout === 'grid') {
+        container.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5";
+        container.innerHTML = filtered.map(m => {
+          const stat = getMemberStats(m.id);
+          return `
+            <div onclick="openReceiptModal('${m.id}')" class="hud-card cursor-pointer rounded-2xl p-4 space-y-3.5 transition transform hover:-translate-y-0.5">
+              <div class="flex justify-between items-start gap-2">
+                <span class="font-bold text-white text-sm tracking-tight">${m.name}</span>
+                ${getBadge(stat.status)}
+              </div>
+              <div class="grid grid-cols-3 gap-1.5 text-center py-1">
+                <div class="bg-stone-900/90 p-2 rounded-xl border border-white/5">
+                  <span class="text-stone-500 block text-[9px]">PRESENT</span>
+                  <span class="font-black text-emerald-400 text-sm">${stat.presents}</span>
+                </div>
+                <div class="bg-stone-900/90 p-2 rounded-xl border border-white/5">
+                  <span class="text-stone-500 block text-[9px]">LATE</span>
+                  <span class="font-black text-amber-400 text-sm">${stat.lates}</span>
+                </div>
+                <div class="bg-stone-900/90 p-2 rounded-xl border border-white/5">
+                  <span class="text-stone-500 block text-[9px]">ABSENT</span>
+                  <span class="font-black text-rose-400 text-sm">${stat.effectiveAbsents}</span>
+                </div>
+              </div>
+              <div class="flex justify-between items-center pt-1 border-t border-white/5">
+                ${getStrikeSlots(stat.effectiveAbsents)}
+                <span class="text-[10px] text-stone-500 font-bold hover:text-white">Receipt →</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } else {
+        container.className = "hud-card rounded-2xl overflow-hidden";
+        container.innerHTML = `
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-stone-900/80 text-stone-400 border-b border-white/10">
+                <tr>
+                  <th class="py-3 px-4">Member Name</th>
+                  <th class="py-3 px-2 text-center">Present</th>
+                  <th class="py-3 px-2 text-center">Late</th>
+                  <th class="py-3 px-2 text-center">Absents</th>
+                  <th class="py-3 px-4 text-center">Strikes</th>
+                  <th class="py-3 px-4 text-center">Status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5">
+                ${filtered.map(m => {
+                  const stat = getMemberStats(m.id);
+                  return `
+                    <tr onclick="openReceiptModal('${m.id}')" class="hover:bg-white/[0.02] cursor-pointer">
+                      <td class="py-3 px-4 font-bold text-white">${m.name}</td>
+                      <td class="py-3 px-2 text-center text-emerald-400 font-bold">${stat.presents}</td>
+                      <td class="py-3 px-2 text-center text-amber-400 font-bold">${stat.lates}</td>
+                      <td class="py-3 px-2 text-center text-rose-400 font-bold">${stat.effectiveAbsents}</td>
+                      <td class="py-3 px-4 flex justify-center">${getStrikeSlots(stat.effectiveAbsents)}</td>
+                      <td class="py-3 px-4">${getBadge(stat.status)}</td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+    }
+
+    // -----------------------------------------------------------------
+    // Live Area Trend Chart (Chart.js)
+    // -----------------------------------------------------------------
+    function renderChart() {
+      const ctx = document.getElementById('attendanceChart');
+      if (!ctx) return;
+
+      const labels = sessions.map(s => s.label);
+      const presentCounts = [];
+      const lateCounts = [];
+      const absentCounts = [];
+
+      sessions.forEach(s => {
+        const logs = attendance.filter(a => a.sessionId === s.id);
+        presentCounts.push(logs.filter(l => l.status === 'present').length);
+        lateCounts.push(logs.filter(l => l.status === 'late').length);
+        absentCounts.push(logs.filter(l => l.status === 'absent').length);
+      });
+
+      const indicator = document.getElementById('graphStateText');
+      indicator.innerText = sessions.length === 0 ? "Awaiting Practice Data" : `${sessions.length} Practices Logged`;
+
+      if (trendChart) trendChart.destroy();
+
+      trendChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels.length ? labels : ['Day 1', 'Day 2', 'Day 3', 'Day 4'],
+          datasets: [
+            {
+              label: 'Present',
+              data: labels.length ? presentCounts : [0, 0, 0, 0],
+              borderColor: '#10B981',
+              backgroundColor: 'rgba(16, 185, 129, 0.15)',
+              tension: 0.35,
+              fill: true,
+              borderWidth: 2
+            },
+            {
+              label: 'Late',
+              data: labels.length ? lateCounts : [0, 0, 0, 0],
+              borderColor: '#F59E0B',
+              backgroundColor: 'rgba(245, 158, 11, 0.05)',
+              tension: 0.35,
+              fill: true,
+              borderWidth: 2
+            },
+            {
+              label: 'Absent',
+              data: labels.length ? absentCounts : [0, 0, 0, 0],
+              borderColor: '#EF4444',
+              backgroundColor: 'transparent',
+              tension: 0.35,
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: { color: '#9ca3af', font: { family: 'JetBrains Mono', size: 10 } }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255,255,255,0.03)' },
+              ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 10 } }
+            },
+            y: {
+              beginAtZero: true,
+              grid: { color: 'rgba(255,255,255,0.03)' },
+              ticks: { color: '#64748b', font: { family: 'JetBrains Mono', size: 10 } }
+            }
+          }
+        }
+      });
+    }
+
+    // -----------------------------------------------------------------
+    // Member Receipt Modal
+    // -----------------------------------------------------------------
+    function openReceiptModal(memberId) {
+      const member = members.find(m => m.id === memberId);
+      if (!member) return;
+
+      const stat = getMemberStats(memberId);
+      document.getElementById('receiptName').innerText = member.name;
+      document.getElementById('receiptPresents').innerText = stat.presents;
+      document.getElementById('receiptLates').innerText = stat.lates;
+      document.getElementById('receiptEffectiveAbsents').innerText = stat.effectiveAbsents;
+
+      const box = document.getElementById('receiptStrikeBox');
+      if (stat.effectiveAbsents >= 3) {
+        box.className = "p-3 rounded-xl border bg-[#251015] border-[#4c1d27] text-rose-400 text-xs flex justify-between items-center";
+        box.innerHTML = `<span>🔴 DROPPED (3 Absents)</span><span>[ ❌ ❌ ❌ ]</span>`;
+      } else if (stat.effectiveAbsents === 2) {
+        box.className = "p-3 rounded-xl border bg-[#231a0e] border-[#4d381c] text-amber-400 text-xs flex justify-between items-center";
+        box.innerHTML = `<span>🟠 WARNING (1 Absent Left)</span><span>[ ❌ ❌ ⚪ ]</span>`;
+      } else {
+        box.className = "p-3 rounded-xl border bg-[#0e1f18] border-[#1b4332] text-emerald-400 text-xs flex justify-between items-center";
+        box.innerHTML = `<span>🟢 IN GOOD STANDING</span><span>[ ${stat.effectiveAbsents === 1 ? '❌ ⚪ ⚪' : '⚪ ⚪ ⚪'} ]</span>`;
+      }
+
+      const list = document.getElementById('receiptTimeline');
+      const sortedLogs = stat.logs.sort((a,b) => new Date(b.date) - new Date(a.date));
+
+      if (sortedLogs.length === 0) {
+        list.innerHTML = `<div class="text-xs text-stone-500 py-3 text-center">No attendance logged yet.</div>`;
+      } else {
+        list.innerHTML = sortedLogs.map(l => {
+          let badge = l.status === 'present' ? '🟢 Present' : (l.status === 'late' ? `🟠 Late (${l.timeArrived})` : '🔴 Absent');
+          return `
+            <div class="bg-stone-900 p-2.5 rounded-xl border border-white/5 flex justify-between items-center">
+              <div>
+                <div class="font-bold text-white">${l.sessionLabel} • ${l.date}</div>
+                <div class="text-stone-500 text-[10px]">Hours: ${l.startTime}-${l.endTime} | Arrived: ${l.timeArrived}</div>
+              </div>
+              <div>${badge}</div>
+            </div>
+          `;
+        }).join('');
+      }
+
       document.getElementById('receiptModal').classList.remove('hidden');
     }
-    const closeReceiptModal = () => document.getElementById('receiptModal').classList.add('hidden');
 
-    function openExportModal() { document.getElementById('exportModal').classList.remove('hidden'); }
-    function closeExportModal() { document.getElementById('exportModal').classList.add('hidden'); }
-    function updateExportSelectors() {
-      let s = document.getElementById('exportSessionSelector'); if(!s) return;
-      s.innerHTML = `<option value="overall">Summary View</option>` + sessions.map(x => `<option value="${x.id}">${x.label} (${x.date})</option>`).join('');
+    function closeReceiptModal() {
+      document.getElementById('receiptModal').classList.add('hidden');
+    }
+
+    // -----------------------------------------------------------------
+    // Export (1-Click Group Chat Image PNG / PDF)
+    // -----------------------------------------------------------------
+    function openExportModal() {
+      updateExportSelectors();
       generateExportCard();
+      document.getElementById('exportModal').classList.remove('hidden');
+    }
+
+    function closeExportModal() {
+      document.getElementById('exportModal').classList.add('hidden');
+    }
+
+    function updateExportSelectors() {
+      const sel = document.getElementById('exportSessionSelector');
+      if (!sel) return;
+      sel.innerHTML = `<option value="overall">Overall Summary (All Practices)</option>` +
+        sessions.map(s => `<option value="${s.id}">${s.label} (${s.date})</option>`).join('');
     }
 
     function generateExportCard() {
-      let v = document.getElementById('exportSessionSelector').value, t = document.getElementById('exportTitle'), c = document.getElementById('exportContentList');
-      document.getElementById('exportTimestamp').innerText = "GENERATED " + new Date().toLocaleDateString();
-      if(v === 'overall') {
-        t.innerText = "OVERALL RECORD"; document.getElementById('exportMeta').innerText = "3 Lates = 1 Absent | 3 Absents = DROP";
-        c.innerHTML = `<table class="w-full text-left mt-4 border-collapse border border-white/10"><thead class="bg-white/10 uppercase"><tr class="text-[10px] text-stone-300"><th class="p-2 border border-white/10">Member</th><th class="p-2 border border-white/10 text-center">OK</th><th class="p-2 border border-white/10 text-center">Warn</th><th class="p-2 border border-white/10 text-center">Drop</th></tr></thead><tbody>` + members.map(m => {
-          let s = getStats(m.id);
-          return `<tr class="border-b border-white/5 uppercase"><td class="p-2 font-bold">${m.name}</td>
-          <td class="p-2 text-center text-stone-400 font-bold ${s.st==='ok'?'text-white':''}">${s.st==='ok'?'✓':'-'}</td>
-          <td class="p-2 text-center text-amber-500 font-bold ${s.st==='warning'?'bg-amber-500/10':''}">${s.st==='warning'?'✓':'-'}</td>
-          <td class="p-2 text-center text-rose-500 font-bold ${s.st==='dropped'?'bg-rose-500/10':''}">${s.st==='dropped'?'✗':'-'}</td></tr>`;
-        }).join('') + `</tbody></table>`;
+      const mode = document.getElementById('exportSessionSelector').value;
+      const title = document.getElementById('exportTitle');
+      const meta = document.getElementById('exportMeta');
+      const container = document.getElementById('exportContentList');
+      document.getElementById('exportTimestamp').innerText = new Date().toLocaleDateString();
+
+      if (mode === 'overall') {
+        title.innerText = 'GROUP 03 SUMMARY';
+        meta.innerText = '3 Lates = 1 Absent | 3 Absents = Drop';
+
+        container.innerHTML = members.map(m => {
+          const stat = getMemberStats(m.id);
+          let tag = stat.status === 'dropped' ? '🔴 DROPPED' : (stat.status === 'warning' ? '🟠 WARNING' : '🟢 OK');
+          return `
+            <div class="flex justify-between items-center p-2 bg-stone-900 rounded-lg border border-stone-800">
+              <span class="font-bold text-white">${m.name}</span>
+              <div class="flex gap-2 text-[10px]">
+                <span>P:${stat.presents}</span>
+                <span>L:${stat.lates}</span>
+                <span>Abs:${stat.effectiveAbsents}</span>
+                <span class="font-bold">${tag}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
       } else {
-        let ss = sessions.find(x => x.id === v); t.innerText = `${ss.label.toUpperCase()}`; document.getElementById('exportMeta').innerText = `DATE: ${ss.date} | TIME: ${ss.startTime} - ${ss.endTime}`;
-        let l = attendance.filter(a => a.sessionId === v);
-        c.innerHTML = l.map(a => `<div class="flex justify-between py-1.5 border-b border-white/5 uppercase items-center font-bold text-[11px]"><span class="text-white truncate">${a.memberName}</span><span class="${a.status==='present'?'text-emerald-400':(a.status==='late'?'text-amber-400':'text-rose-400')}">${a.status}</span></div>`).join('');
+        const s = sessions.find(x => x.id === mode);
+        if (!s) return;
+        title.innerText = `${s.label.toUpperCase()} REPORT`;
+        meta.innerText = `${s.date} • ${s.startTime} - ${s.endTime}`;
+
+        const logs = attendance.filter(a => a.sessionId === s.id);
+        container.innerHTML = logs.map(l => {
+          let badge = l.status === 'present' ? '🟢 Present' : (l.status === 'late' ? `🟠 Late (${l.timeArrived})` : '🔴 Absent');
+          return `
+            <div class="flex justify-between items-center p-2 bg-stone-900 rounded-lg border border-stone-800">
+              <span class="font-bold text-white">${l.memberName}</span>
+              <span class="text-[11px]">${badge}</span>
+            </div>
+          `;
+        }).join('');
       }
     }
-    const downloadAsImage = () => html2canvas(document.getElementById('exportCardArea'), {backgroundColor: '#0c0d10', scale: 2}).then(c => { let l=document.createElement('a'); l.download='Roster.png'; l.href=c.toDataURL(); l.click(); });
+
+    function downloadAsImage() {
+      const card = document.getElementById('exportCardArea');
+      html2canvas(card, { backgroundColor: '#07090C', scale: 2 }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = `Group3_Report_${Date.now()}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
   </script>
 </body>
 </html>
