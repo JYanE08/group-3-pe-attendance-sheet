@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GROUP 03 • PE CULMINATING</title>
+  <title>GROUP 3 • Attendance Monitoring System</title>
   
-  <!-- Fonts: Syne + JetBrains Mono -->
+  <!-- Fonts: Plus Jakarta Sans + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Syne:wght@700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -16,7 +16,7 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- html2canvas for GC Screenshots -->
+  <!-- html2canvas -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <!-- Firebase Compat SDK -->
@@ -26,36 +26,24 @@
 
   <style>
     body {
-      font-family: 'JetBrains Mono', monospace;
-      background-color: #07090C;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0B0D11;
       color: #E2E8F0;
     }
-    .font-syne {
-      font-family: 'Syne', sans-serif;
+    .font-mono-custom {
+      font-family: 'JetBrains Mono', monospace;
     }
     
-    /* Background Canvas Grids */
-    .telemetry-grid {
-      background-image: 
-        radial-gradient(circle at 50% 0%, rgba(249, 115, 22, 0.12) 0%, transparent 60%),
-        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-      background-size: 100% 100%, 28px 28px, 28px 28px;
+    /* Clean Bento Card */
+    .bento-card {
+      background: #11141A;
+      border: 1px solid #1E232E;
+    }
+    .bento-card:hover {
+      border-color: #2D3444;
     }
 
-    /* Tactile Glass Panels */
-    .hud-card {
-      background: linear-gradient(135deg, rgba(22, 27, 36, 0.75) 0%, rgba(12, 15, 20, 0.85) 100%);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 8px 32px rgba(0, 0, 0, 0.4);
-    }
-    .hud-card:hover {
-      border-color: rgba(255, 255, 255, 0.14);
-    }
-
-    /* 3D Spheres (Matching your exact reference) */
+    /* Exact 3D Glowing Spheres */
     .sphere-grey {
       width: 9px; height: 9px; border-radius: 50%;
       background: radial-gradient(circle at 35% 35%, #ffffff, #9ca3af 60%, #4b5563);
@@ -76,82 +64,64 @@
       background: radial-gradient(circle at 35% 35%, #fca5a5, #ef4444 60%, #991b1b);
       box-shadow: 0 0 8px rgba(239, 68, 68, 0.7);
     }
-
-    /* LED Segmented Strike Bar */
-    .strike-slot {
-      height: 6px;
-      border-radius: 2px;
-      background: rgba(255, 255, 255, 0.08);
-      transition: all 0.3s ease;
-    }
-    .strike-slot.filled-warn {
-      background: #F59E0B;
-      box-shadow: 0 0 8px rgba(245, 158, 11, 0.8);
-    }
-    .strike-slot.filled-danger {
-      background: #EF4444;
-      box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
-    }
   </style>
 </head>
-<body class="min-h-screen telemetry-grid selection:bg-orange-500 selection:text-black antialiased">
+<body class="min-h-screen antialiased selection:bg-stone-700 selection:text-white">
 
   <!-- =================================================================== -->
-  <!-- VIEW 1: MINIMALIST LANDING PAGE (EXACTLY 2 CHOICES)                 -->
+  <!-- VIEW 1: CLEAN MINIMAL LANDING PAGE                                  -->
   <!-- =================================================================== -->
   <section id="landingView" class="min-h-screen flex flex-col justify-between items-center p-6 relative z-10">
-    <div class="w-full flex justify-between items-center max-w-5xl text-xs">
-      <span class="tracking-widest text-stone-500 font-bold">PE CULMINATING</span>
-      <span class="text-stone-600">GROUP 03</span>
+    <div class="w-full flex justify-between items-center max-w-5xl text-xs font-mono-custom text-stone-500">
+      <span>PE CULMINATING</span>
+      <span>2026</span>
     </div>
 
-    <div class="w-full max-w-md text-center space-y-8 my-auto">
-      <div class="space-y-3">
-        <h1 class="text-6xl sm:text-7xl font-syne font-black tracking-tighter uppercase text-white leading-none">
-          GROUP 03
+    <!-- Center Hero + 2 Main Buttons -->
+    <div class="w-full max-w-sm text-center space-y-8 my-auto">
+      <div class="space-y-2">
+        <h1 class="text-5xl sm:text-6xl font-extrabold tracking-tight text-white uppercase">
+          GROUP 3
         </h1>
-        <div class="inline-block px-3 py-1 rounded-full text-[11px] font-bold tracking-widest text-orange-400 bg-orange-500/10 border border-orange-500/20">
-          3 LATES = 1 ABSENT • 3 ABSENTS = DROP • >20M = LATE
-        </div>
+        <p class="text-sm font-medium text-stone-400">
+          Attendance Monitoring System
+        </p>
       </div>
 
-      <!-- EXACT 2 BUTTONS -->
-      <div class="flex flex-col gap-3 justify-center items-center w-full">
-        <button onclick="navigateTo('dashboard')" class="w-full py-4 rounded-xl bg-white hover:bg-stone-200 text-black font-extrabold text-sm tracking-widest uppercase transition-all transform active:scale-95 shadow-lg shadow-white/5">
+      <!-- THE 2 BUTTONS -->
+      <div class="flex flex-col gap-2.5 justify-center items-center w-full font-mono-custom text-xs">
+        <button onclick="navigateTo('dashboard')" class="w-full py-3.5 rounded-xl bg-white hover:bg-stone-200 text-black font-bold uppercase tracking-wider transition active:scale-95 shadow-sm">
           ENTER
         </button>
-        <button onclick="openAuthModal()" class="w-full py-4 rounded-xl hud-card hover:bg-white/10 text-stone-300 font-extrabold text-sm tracking-widest uppercase transition-all transform active:scale-95 border border-white/10">
+        <button onclick="openAuthModal()" class="w-full py-3.5 rounded-xl bento-card hover:bg-white/5 text-stone-300 font-bold uppercase tracking-wider transition active:scale-95">
           ADMIN ACCESS
         </button>
       </div>
     </div>
 
-    <div class="text-[11px] text-stone-600 tracking-widest">
-      ATTENDANCE MONITOR
+    <div class="text-[11px] font-mono-custom text-stone-600">
+      PE Department • Attendance Tracking
     </div>
   </section>
 
   <!-- =================================================================== -->
-  <!-- VIEW 2: HIGH-TECH DASHBOARD                                         -->
+  <!-- VIEW 2: DASHBOARD VIEW                                              -->
   <!-- =================================================================== -->
   <section id="dashboardView" class="hidden min-h-screen relative z-10 pb-20">
-    
-    <!-- Top Action Bar -->
-    <header class="hud-card border-b border-white/5 sticky top-0 z-30">
-      <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center text-xs">
-        <button onclick="navigateTo('landing')" class="text-stone-400 hover:text-white transition flex items-center gap-1">
-          ← BACK
+    <!-- Navbar -->
+    <header class="bento-card border-b border-stone-800 sticky top-0 z-30 bg-[#0B0D11]/90 backdrop-blur-md">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center text-xs font-mono-custom">
+        <button onclick="navigateTo('landing')" class="text-stone-400 hover:text-white transition">
+          ← HOME
         </button>
-        <div class="font-bold tracking-widest text-white uppercase flex items-center gap-2">
-          <span>GROUP 03</span>
-          <span class="text-stone-600">•</span>
-          <span class="text-orange-400">TELEMETRY</span>
+        <div class="font-bold text-white uppercase tracking-wider">
+          GROUP 3 ATTENDANCE
         </div>
         <div class="flex items-center gap-2">
-          <button onclick="openExportModal()" class="font-bold px-3 py-1.5 rounded-lg bg-orange-500/10 text-orange-400 border border-orange-500/30 hover:bg-orange-500/20 transition">
+          <button onclick="openExportModal()" class="font-bold px-3 py-1.5 rounded-lg bg-stone-800 text-stone-200 hover:bg-stone-700 transition">
             📸 EXPORT / PRINT
           </button>
-          <button id="navAdminBtn" onclick="openAuthModal()" class="font-bold px-3 py-1.5 rounded-lg bg-white/5 text-stone-300 hover:bg-white/15 transition border border-white/10">
+          <button id="navAdminBtn" onclick="openAuthModal()" class="font-bold px-3 py-1.5 rounded-lg bg-white/10 text-white hover:bg-white/20 transition">
             🔒 ADMIN
           </button>
         </div>
@@ -160,8 +130,21 @@
 
     <main class="max-w-6xl mx-auto px-4 py-6 space-y-6">
 
-      <!-- EXACT SCREENSHOT STATUS LEGEND PILLS -->
-      <div class="flex flex-wrap items-center gap-2 pt-1 text-xs">
+      <!-- THE MEMO & RULES (Now on Dashboard) -->
+      <div class="bento-card rounded-2xl p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 border-l-4 border-l-amber-500">
+        <div>
+          <span class="text-[10px] font-mono-custom font-bold text-amber-500 uppercase tracking-wider block">ATTENDANCE POLICY MEMO</span>
+          <div class="text-xs sm:text-sm font-semibold text-white">
+            3 Absents = Automatic Drop &nbsp;|&nbsp; 3 Lates = 1 Absent &nbsp;|&nbsp; Arrival >20 mins = Late
+          </div>
+        </div>
+        <span class="text-[11px] font-mono-custom text-stone-400 bg-stone-900 px-3 py-1 rounded-lg border border-stone-800">
+          Strict Compliance
+        </span>
+      </div>
+
+      <!-- EXACT SCREENSHOT STATUS LEGEND -->
+      <div class="flex flex-wrap items-center gap-2 text-xs font-mono-custom">
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#151314] border border-[#2e262a] text-stone-300">
           <span class="sphere-grey"></span> No Practice
         </div>
@@ -176,65 +159,61 @@
         </div>
       </div>
 
-      <!-- Live Quick-Stats Telemetry HUD -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
-        <div class="hud-card p-4 rounded-2xl space-y-1">
-          <span class="text-stone-500 text-[10px] block uppercase tracking-wider">TOTAL PRACTICES</span>
-          <span id="statPractices" class="text-2xl font-black text-white font-syne">0</span>
-        </div>
-        <div class="hud-card p-4 rounded-2xl space-y-1">
-          <span class="text-stone-500 text-[10px] block uppercase tracking-wider">ATTENDANCE RATE</span>
-          <span id="statTurnout" class="text-2xl font-black text-emerald-400 font-syne">100%</span>
-        </div>
-        <div class="hud-card p-4 rounded-2xl space-y-1">
-          <span class="text-stone-500 text-[10px] block uppercase tracking-wider">ACTIVE WARNINGS</span>
-          <span id="statWarnings" class="text-2xl font-black text-amber-400 font-syne">0</span>
-        </div>
-        <div class="hud-card p-4 rounded-2xl space-y-1">
-          <span class="text-stone-500 text-[10px] block uppercase tracking-wider">DROPPED</span>
-          <span id="statDropped" class="text-2xl font-black text-rose-400 font-syne">0</span>
-        </div>
-      </div>
-
-      <!-- Live Trend Area Graph -->
-      <div class="hud-card p-5 rounded-2xl space-y-3">
-        <div class="flex justify-between items-center text-xs">
-          <span class="text-stone-400 font-bold tracking-wider uppercase">PRACTICE ATTENDANCE TREND</span>
-          <span id="graphStateText" class="text-stone-500 text-[11px]">Awaiting Practice Data</span>
-        </div>
-        <div class="relative h-44 w-full">
-          <canvas id="attendanceChart"></canvas>
-        </div>
-      </div>
-
-      <!-- Search, Status Filter & Layout Switcher Controls -->
-      <div class="space-y-3">
-        <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
-          <!-- Search Input -->
-          <div class="relative flex-1 max-w-sm">
-            <input id="searchInput" oninput="handleSearch()" type="text" placeholder="Search member name..." class="w-full bg-stone-900/80 border border-white/10 px-3.5 py-2 rounded-xl text-xs text-white placeholder-stone-600 focus:outline-none focus:border-orange-500" />
+      <!-- Live Bento Telemetry Grid: Trend Graph (Left) + Stats (Right) -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Trend Graph (2 Columns) -->
+        <div class="lg:col-span-2 bento-card p-5 rounded-2xl space-y-3">
+          <div class="flex justify-between items-center text-xs font-mono-custom">
+            <span class="text-stone-300 font-bold uppercase tracking-wider">PRACTICE ATTENDANCE TREND</span>
+            <span id="graphStateText" class="text-stone-500 text-[11px]">Awaiting Practice Data</span>
           </div>
-
-          <!-- Status Filters -->
-          <div class="flex flex-wrap gap-1.5 text-xs">
-            <button onclick="setFilter('all')" id="filterAll" class="px-2.5 py-1.5 rounded-lg bg-white/20 text-white font-bold transition">ALL</button>
-            <button onclick="setFilter('ok')" id="filterOk" class="px-2.5 py-1.5 rounded-lg bg-white/5 text-emerald-400 hover:bg-emerald-500/10 transition border border-emerald-500/20">🟢 OK</button>
-            <button onclick="setFilter('warning')" id="filterWarn" class="px-2.5 py-1.5 rounded-lg bg-white/5 text-amber-400 hover:bg-amber-500/10 transition border border-amber-500/20">🟠 WARN</button>
-            <button onclick="setFilter('dropped')" id="filterDrop" class="px-2.5 py-1.5 rounded-lg bg-white/5 text-rose-400 hover:bg-rose-500/10 transition border border-rose-500/20">🔴 DROP</button>
+          <div class="relative h-44 w-full">
+            <canvas id="attendanceChart"></canvas>
           </div>
+        </div>
 
-          <!-- Layout Switcher -->
-          <div class="flex gap-1 text-xs">
-            <button onclick="setLayout('grid')" id="layoutBtnGrid" class="px-3 py-1.5 rounded-lg bg-white/20 text-white font-bold transition">⊞ Grid</button>
-            <button onclick="setLayout('table')" id="layoutBtnTable" class="px-3 py-1.5 rounded-lg bg-white/5 text-stone-400 hover:text-white transition">☰ Table</button>
+        <!-- 4 Quick Stats (1 Column) -->
+        <div class="grid grid-cols-2 gap-3 font-mono-custom">
+          <div class="bento-card p-4 rounded-2xl flex flex-col justify-between">
+            <span class="text-stone-500 text-[10px] uppercase tracking-wider">PRACTICES</span>
+            <span id="statPractices" class="text-2xl font-black text-white">0</span>
+          </div>
+          <div class="bento-card p-4 rounded-2xl flex flex-col justify-between">
+            <span class="text-stone-500 text-[10px] uppercase tracking-wider">TURNOUT</span>
+            <span id="statTurnout" class="text-2xl font-black text-emerald-400">100%</span>
+          </div>
+          <div class="bento-card p-4 rounded-2xl flex flex-col justify-between">
+            <span class="text-stone-500 text-[10px] uppercase tracking-wider">WARNINGS</span>
+            <span id="statWarnings" class="text-2xl font-black text-amber-400">0</span>
+          </div>
+          <div class="bento-card p-4 rounded-2xl flex flex-col justify-between">
+            <span class="text-stone-500 text-[10px] uppercase tracking-wider">DROPPED</span>
+            <span id="statDropped" class="text-2xl font-black text-rose-400">0</span>
           </div>
         </div>
       </div>
 
-      <!-- Dynamic Roster Container -->
-      <div id="rosterContainer">
-        <!-- Injected via JS -->
+      <!-- Controls: Search + Filter + Layout -->
+      <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 pt-2">
+        <div class="relative flex-1 max-w-xs font-mono-custom text-xs">
+          <input id="searchInput" oninput="handleSearch()" type="text" placeholder="Search member name..." class="w-full bg-[#11141A] border border-stone-800 px-3.5 py-2 rounded-xl text-white placeholder-stone-600 focus:outline-none focus:border-stone-600" />
+        </div>
+
+        <div class="flex flex-wrap gap-1.5 text-xs font-mono-custom">
+          <button onclick="setFilter('all')" id="filterAll" class="px-3 py-1.5 rounded-lg bg-white text-black font-bold transition">ALL</button>
+          <button onclick="setFilter('ok')" id="filterOk" class="px-3 py-1.5 rounded-lg bg-stone-900 text-emerald-400 hover:bg-stone-800 transition border border-emerald-500/20">🟢 OK</button>
+          <button onclick="setFilter('warning')" id="filterWarn" class="px-3 py-1.5 rounded-lg bg-stone-900 text-amber-400 hover:bg-stone-800 transition border border-amber-500/20">🟠 WARN</button>
+          <button onclick="setFilter('dropped')" id="filterDrop" class="px-3 py-1.5 rounded-lg bg-stone-900 text-rose-400 hover:bg-stone-800 transition border border-rose-500/20">🔴 DROP</button>
+        </div>
+
+        <div class="flex gap-1 text-xs font-mono-custom">
+          <button onclick="setLayout('grid')" id="layoutBtnGrid" class="px-3 py-1.5 rounded-lg bg-white/20 text-white font-bold transition">⊞ Grid</button>
+          <button onclick="setLayout('table')" id="layoutBtnTable" class="px-3 py-1.5 rounded-lg bg-stone-900 text-stone-400 hover:text-white transition">☰ Table</button>
+        </div>
       </div>
+
+      <!-- Member Roster (Includes Visual Attendance Bars) -->
+      <div id="rosterContainer"></div>
     </main>
   </section>
 
@@ -242,13 +221,13 @@
   <!-- VIEW 3: ADMIN CONSOLE                                               -->
   <!-- =================================================================== -->
   <section id="adminView" class="hidden min-h-screen relative z-10 pb-20">
-    <header class="hud-card border-b border-white/5 sticky top-0 z-30">
-      <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center text-xs">
+    <header class="bento-card border-b border-stone-800 sticky top-0 z-30 bg-[#0B0D11]/90 backdrop-blur-md">
+      <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center text-xs font-mono-custom">
         <button onclick="navigateTo('dashboard')" class="text-stone-400 hover:text-white transition">
           ← DASHBOARD
         </button>
-        <span class="text-orange-400 font-bold uppercase tracking-widest">
-          LEADER CONSOLE
+        <span class="text-white font-bold uppercase tracking-wider">
+          ADMIN CONSOLE
         </span>
         <button onclick="logoutAdmin()" class="text-rose-400 hover:underline">
           Logout
@@ -256,21 +235,21 @@
       </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 py-6 space-y-6 text-xs">
+    <main class="max-w-6xl mx-auto px-4 py-6 space-y-6 text-xs font-mono-custom">
 
-      <!-- Add Member -->
-      <div class="hud-card rounded-2xl p-4 space-y-2">
+      <!-- 1. Add Member -->
+      <div class="bento-card rounded-2xl p-4 space-y-2">
         <span class="text-stone-400 font-bold uppercase tracking-wider block">1. ADD MEMBER</span>
         <div class="flex gap-2">
-          <input id="newMemberName" type="text" placeholder="Full Name..." class="flex-1 bg-stone-900 border border-stone-700 px-3 py-2 rounded-xl text-white focus:outline-none focus:border-orange-500" />
+          <input id="newMemberName" type="text" placeholder="Full Name..." class="flex-1 bg-stone-900 border border-stone-700 px-3 py-2 rounded-xl text-white focus:outline-none focus:border-stone-500" />
           <button onclick="addMember()" class="bg-white hover:bg-stone-200 text-black px-4 py-2 rounded-xl font-bold uppercase">
             + Add
           </button>
         </div>
       </div>
 
-      <!-- Record Practice -->
-      <div class="hud-card rounded-2xl p-5 space-y-4">
+      <!-- 2. Log Practice Session -->
+      <div class="bento-card rounded-2xl p-5 space-y-4">
         <div class="flex justify-between items-center">
           <span class="text-stone-400 font-bold uppercase tracking-wider">2. LOG PRACTICE SESSION</span>
           <button onclick="markAllPresent()" class="text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 rounded-lg">
@@ -300,24 +279,24 @@
         <!-- Attendance List -->
         <div class="overflow-x-auto pt-2">
           <table class="w-full text-left">
-            <thead class="text-stone-500 border-b border-white/10">
+            <thead class="text-stone-500 border-b border-stone-800">
               <tr>
                 <th class="py-2">Member</th>
                 <th class="py-2">Status</th>
                 <th class="py-2">Arrival (>20m = Late)</th>
               </tr>
             </thead>
-            <tbody id="attendanceInputList" class="divide-y divide-white/5"></tbody>
+            <tbody id="attendanceInputList" class="divide-y divide-stone-800"></tbody>
           </table>
         </div>
 
-        <button onclick="savePracticeSession()" class="w-full bg-orange-600 hover:bg-orange-500 text-white font-extrabold uppercase py-3 rounded-xl transition">
-          💾 Save Practice Session
+        <button onclick="savePracticeSession()" class="w-full bg-white hover:bg-stone-200 text-black font-extrabold uppercase py-3 rounded-xl transition">
+          Save Practice Session
         </button>
       </div>
 
-      <!-- Past Sessions -->
-      <div class="hud-card rounded-2xl p-4 space-y-2">
+      <!-- 3. Past Sessions -->
+      <div class="bento-card rounded-2xl p-4 space-y-2">
         <span class="text-stone-400 font-bold uppercase tracking-wider block">3. EDIT PAST SESSIONS</span>
         <div id="pastSessionsList" class="space-y-2"></div>
       </div>
@@ -328,8 +307,8 @@
   <!-- MODAL: ONE-CLICK GC IMAGE & PRINT EXPORT                            -->
   <!-- =================================================================== -->
   <div id="exportModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="hud-card bg-stone-950 w-full max-w-xl rounded-2xl p-5 space-y-4 max-h-[92vh] flex flex-col text-xs">
-      <div class="flex justify-between items-center border-b border-white/10 pb-3">
+    <div class="bento-card bg-[#0D0F14] w-full max-w-xl rounded-2xl p-5 space-y-4 max-h-[92vh] flex flex-col text-xs font-mono-custom">
+      <div class="flex justify-between items-center border-b border-stone-800 pb-3">
         <span class="font-bold text-white uppercase tracking-wider">📸 GC PICTURE & PRINT</span>
         <button onclick="closeExportModal()" class="text-stone-400 hover:text-white text-base">&times;</button>
       </div>
@@ -338,10 +317,10 @@
         <select id="exportSessionSelector" onchange="generateExportCard()" class="flex-1 bg-stone-900 border border-stone-700 text-white px-2.5 py-2 rounded-lg">
           <option value="overall">Overall Summary (All Practices)</option>
         </select>
-        <button onclick="downloadAsImage()" class="bg-orange-500 hover:bg-orange-600 text-black font-extrabold px-3 py-2 rounded-lg">
+        <button onclick="downloadAsImage()" class="bg-white hover:bg-stone-200 text-black font-extrabold px-3 py-2 rounded-lg">
           Save PNG
         </button>
-        <button onclick="window.print()" class="bg-white/10 hover:bg-white/20 text-white px-3 py-2 rounded-lg">
+        <button onclick="window.print()" class="bg-stone-800 hover:bg-stone-700 text-white px-3 py-2 rounded-lg">
           Print
         </button>
       </div>
@@ -350,7 +329,7 @@
         <div id="exportCardArea" class="bg-stone-950 p-5 rounded-xl border border-stone-800 space-y-3">
           <div class="border-b border-stone-800 pb-2 flex justify-between items-end">
             <div>
-              <div id="exportTitle" class="text-lg font-syne font-black text-white uppercase">GROUP 03 SUMMARY</div>
+              <div id="exportTitle" class="text-base font-black text-white uppercase">GROUP 3 SUMMARY</div>
               <div id="exportMeta" class="text-[10px] text-stone-500">3 Lates = 1 Absent | 3 Absents = Drop</div>
             </div>
             <div id="exportTimestamp" class="text-[10px] text-stone-600"></div>
@@ -365,25 +344,25 @@
   <!-- MODAL: MEMBER TIMELINE RECEIPT                                      -->
   <!-- =================================================================== -->
   <div id="receiptModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="hud-card bg-stone-950 w-full max-w-md rounded-2xl p-5 space-y-4 max-h-[90vh] flex flex-col text-xs">
-      <div class="flex justify-between items-start border-b border-white/10 pb-2">
+    <div class="bento-card bg-[#0D0F14] w-full max-w-md rounded-2xl p-5 space-y-4 max-h-[90vh] flex flex-col text-xs font-mono-custom">
+      <div class="flex justify-between items-start border-b border-stone-800 pb-2">
         <div>
           <span class="text-[9px] uppercase text-stone-500 font-bold">RECEIPT RECORD</span>
-          <h3 id="receiptName" class="text-xl font-syne font-black uppercase text-white">Name</h3>
+          <h3 id="receiptName" class="text-xl font-bold text-white font-sans">Name</h3>
         </div>
         <button onclick="closeReceiptModal()" class="text-stone-400 text-lg">&times;</button>
       </div>
 
       <div class="grid grid-cols-3 gap-2 text-center">
-        <div class="bg-stone-900 p-2.5 rounded-xl border border-white/5">
+        <div class="bg-stone-900 p-2.5 rounded-xl border border-stone-800">
           <span class="text-[9px] text-stone-500 block">PRESENT</span>
           <span id="receiptPresents" class="text-lg font-bold text-emerald-400">0</span>
         </div>
-        <div class="bg-stone-900 p-2.5 rounded-xl border border-white/5">
+        <div class="bg-stone-900 p-2.5 rounded-xl border border-stone-800">
           <span class="text-[9px] text-stone-500 block">LATE</span>
           <span id="receiptLates" class="text-lg font-bold text-amber-400">0</span>
         </div>
-        <div class="bg-stone-900 p-2.5 rounded-xl border border-white/5">
+        <div class="bg-stone-900 p-2.5 rounded-xl border border-stone-800">
           <span class="text-[9px] text-stone-500 block">ABSENTS</span>
           <span id="receiptEffectiveAbsents" class="text-lg font-bold text-rose-400">0</span>
         </div>
@@ -392,7 +371,7 @@
       <div id="receiptStrikeBox" class="p-3 rounded-xl border text-xs flex justify-between items-center font-bold"></div>
 
       <div class="space-y-1.5 flex-1 overflow-y-auto pr-1">
-        <span class="text-[10px] uppercase text-stone-500">Timeline Logs</span>
+        <span class="text-[10px] uppercase text-stone-500">Practice Timeline</span>
         <div id="receiptTimeline" class="space-y-1.5"></div>
       </div>
     </div>
@@ -402,9 +381,9 @@
   <!-- MODAL: ADMIN LOGIN                                                  -->
   <!-- =================================================================== -->
   <div id="authModal" class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-    <div class="hud-card bg-stone-950 w-full max-w-xs rounded-2xl p-5 space-y-3 text-xs">
-      <div class="flex justify-between items-center border-b border-white/10 pb-2">
-        <span class="font-bold text-white uppercase">LEADER LOGIN</span>
+    <div class="bento-card bg-[#0D0F14] w-full max-w-xs rounded-2xl p-5 space-y-3 text-xs font-mono-custom">
+      <div class="flex justify-between items-center border-b border-stone-800 pb-2">
+        <span class="font-bold text-white uppercase">ADMIN LOGIN</span>
         <button onclick="closeAuthModal()" class="text-stone-400">&times;</button>
       </div>
       <input id="loginEmail" type="email" placeholder="admin@group3.com" class="w-full bg-stone-900 border border-stone-700 px-3 py-2 rounded-lg text-white" />
@@ -423,7 +402,7 @@
     // -----------------------------------------------------------------
     // 1. FIREBASE CONFIG KEYS
     // -----------------------------------------------------------------
-   const firebaseConfig = {
+    const firebaseConfig = {
   apiKey: "AIzaSyD29Zqlz1Oe9dNZuLX4h7jywOadUtJ5jOY",
   authDomain: "group-3-pe-attendance-sheet.firebaseapp.com",
   projectId: "group-3-pe-attendance-sheet",
@@ -441,7 +420,7 @@
     let attendance = [];
     let currentUser = null;
     let currentLayout = 'grid'; // 'grid' or 'table'
-    let currentFilter = 'all';  // 'all', 'ok', 'warning', 'dropped'
+    let currentFilter = 'all';
     let trendChart = null;
 
     document.getElementById('sessionDate').valueAsDate = new Date();
@@ -469,10 +448,10 @@
       currentLayout = layout;
       document.getElementById('layoutBtnGrid').className = layout === 'grid' 
         ? 'px-3 py-1.5 rounded-lg bg-white/20 text-white font-bold transition' 
-        : 'px-3 py-1.5 rounded-lg bg-white/5 text-stone-400 hover:text-white transition';
+        : 'px-3 py-1.5 rounded-lg bg-stone-900 text-stone-400 hover:text-white transition';
       document.getElementById('layoutBtnTable').className = layout === 'table' 
         ? 'px-3 py-1.5 rounded-lg bg-white/20 text-white font-bold transition' 
-        : 'px-3 py-1.5 rounded-lg bg-white/5 text-stone-400 hover:text-white transition';
+        : 'px-3 py-1.5 rounded-lg bg-stone-900 text-stone-400 hover:text-white transition';
       renderRoster();
     }
 
@@ -482,9 +461,9 @@
       Object.keys(btns).forEach(k => {
         const el = document.getElementById(btns[k]);
         if (k === filter) {
-          el.className = 'px-2.5 py-1.5 rounded-lg bg-white/20 text-white font-bold transition';
+          el.className = 'px-3 py-1.5 rounded-lg bg-white text-black font-bold transition';
         } else {
-          el.className = 'px-2.5 py-1.5 rounded-lg bg-white/5 text-stone-400 hover:text-white transition border border-white/5';
+          el.className = 'px-3 py-1.5 rounded-lg bg-stone-900 text-stone-400 hover:text-white transition border border-stone-800';
         }
       });
       renderRoster();
@@ -499,7 +478,7 @@
     // -----------------------------------------------------------------
     auth.onAuthStateChanged(user => {
       currentUser = user;
-      document.getElementById('navAdminBtn').innerText = user ? '⚡ CONSOLE' : '🔒 ADMIN';
+      document.getElementById('navAdminBtn').innerText = user ? 'ADMIN CONSOLE' : '🔒 ADMIN';
     });
 
     function openAuthModal() {
@@ -585,14 +564,14 @@
         <tr class="hover:bg-white/[0.02]">
           <td class="py-2.5 font-bold text-white">${m.name}</td>
           <td class="py-2.5">
-            <select id="status_${m.id}" onchange="handleStatusChange('${m.id}')" class="bg-stone-800 border border-stone-700 text-white text-xs px-2.5 py-1.5 rounded-lg">
+            <select id="status_${m.id}" onchange="handleStatusChange('${m.id}')" class="bg-stone-900 border border-stone-700 text-white text-xs px-2.5 py-1.5 rounded-lg">
               <option value="present">🟢 Present</option>
               <option value="late">🟠 Late (>20m)</option>
               <option value="absent">🔴 Absent</option>
             </select>
           </td>
           <td class="py-2.5">
-            <input id="time_${m.id}" type="time" onchange="autoCalculateLate('${m.id}')" value="${document.getElementById('sessionStart').value}" class="bg-stone-800 border border-stone-700 text-white text-xs px-2 py-1 rounded-lg" />
+            <input id="time_${m.id}" type="time" onchange="autoCalculateLate('${m.id}')" value="${document.getElementById('sessionStart').value}" class="bg-stone-900 border border-stone-700 text-white text-xs px-2 py-1 rounded-lg" />
           </td>
         </tr>
       `).join('');
@@ -687,12 +666,12 @@
       }
 
       container.innerHTML = sessions.slice(-5).reverse().map(s => `
-        <div class="flex justify-between items-center bg-stone-900 p-2.5 rounded-xl border border-white/5">
+        <div class="flex justify-between items-center bg-stone-900 p-2.5 rounded-xl border border-stone-800">
           <div>
             <span class="font-bold text-white">${s.label}</span>
             <span class="text-stone-500">(${s.date})</span>
           </div>
-          <button onclick="editSessionRecords('${s.id}')" class="text-orange-400 hover:underline">
+          <button onclick="editSessionRecords('${s.id}')" class="text-stone-300 hover:text-white font-bold underline">
             Edit
           </button>
         </div>
@@ -746,7 +725,7 @@
         else status = 'ok';
       }
 
-      return { presents, lates, directAbsents, penaltyAbsents, effectiveAbsents, status, logs };
+      return { presents, lates, directAbsents, penaltyAbsents, effectiveAbsents, status, logs, totalLogs: logs.length };
     }
 
     function updateHUD() {
@@ -769,18 +748,17 @@
     }
 
     // -----------------------------------------------------------------
-    // Dynamic Roster Render
+    // Dynamic Roster Render (With Visual Ratio Bar Graph)
     // -----------------------------------------------------------------
     function renderRoster() {
       const container = document.getElementById('rosterContainer');
       const searchVal = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
 
       if (members.length === 0) {
-        container.innerHTML = `<div class="py-12 text-center text-stone-500 text-xs">No members registered yet.</div>`;
+        container.innerHTML = `<div class="py-12 text-center text-stone-500 font-mono-custom text-xs">No members registered yet.</div>`;
         return;
       }
 
-      // Filter logic
       const filtered = members.filter(m => {
         const stat = getMemberStats(m.id);
         const matchName = m.name.toLowerCase().includes(searchVal);
@@ -789,26 +767,37 @@
       });
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="py-8 text-center text-stone-500 text-xs">No members match your search or filter.</div>`;
+        container.innerHTML = `<div class="py-8 text-center text-stone-500 font-mono-custom text-xs">No matching members found.</div>`;
         return;
       }
 
       const getBadge = (status) => {
-        if (status === 'none') return `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#151314] border border-[#2e262a] text-[11px] text-stone-300"><span class="sphere-grey"></span> No Practice</div>`;
-        if (status === 'ok') return `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#0e1f18] border border-[#1b4332] text-[11px] text-emerald-400 font-medium"><span class="sphere-green"></span> In Good Standing</div>`;
-        if (status === 'warning') return `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#231a0e] border border-[#4d381c] text-[11px] text-amber-400 font-bold"><span class="sphere-amber"></span> Warning (2 Absents)</div>`;
-        return `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#251015] border border-[#4c1d27] text-[11px] text-rose-400 font-bold"><span class="sphere-rose"></span> Dropped (3 Absents)</div>`;
+        if (status === 'none') return `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#151314] border border-[#2e262a] text-[11px] font-mono-custom text-stone-300"><span class="sphere-grey"></span> No Practice</div>`;
+        if (status === 'ok') return `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#0e1f18] border border-[#1b4332] text-[11px] font-mono-custom text-emerald-400 font-medium"><span class="sphere-green"></span> In Good Standing</div>`;
+        if (status === 'warning') return `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#231a0e] border border-[#4d381c] text-[11px] font-mono-custom text-amber-400 font-bold"><span class="sphere-amber"></span> Warning (2 Absents)</div>`;
+        return `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#251015] border border-[#4c1d27] text-[11px] font-mono-custom text-rose-400 font-bold"><span class="sphere-rose"></span> Dropped (3 Absents)</div>`;
       };
 
-      const getStrikeSlots = (abs) => {
-        const s1 = abs >= 1 ? (abs >= 3 ? 'filled-danger' : 'filled-warn') : '';
-        const s2 = abs >= 2 ? (abs >= 3 ? 'filled-danger' : 'filled-warn') : '';
-        const s3 = abs >= 3 ? 'filled-danger' : '';
+      // Clever Proportional Attendance Ratio Bar
+      const getAttendanceBar = (stat) => {
+        const total = stat.totalLogs;
+        if (total === 0) {
+          return `
+            <div class="w-full bg-stone-800 h-2 rounded-full overflow-hidden flex" title="No practice recorded yet">
+              <div class="w-full bg-stone-700 h-full"></div>
+            </div>
+          `;
+        }
+
+        const pPct = (stat.presents / total) * 100;
+        const lPct = (stat.lates / total) * 100;
+        const aPct = (stat.directAbsents / total) * 100;
+
         return `
-          <div class="grid grid-cols-3 gap-1 w-20">
-            <div class="strike-slot ${s1}"></div>
-            <div class="strike-slot ${s2}"></div>
-            <div class="strike-slot ${s3}"></div>
+          <div class="w-full bg-stone-800 h-2 rounded-full overflow-hidden flex gap-0.5" title="${stat.presents} Present, ${stat.lates} Late, ${stat.directAbsents} Absent">
+            <div style="width: ${pPct}%" class="bg-emerald-500 h-full"></div>
+            <div style="width: ${lPct}%" class="bg-amber-500 h-full"></div>
+            <div style="width: ${aPct}%" class="bg-rose-500 h-full"></div>
           </div>
         `;
       };
@@ -818,57 +807,54 @@
         container.innerHTML = filtered.map(m => {
           const stat = getMemberStats(m.id);
           return `
-            <div onclick="openReceiptModal('${m.id}')" class="hud-card cursor-pointer rounded-2xl p-4 space-y-3.5 transition transform hover:-translate-y-0.5">
+            <div onclick="openReceiptModal('${m.id}')" class="bento-card cursor-pointer rounded-2xl p-4 space-y-3.5 transition hover:border-stone-700">
               <div class="flex justify-between items-start gap-2">
-                <span class="font-bold text-white text-sm tracking-tight">${m.name}</span>
+                <span class="font-bold text-white text-sm tracking-tight font-sans">${m.name}</span>
                 ${getBadge(stat.status)}
               </div>
-              <div class="grid grid-cols-3 gap-1.5 text-center py-1">
-                <div class="bg-stone-900/90 p-2 rounded-xl border border-white/5">
-                  <span class="text-stone-500 block text-[9px]">PRESENT</span>
-                  <span class="font-black text-emerald-400 text-sm">${stat.presents}</span>
-                </div>
-                <div class="bg-stone-900/90 p-2 rounded-xl border border-white/5">
-                  <span class="text-stone-500 block text-[9px]">LATE</span>
-                  <span class="font-black text-amber-400 text-sm">${stat.lates}</span>
-                </div>
-                <div class="bg-stone-900/90 p-2 rounded-xl border border-white/5">
-                  <span class="text-stone-500 block text-[9px]">ABSENT</span>
-                  <span class="font-black text-rose-400 text-sm">${stat.effectiveAbsents}</span>
+
+              <!-- Visual Attendance Ratio Bar -->
+              <div class="space-y-1">
+                ${getAttendanceBar(stat)}
+                <div class="flex justify-between text-[10px] font-mono-custom text-stone-500">
+                  <span>P: <strong class="text-emerald-400">${stat.presents}</strong></span>
+                  <span>L: <strong class="text-amber-400">${stat.lates}</strong></span>
+                  <span>Abs: <strong class="text-rose-400">${stat.effectiveAbsents}</strong></span>
                 </div>
               </div>
-              <div class="flex justify-between items-center pt-1 border-t border-white/5">
-                ${getStrikeSlots(stat.effectiveAbsents)}
-                <span class="text-[10px] text-stone-500 font-bold hover:text-white">Receipt →</span>
+
+              <div class="flex justify-between items-center pt-2 border-t border-stone-800 font-mono-custom text-[11px] text-stone-400">
+                <span>Strikes: <strong class="${stat.effectiveAbsents >= 3 ? 'text-rose-400' : (stat.effectiveAbsents === 2 ? 'text-amber-400' : 'text-stone-300')}">${stat.effectiveAbsents} / 3</strong></span>
+                <span class="text-stone-500 hover:text-white">Receipt →</span>
               </div>
             </div>
           `;
         }).join('');
       } else {
-        container.className = "hud-card rounded-2xl overflow-hidden";
+        container.className = "bento-card rounded-2xl overflow-hidden font-mono-custom";
         container.innerHTML = `
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
-              <thead class="bg-stone-900/80 text-stone-400 border-b border-white/10">
+              <thead class="bg-stone-900/90 text-stone-400 border-b border-stone-800">
                 <tr>
-                  <th class="py-3 px-4">Member Name</th>
-                  <th class="py-3 px-2 text-center">Present</th>
-                  <th class="py-3 px-2 text-center">Late</th>
+                  <th class="py-3 px-4 font-sans font-bold">Member Name</th>
+                  <th class="py-3 px-3 text-center">Visual Ratio</th>
+                  <th class="py-3 px-2 text-center">Presents</th>
+                  <th class="py-3 px-2 text-center">Lates</th>
                   <th class="py-3 px-2 text-center">Absents</th>
-                  <th class="py-3 px-4 text-center">Strikes</th>
                   <th class="py-3 px-4 text-center">Status</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-white/5">
+              <tbody class="divide-y divide-stone-800">
                 ${filtered.map(m => {
                   const stat = getMemberStats(m.id);
                   return `
                     <tr onclick="openReceiptModal('${m.id}')" class="hover:bg-white/[0.02] cursor-pointer">
-                      <td class="py-3 px-4 font-bold text-white">${m.name}</td>
+                      <td class="py-3 px-4 font-bold text-white font-sans">${m.name}</td>
+                      <td class="py-3 px-3 w-32">${getAttendanceBar(stat)}</td>
                       <td class="py-3 px-2 text-center text-emerald-400 font-bold">${stat.presents}</td>
                       <td class="py-3 px-2 text-center text-amber-400 font-bold">${stat.lates}</td>
                       <td class="py-3 px-2 text-center text-rose-400 font-bold">${stat.effectiveAbsents}</td>
-                      <td class="py-3 px-4 flex justify-center">${getStrikeSlots(stat.effectiveAbsents)}</td>
                       <td class="py-3 px-4">${getBadge(stat.status)}</td>
                     </tr>
                   `;
@@ -881,7 +867,7 @@
     }
 
     // -----------------------------------------------------------------
-    // Live Area Trend Chart (Chart.js)
+    // Chart.js Area Trend Chart
     // -----------------------------------------------------------------
     function renderChart() {
       const ctx = document.getElementById('attendanceChart');
@@ -913,7 +899,7 @@
               label: 'Present',
               data: labels.length ? presentCounts : [0, 0, 0, 0],
               borderColor: '#10B981',
-              backgroundColor: 'rgba(16, 185, 129, 0.15)',
+              backgroundColor: 'rgba(16, 185, 129, 0.12)',
               tension: 0.35,
               fill: true,
               borderWidth: 2
@@ -922,9 +908,8 @@
               label: 'Late',
               data: labels.length ? lateCounts : [0, 0, 0, 0],
               borderColor: '#F59E0B',
-              backgroundColor: 'rgba(245, 158, 11, 0.05)',
+              backgroundColor: 'transparent',
               tension: 0.35,
-              fill: true,
               borderWidth: 2
             },
             {
@@ -994,7 +979,7 @@
         list.innerHTML = sortedLogs.map(l => {
           let badge = l.status === 'present' ? '🟢 Present' : (l.status === 'late' ? `🟠 Late (${l.timeArrived})` : '🔴 Absent');
           return `
-            <div class="bg-stone-900 p-2.5 rounded-xl border border-white/5 flex justify-between items-center">
+            <div class="bg-stone-900 p-2.5 rounded-xl border border-stone-800 flex justify-between items-center">
               <div>
                 <div class="font-bold text-white">${l.sessionLabel} • ${l.date}</div>
                 <div class="text-stone-500 text-[10px]">Hours: ${l.startTime}-${l.endTime} | Arrived: ${l.timeArrived}</div>
@@ -1040,7 +1025,7 @@
       document.getElementById('exportTimestamp').innerText = new Date().toLocaleDateString();
 
       if (mode === 'overall') {
-        title.innerText = 'GROUP 03 SUMMARY';
+        title.innerText = 'GROUP 3 SUMMARY';
         meta.innerText = '3 Lates = 1 Absent | 3 Absents = Drop';
 
         container.innerHTML = members.map(m => {
@@ -1048,7 +1033,7 @@
           let tag = stat.status === 'dropped' ? '🔴 DROPPED' : (stat.status === 'warning' ? '🟠 WARNING' : '🟢 OK');
           return `
             <div class="flex justify-between items-center p-2 bg-stone-900 rounded-lg border border-stone-800">
-              <span class="font-bold text-white">${m.name}</span>
+              <span class="font-bold text-white font-sans">${m.name}</span>
               <div class="flex gap-2 text-[10px]">
                 <span>P:${stat.presents}</span>
                 <span>L:${stat.lates}</span>
@@ -1069,7 +1054,7 @@
           let badge = l.status === 'present' ? '🟢 Present' : (l.status === 'late' ? `🟠 Late (${l.timeArrived})` : '🔴 Absent');
           return `
             <div class="flex justify-between items-center p-2 bg-stone-900 rounded-lg border border-stone-800">
-              <span class="font-bold text-white">${l.memberName}</span>
+              <span class="font-bold text-white font-sans">${m ? l.memberName : ''}</span>
               <span class="text-[11px]">${badge}</span>
             </div>
           `;
@@ -1079,7 +1064,7 @@
 
     function downloadAsImage() {
       const card = document.getElementById('exportCardArea');
-      html2canvas(card, { backgroundColor: '#07090C', scale: 2 }).then(canvas => {
+      html2canvas(card, { backgroundColor: '#0B0D11', scale: 2 }).then(canvas => {
         const link = document.createElement('a');
         link.download = `Group3_Report_${Date.now()}.png`;
         link.href = canvas.toDataURL();
