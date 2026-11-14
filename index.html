@@ -41,16 +41,10 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
-    /* Tactile Paper Sheet Cards */
     .linen-card {
       background: #FFFFFF;
       border: 2px solid var(--blackhole);
       box-shadow: 4px 4px 0px 0px var(--blackhole);
-    }
-    .linen-card-sm {
-      background: #FFFFFF;
-      border: 1.5px solid var(--blackhole);
-      box-shadow: 2px 2px 0px 0px var(--blackhole);
     }
 
     /* 3D Spheres */
@@ -74,19 +68,16 @@
       background: radial-gradient(circle at 35% 35%, #fca5a5, #ef4444 60%, #991b1b);
       box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
     }
+    .sphere-blue {
+      width: 9px; height: 9px; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #bfdbfe, #3b82f6 60%, #1d4ed8);
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+    }
 
-    /* Print Styles */
     @media print {
-      body {
-        background: #FFFFFF !important;
-      }
-      .no-print, header, nav, button {
-        display: none !important;
-      }
-      #exportCardArea {
-        border: 2px solid #000000 !important;
-        box-shadow: none !important;
-      }
+      body { background: #FFFFFF !important; }
+      .no-print, header, nav, button { display: none !important; }
+      #exportCardArea { border: 2px solid #000000 !important; box-shadow: none !important; }
     }
   </style>
 </head>
@@ -101,7 +92,6 @@
       <span>SECTION 2026</span>
     </div>
 
-    <!-- Center Hero + 2 Main Buttons -->
     <div class="w-full max-w-sm text-center space-y-8 my-auto">
       <div class="space-y-2">
         <h1 class="text-6xl sm:text-7xl font-black tracking-tighter text-[#222222] uppercase">
@@ -112,12 +102,11 @@
         </p>
       </div>
 
-      <!-- THE 2 BUTTONS -->
       <div class="flex flex-col gap-3 justify-center items-center w-full font-mono-custom text-xs">
-        <button onclick="navigateTo('dashboard')" class="w-full py-4 rounded-xl bg-[#222222] hover:bg-[#FF6D1F] text-[#FAF3E1] font-black uppercase tracking-widest transition-all transform active:scale-95 shadow-md">
+        <button onclick="navigateTo('dashboard')" class="w-full py-4 rounded-xl bg-[#222222] hover:bg-[#FF6D1F] text-[#FAF3E1] font-black uppercase tracking-widest transition transform active:scale-95 shadow-md">
           ENTER
         </button>
-        <button onclick="openAuthModal()" class="w-full py-4 rounded-xl bg-[#F5E7C6] hover:bg-[#EADBBE] text-[#222222] font-black uppercase tracking-widest transition-all transform active:scale-95 border-2 border-[#222222]">
+        <button onclick="openAuthModal()" class="w-full py-4 rounded-xl bg-[#F5E7C6] hover:bg-[#EADBBE] text-[#222222] font-black uppercase tracking-widest transition transform active:scale-95 border-2 border-[#222222]">
           ADMIN ACCESS
         </button>
       </div>
@@ -159,7 +148,7 @@
         <div>
           <span class="text-[10px] font-mono-custom font-black text-[#FF6D1F] uppercase tracking-wider block">ATTENDANCE POLICY MEMO</span>
           <div class="text-xs sm:text-sm font-extrabold text-[#222222]">
-            3 Absents = Automatic Drop &nbsp;|&nbsp; 3 Lates = 1 Absent &nbsp;|&nbsp; Arrival >20 mins = Late
+            3 Absents = Automatic Drop &nbsp;|&nbsp; 3 Lates = 1 Absent &nbsp;|&nbsp; Excused = No Strike
           </div>
         </div>
         <span class="text-[10px] font-mono-custom font-black text-[#222222] bg-[#F5E7C6] px-3 py-1 rounded-lg border border-[#222222]">
@@ -167,7 +156,7 @@
         </span>
       </div>
 
-      <!-- EXACT SCREENSHOT STATUS LEGEND -->
+      <!-- STATUS LEGEND -->
       <div class="flex flex-wrap items-center gap-2 text-xs font-mono-custom">
         <div class="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-[#222222] text-[#222222] font-bold">
           <span class="sphere-grey"></span> No Practice
@@ -183,7 +172,7 @@
         </div>
       </div>
 
-      <!-- INTERACTIVE SESSION CAROUSEL (Switch between Overall and Specific Practice Days) -->
+      <!-- PRACTICE SELECTION CAROUSEL -->
       <div class="space-y-2 font-mono-custom">
         <div class="flex justify-between items-center">
           <span class="text-xs font-black text-[#222222] uppercase tracking-wider">SELECT PRACTICE VIEW:</span>
@@ -194,20 +183,18 @@
         </div>
       </div>
 
-      <!-- PRACTICE BAR GRAPH + QUICK TELEMETRY -->
+      <!-- PRACTICE TURNOUT BAR GRAPH + STATS -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <!-- Turnout Bar Graph (Chart.js) -->
         <div class="lg:col-span-2 linen-card p-5 rounded-2xl space-y-3">
           <div class="flex justify-between items-center text-xs font-mono-custom">
             <span class="text-[#222222] font-black uppercase tracking-wider">PRACTICE TURNOUT BAR GRAPH</span>
-            <span id="graphStateText" class="text-[#222222]/60 text-[11px]">Loading practices...</span>
+            <span id="graphStateText" class="text-[#222222]/60 text-[11px]">Loading...</span>
           </div>
           <div class="relative h-44 w-full">
             <canvas id="attendanceBarChart"></canvas>
           </div>
         </div>
 
-        <!-- 4 Stats -->
         <div class="grid grid-cols-2 gap-3 font-mono-custom">
           <div class="linen-card p-4 rounded-2xl flex flex-col justify-between">
             <span class="text-[#222222]/60 text-[10px] uppercase font-bold tracking-wider">PRACTICES</span>
@@ -228,7 +215,7 @@
         </div>
       </div>
 
-      <!-- Search & Layout Controls -->
+      <!-- Controls: Search & Layout -->
       <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 pt-2">
         <div class="relative flex-1 max-w-xs font-mono-custom text-xs">
           <input id="searchInput" oninput="handleSearch()" type="text" placeholder="Search member name..." class="w-full bg-white border-2 border-[#222222] px-3.5 py-2 rounded-xl text-[#222222] placeholder-[#222222]/40 focus:outline-none focus:border-[#FF6D1F]" />
@@ -247,7 +234,6 @@
         </div>
       </div>
 
-      <!-- Member Roster View -->
       <div id="rosterContainer"></div>
     </main>
   </section>
@@ -283,7 +269,7 @@
         </div>
       </div>
 
-      <!-- 2. Log Practice Session -->
+      <!-- 2. Log Practice Session (NO TIMES NEEDED) -->
       <div class="linen-card rounded-2xl p-5 space-y-4">
         <div class="flex justify-between items-center">
           <span class="text-[#222222] font-black uppercase tracking-wider">2. LOG PRACTICE SESSION</span>
@@ -292,7 +278,7 @@
           </button>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="text-[#222222]/70 block mb-1 font-bold">Session Label</label>
             <input id="sessionLabel" type="text" placeholder="Day 1 Practice" class="w-full bg-white border-2 border-[#222222] px-3 py-2 rounded-lg text-[#222222] font-bold" />
@@ -301,24 +287,14 @@
             <label class="text-[#222222]/70 block mb-1 font-bold">Date</label>
             <input id="sessionDate" type="date" class="w-full bg-white border-2 border-[#222222] px-3 py-2 rounded-lg text-[#222222] font-bold" />
           </div>
-          <div>
-            <label class="text-[#222222]/70 block mb-1 font-bold">Call Time (Start)</label>
-            <input id="sessionStart" type="time" value="16:00" class="w-full bg-white border-2 border-[#222222] px-3 py-2 rounded-lg text-[#222222] font-bold" />
-          </div>
-          <div>
-            <label class="text-[#222222]/70 block mb-1 font-bold">Dismissal (End)</label>
-            <input id="sessionEnd" type="time" value="18:00" class="w-full bg-white border-2 border-[#222222] px-3 py-2 rounded-lg text-[#222222] font-bold" />
-          </div>
         </div>
 
-        <!-- Attendance Input List -->
         <div class="overflow-x-auto pt-2">
           <table class="w-full text-left">
             <thead class="text-[#222222] border-b-2 border-[#222222] font-bold">
               <tr>
                 <th class="py-2">Member</th>
-                <th class="py-2">Status</th>
-                <th class="py-2">Arrival (>20m = Late)</th>
+                <th class="py-2 text-right sm:text-left">Status</th>
               </tr>
             </thead>
             <tbody id="attendanceInputList" class="divide-y divide-[#EADBBE]"></tbody>
@@ -330,13 +306,49 @@
         </button>
       </div>
 
-      <!-- 3. Edit Past Sessions -->
+      <!-- 3. Edit Past Sessions (CLEAN IN-APP MODAL TRIGGER) -->
       <div class="linen-card rounded-2xl p-4 space-y-2">
         <span class="text-[#222222] font-black uppercase tracking-wider block">3. EDIT PAST SESSIONS</span>
         <div id="pastSessionsList" class="space-y-2"></div>
       </div>
     </main>
   </section>
+
+  <!-- =================================================================== -->
+  <!-- MODAL: CLEAN IN-APP SESSION EDITOR (NO BROWSER POPUPS)             -->
+  <!-- =================================================================== -->
+  <div id="editSessionModal" class="hidden fixed inset-0 z-50 bg-[#222222]/85 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-[#FAF3E1] border-2 border-[#222222] w-full max-w-xl rounded-2xl p-5 space-y-4 max-h-[90vh] flex flex-col text-xs font-mono-custom shadow-2xl">
+      <div class="flex justify-between items-center border-b-2 border-[#222222] pb-3">
+        <div>
+          <span class="font-black text-[#222222] uppercase tracking-wider text-sm">✏️ EDIT PRACTICE RECORD</span>
+          <p id="editSessionSubtitle" class="text-[10px] text-[#222222]/70 font-bold">Session Name • Date</p>
+        </div>
+        <button onclick="closeEditModal()" class="text-[#222222] font-black text-xl hover:text-[#FF6D1F]">&times;</button>
+      </div>
+
+      <div class="overflow-y-auto flex-1 pr-1">
+        <table class="w-full text-left border-collapse">
+          <thead class="bg-[#F5E7C6] border-b-2 border-[#222222] text-[#222222] font-bold text-[10px]">
+            <tr>
+              <th class="p-2">Member</th>
+              <th class="p-2 text-right">Updated Status</th>
+            </tr>
+          </thead>
+          <tbody id="editMemberList" class="divide-y divide-[#EADBBE]"></tbody>
+        </table>
+      </div>
+
+      <div class="pt-2 border-t-2 border-[#222222] flex gap-2">
+        <button onclick="saveSessionEdits()" class="flex-1 bg-[#FF6D1F] hover:bg-[#222222] text-white font-black py-2.5 rounded-xl uppercase transition">
+          💾 Save Changes
+        </button>
+        <button onclick="closeEditModal()" class="px-4 bg-white border-2 border-[#222222] text-[#222222] font-bold rounded-xl">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- =================================================================== -->
   <!-- MODAL: ONE-CLICK GC IMAGE & PRINT EXPORT                            -->
@@ -366,25 +378,24 @@
       <!-- THE OFFICIAL GC SHEET CAPTURE CARD -->
       <div class="overflow-y-auto flex-1 p-1">
         <div id="exportCardArea" class="bg-white p-6 rounded-2xl border-2 border-[#222222] space-y-4 shadow-sm">
-          <!-- Card Header -->
-          <div class="border-b-2 border-[#222222] pb-3 flex justify-between items-end">
+          <!-- Header -->
+          <div class="border-b-2 border-[#222222] pb-3 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2">
             <div>
               <span class="text-[10px] font-black uppercase tracking-widest text-[#FF6D1F]">PHYSICAL EDUCATION CULMINATING</span>
-              <h2 id="exportTitle" class="text-2xl font-black uppercase text-[#222222] tracking-tight">DAY 1 PRACTICE ATTENDANCE</h2>
-              <div id="exportMeta" class="text-xs text-[#222222] font-bold mt-1">Date: 11/14/2026 • Time: 4:00 PM - 6:00 PM</div>
+              <h2 id="exportTitle" class="text-2xl font-black uppercase text-[#222222] tracking-tight">DAY 1 ATTENDANCE SHEET</h2>
+              <div id="exportMeta" class="text-xs text-[#222222] font-bold mt-0.5">Date: 11/14/2026</div>
             </div>
-            <div id="exportTurnoutPill" class="text-right">
+            <div id="exportTurnoutPill">
               <!-- Rendered via JS -->
             </div>
           </div>
 
-          <!-- Roster Table with Complete Written-Out Statuses -->
+          <!-- Roster Table (CLEAN: Member | Status | Strikes to Date) -->
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs border border-[#222222] border-collapse">
               <thead class="bg-[#F5E7C6] border-b-2 border-[#222222] text-[#222222] font-black uppercase text-[10px]">
                 <tr>
                   <th class="p-2.5 border-r border-[#222222]">Member Name</th>
-                  <th class="p-2.5 border-r border-[#222222] text-center">Arrival Time</th>
                   <th class="p-2.5 border-r border-[#222222] text-center">Today's Status</th>
                   <th class="p-2.5 text-center">Strikes to Date</th>
                 </tr>
@@ -395,10 +406,10 @@
             </table>
           </div>
 
-          <!-- Card Footer Memo -->
+          <!-- Card Footer (NO POLICY NOTE) -->
           <div class="border-t-2 border-[#222222] pt-3 text-[10px] text-[#222222] flex justify-between font-bold">
-            <span>Policy: 3 Lates = 1 Absent | 3 Absents = Automatic Drop</span>
-            <span>OFFICIAL RECORD • GROUP 03</span>
+            <span>OFFICIAL ATTENDANCE RECORD</span>
+            <span>GROUP 03</span>
           </div>
         </div>
       </div>
@@ -412,24 +423,28 @@
     <div class="bg-[#FAF3E1] border-2 border-[#222222] w-full max-w-md rounded-2xl p-5 space-y-4 max-h-[90vh] flex flex-col text-xs font-mono-custom shadow-2xl">
       <div class="flex justify-between items-start border-b-2 border-[#222222] pb-2">
         <div>
-          <span class="text-[9px] uppercase text-[#222222]/60 font-black">MEMBER RECEIPT</span>
+          <span class="text-[9px] uppercase text-[#222222]/60 font-black">MEMBER RECORD</span>
           <h3 id="receiptName" class="text-xl font-black uppercase text-[#222222]">Name</h3>
         </div>
         <button onclick="closeReceiptModal()" class="text-[#222222] font-black text-xl hover:text-[#FF6D1F]">&times;</button>
       </div>
 
-      <div class="grid grid-cols-3 gap-2 text-center">
-        <div class="bg-white p-2.5 rounded-xl border border-[#222222]">
+      <div class="grid grid-cols-4 gap-1.5 text-center">
+        <div class="bg-white p-2 rounded-xl border border-[#222222]">
           <span class="text-[9px] text-[#222222]/60 block font-bold">PRESENT</span>
-          <span id="receiptPresents" class="text-xl font-black text-emerald-600">0</span>
+          <span id="receiptPresents" class="text-lg font-black text-emerald-600">0</span>
         </div>
-        <div class="bg-white p-2.5 rounded-xl border border-[#222222]">
+        <div class="bg-white p-2 rounded-xl border border-[#222222]">
           <span class="text-[9px] text-[#222222]/60 block font-bold">LATE</span>
-          <span id="receiptLates" class="text-xl font-black text-[#FF6D1F]">0</span>
+          <span id="receiptLates" class="text-lg font-black text-[#FF6D1F]">0</span>
         </div>
-        <div class="bg-white p-2.5 rounded-xl border border-[#222222]">
-          <span class="text-[9px] text-[#222222]/60 block font-bold">ABSENTS</span>
-          <span id="receiptEffectiveAbsents" class="text-xl font-black text-rose-600">0</span>
+        <div class="bg-white p-2 rounded-xl border border-[#222222]">
+          <span class="text-[9px] text-[#222222]/60 block font-bold">ABSENT</span>
+          <span id="receiptEffectiveAbsents" class="text-lg font-black text-rose-600">0</span>
+        </div>
+        <div class="bg-white p-2 rounded-xl border border-[#222222]">
+          <span class="text-[9px] text-[#222222]/60 block font-bold">EXCUSED</span>
+          <span id="receiptExcused" class="text-lg font-black text-blue-600">0</span>
         </div>
       </div>
 
@@ -484,10 +499,11 @@
     let sessions = [];
     let attendance = [];
     let currentUser = null;
-    let currentLayout = 'grid'; // 'grid' or 'table'
+    let currentLayout = 'grid';
     let currentFilter = 'all';
-    let selectedSessionView = 'all'; // 'all' or sessionId
+    let selectedSessionView = 'all';
     let attendanceBarChart = null;
+    let currentEditingSessionId = null;
 
     document.getElementById('sessionDate').valueAsDate = new Date();
 
@@ -625,75 +641,40 @@
     }
 
     // -----------------------------------------------------------------
-    // Practice Logging (20m Grace Period)
+    // Attendance Input (NO TIME NEEDED)
     // -----------------------------------------------------------------
     function renderAttendanceForm() {
       const tbody = document.getElementById('attendanceInputList');
       if (members.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="3" class="py-3 text-[#222222]/50 text-center">No members registered yet.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="2" class="py-3 text-[#222222]/50 text-center">No members registered yet.</td></tr>`;
         return;
       }
 
       tbody.innerHTML = members.map(m => `
         <tr class="hover:bg-[#FAF3E1]/40">
           <td class="py-2.5 font-bold text-[#222222]">${m.name}</td>
-          <td class="py-2.5">
-            <select id="status_${m.id}" onchange="handleStatusChange('${m.id}')" class="bg-white border-2 border-[#222222] text-[#222222] text-xs px-2.5 py-1.5 rounded-lg font-bold">
+          <td class="py-2.5 text-right sm:text-left">
+            <select id="status_${m.id}" class="bg-white border-2 border-[#222222] text-[#222222] text-xs px-2.5 py-1.5 rounded-lg font-bold">
               <option value="present">🟢 Present</option>
-              <option value="late">🟠 Late (>20m)</option>
+              <option value="late">🟠 Late</option>
               <option value="absent">🔴 Absent</option>
+              <option value="excused">⚪ Excused</option>
             </select>
-          </td>
-          <td class="py-2.5">
-            <input id="time_${m.id}" type="time" onchange="autoCalculateLate('${m.id}')" value="${document.getElementById('sessionStart').value}" class="bg-white border-2 border-[#222222] text-[#222222] text-xs px-2 py-1 rounded-lg font-bold" />
           </td>
         </tr>
       `).join('');
     }
 
-    function autoCalculateLate(memberId) {
-      const startTime = document.getElementById('sessionStart').value;
-      const inTime = document.getElementById(`time_${memberId}`).value;
-      const select = document.getElementById(`status_${memberId}`);
-
-      if (select.value === 'absent' || !startTime || !inTime) return;
-
-      const [startH, startM] = startTime.split(':').map(Number);
-      const [inH, inM] = inTime.split(':').map(Number);
-      const diff = (inH * 60 + inM) - (startH * 60 + startM);
-
-      select.value = diff > 20 ? 'late' : 'present';
-    }
-
-    function handleStatusChange(memberId) {
-      const status = document.getElementById(`status_${memberId}`).value;
-      const timeInput = document.getElementById(`time_${memberId}`);
-      if (status === 'absent') {
-        timeInput.disabled = true;
-        timeInput.value = '';
-      } else {
-        timeInput.disabled = false;
-        if (!timeInput.value) timeInput.value = document.getElementById('sessionStart').value;
-      }
-    }
-
     function markAllPresent() {
       members.forEach(m => {
         const sel = document.getElementById(`status_${m.id}`);
-        const time = document.getElementById(`time_${m.id}`);
         if (sel) sel.value = 'present';
-        if (time) {
-          time.disabled = false;
-          time.value = document.getElementById('sessionStart').value;
-        }
       });
     }
 
     async function savePracticeSession() {
       const label = document.getElementById('sessionLabel').value.trim() || 'Practice Session';
       const date = document.getElementById('sessionDate').value;
-      const startTime = document.getElementById('sessionStart').value;
-      const endTime = document.getElementById('sessionEnd').value;
 
       if (!date) return alert('Select date');
       if (members.length === 0) return alert('Add members first');
@@ -702,24 +683,19 @@
       const sessionRef = db.collection('sessions').doc();
 
       batch.set(sessionRef, {
-        label, date, startTime, endTime, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        label, date, createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
       members.forEach(m => {
         const status = document.getElementById(`status_${m.id}`).value;
-        const timeArrived = document.getElementById(`time_${m.id}`).value || 'N/A';
-
         const attRef = db.collection('attendance').doc();
         batch.set(attRef, {
           sessionId: sessionRef.id,
           sessionLabel: label,
           date,
-          startTime,
-          endTime,
           memberId: m.id,
           memberName: m.name,
           status,
-          timeArrived: status === 'absent' ? 'N/A' : timeArrived,
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
       });
@@ -730,7 +706,7 @@
     }
 
     // -----------------------------------------------------------------
-    // Past Sessions / Catch Up
+    // Clean In-App Session Editing (NO PROMPT POPUPS)
     // -----------------------------------------------------------------
     function renderPastSessions() {
       const container = document.getElementById('pastSessionsList');
@@ -740,54 +716,96 @@
       }
 
       container.innerHTML = sessions.slice(-5).reverse().map(s => `
-        <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border border-[#222222]">
+        <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border-2 border-[#222222]">
           <div>
             <span class="font-bold text-[#222222]">${s.label}</span>
-            <span class="text-[#222222]/60">(${s.date})</span>
+            <span class="text-[#222222]/60 font-semibold">(${s.date})</span>
           </div>
-          <button onclick="editSessionRecords('${s.id}')" class="text-[#FF6D1F] font-black hover:underline">
+          <button onclick="openEditSessionModal('${s.id}')" class="text-white bg-[#222222] hover:bg-[#FF6D1F] px-3 py-1 rounded-lg font-black transition">
             Edit
           </button>
         </div>
       `).join('');
     }
 
-    async function editSessionRecords(sessionId) {
+    function openEditSessionModal(sessionId) {
+      currentEditingSessionId = sessionId;
+      const s = sessions.find(x => x.id === sessionId);
+      if (!s) return;
+
+      document.getElementById('editSessionSubtitle').innerText = `${s.label} • ${s.date}`;
       const records = attendance.filter(a => a.sessionId === sessionId);
-      if (records.length === 0) return alert('No records found.');
+      const tbody = document.getElementById('editMemberList');
 
-      const names = records.map(r => r.memberName).join('\n');
-      const targetName = prompt(`Enter member name to edit:\n\n${names}`);
-      if (!targetName) return;
+      tbody.innerHTML = members.map(m => {
+        const rec = records.find(r => r.memberId === m.id);
+        const currentStatus = rec ? rec.status : 'present';
 
-      const record = records.find(r => r.memberName.toLowerCase() === targetName.toLowerCase().trim());
-      if (!record) return alert('Member not found.');
+        return `
+          <tr class="hover:bg-[#FAF3E1]/60">
+            <td class="p-2 font-bold text-[#222222]">${m.name}</td>
+            <td class="p-2 text-right">
+              <select id="edit_status_${m.id}" class="bg-white border-2 border-[#222222] text-[#222222] text-xs px-2 py-1 rounded-lg font-bold">
+                <option value="present" ${currentStatus === 'present' ? 'selected' : ''}>🟢 Present</option>
+                <option value="late" ${currentStatus === 'late' ? 'selected' : ''}>🟠 Late</option>
+                <option value="absent" ${currentStatus === 'absent' ? 'selected' : ''}>🔴 Absent</option>
+                <option value="excused" ${currentStatus === 'excused' ? 'selected' : ''}>⚪ Excused</option>
+              </select>
+            </td>
+          </tr>
+        `;
+      }).join('');
 
-      const newStatus = prompt(`Change status (present / late / absent):`, record.status);
-      if (!newStatus || !['present', 'late', 'absent'].includes(newStatus.toLowerCase())) return;
+      document.getElementById('editSessionModal').classList.remove('hidden');
+    }
 
-      let newTime = record.timeArrived;
-      if (newStatus !== 'absent') {
-        newTime = prompt(`Arrival time:`, record.timeArrived !== 'N/A' ? record.timeArrived : '16:00') || 'N/A';
-      } else {
-        newTime = 'N/A';
-      }
+    function closeEditModal() {
+      document.getElementById('editSessionModal').classList.add('hidden');
+      currentEditingSessionId = null;
+    }
 
-      await db.collection('attendance').doc(record.id).update({
-        status: newStatus.toLowerCase(),
-        timeArrived: newTime
+    async function saveSessionEdits() {
+      if (!currentEditingSessionId) return;
+      const records = attendance.filter(a => a.sessionId === currentEditingSessionId);
+      const batch = db.batch();
+
+      members.forEach(m => {
+        const select = document.getElementById(`edit_status_${m.id}`);
+        if (!select) return;
+        const newStatus = select.value;
+        const rec = records.find(r => r.memberId === m.id);
+
+        if (rec) {
+          batch.update(db.collection('attendance').doc(rec.id), { status: newStatus });
+        } else {
+          const newDoc = db.collection('attendance').doc();
+          const s = sessions.find(x => x.id === currentEditingSessionId);
+          batch.set(newDoc, {
+            sessionId: currentEditingSessionId,
+            sessionLabel: s ? s.label : 'Practice',
+            date: s ? s.date : '',
+            memberId: m.id,
+            memberName: m.name,
+            status: newStatus,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
       });
-      alert('Updated successfully.');
+
+      await batch.commit();
+      alert('Session updated successfully!');
+      closeEditModal();
     }
 
     // -----------------------------------------------------------------
-    // Math & Stats Engine
+    // Math & Stats Engine (Excused does NOT count as strike)
     // -----------------------------------------------------------------
     function getMemberStats(memberId) {
       const logs = attendance.filter(a => a.memberId === memberId);
       const presents = logs.filter(a => a.status === 'present').length;
       const lates = logs.filter(a => a.status === 'late').length;
       const directAbsents = logs.filter(a => a.status === 'absent').length;
+      const excused = logs.filter(a => a.status === 'excused').length;
 
       const penaltyAbsents = Math.floor(lates / 3);
       const effectiveAbsents = directAbsents + penaltyAbsents;
@@ -799,7 +817,7 @@
         else status = 'ok';
       }
 
-      return { presents, lates, directAbsents, penaltyAbsents, effectiveAbsents, status, logs, totalLogs: logs.length };
+      return { presents, lates, directAbsents, excused, penaltyAbsents, effectiveAbsents, status, logs, totalLogs: logs.length };
     }
 
     function updateHUD() {
@@ -811,7 +829,7 @@
         const stat = getMemberStats(m.id);
         if (stat.status === 'warning') warnings++;
         if (stat.status === 'dropped') dropped++;
-        totalAttended += (stat.presents + stat.lates);
+        totalAttended += (stat.presents + stat.lates + stat.excused);
       });
 
       document.getElementById('statWarnings').innerText = warnings;
@@ -822,7 +840,7 @@
     }
 
     // -----------------------------------------------------------------
-    // Session Carousel (Allows selecting a specific practice or All)
+    // Session Carousel
     // -----------------------------------------------------------------
     function renderSessionCarousel() {
       const bar = document.getElementById('sessionFilterBar');
@@ -877,12 +895,8 @@
         return `<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-rose-50 border border-rose-500 text-[11px] font-mono-custom text-rose-700 font-bold"><span class="sphere-rose"></span> Dropped (3 Absents)</div>`;
       };
 
-      // Mini Vertical Bar Graph for Member Card
       const getMemberDailyBarGraph = (memberId) => {
-        if (sessions.length === 0) {
-          return `<div class="text-[10px] text-[#222222]/50 font-mono-custom py-2">No practices held yet.</div>`;
-        }
-
+        if (sessions.length === 0) return `<div class="text-[10px] text-[#222222]/50 font-mono-custom py-2">No practices held yet.</div>`;
         const memberLogs = attendance.filter(a => a.memberId === memberId);
 
         return `
@@ -892,26 +906,16 @@
                 const log = memberLogs.find(l => l.sessionId === s.id);
                 let barColor = 'bg-[#EADBBE]';
                 let barHeight = 'h-2';
-                let tooltip = `${s.label} (${s.date}): Unrecorded`;
 
                 if (log) {
-                  if (log.status === 'present') {
-                    barColor = 'bg-emerald-500';
-                    barHeight = 'h-8';
-                    tooltip = `${s.label}: Present (${log.timeArrived})`;
-                  } else if (log.status === 'late') {
-                    barColor = 'bg-[#FF6D1F]';
-                    barHeight = 'h-5';
-                    tooltip = `${s.label}: Late (${log.timeArrived})`;
-                  } else if (log.status === 'absent') {
-                    barColor = 'bg-[#222222]';
-                    barHeight = 'h-3';
-                    tooltip = `${s.label}: Absent`;
-                  }
+                  if (log.status === 'present') { barColor = 'bg-emerald-500'; barHeight = 'h-8'; }
+                  else if (log.status === 'late') { barColor = 'bg-[#FF6D1F]'; barHeight = 'h-5'; }
+                  else if (log.status === 'absent') { barColor = 'bg-[#222222]'; barHeight = 'h-3'; }
+                  else if (log.status === 'excused') { barColor = 'bg-blue-500'; barHeight = 'h-4'; }
                 }
 
                 return `
-                  <div class="flex-1 flex flex-col items-center justify-end h-full" title="${tooltip}">
+                  <div class="flex-1 flex flex-col items-center justify-end h-full">
                     <div class="w-full ${barColor} ${barHeight} rounded-t"></div>
                     <span class="text-[8px] font-mono-custom text-[#222222]/60 mt-0.5">D${idx + 1}</span>
                   </div>
@@ -922,7 +926,6 @@
         `;
       };
 
-      // Check if we are viewing a specific session or Overall
       const isSessionSelected = selectedSessionView !== 'all';
       const targetSession = isSessionSelected ? sessions.find(s => s.id === selectedSessionView) : null;
 
@@ -931,17 +934,18 @@
         container.innerHTML = filtered.map(m => {
           const stat = getMemberStats(m.id);
 
-          // If a specific session is selected, grab that specific day's log
           let sessionStatusSnippet = '';
           if (isSessionSelected && targetSession) {
             const dayLog = attendance.find(a => a.sessionId === targetSession.id && a.memberId === m.id);
             if (dayLog) {
               if (dayLog.status === 'present') {
-                sessionStatusSnippet = `<div class="bg-emerald-50 border border-emerald-400 p-2 rounded-xl text-emerald-800 font-bold text-xs flex justify-between"><span>🟢 PRESENT</span><span>Arrived: ${dayLog.timeArrived}</span></div>`;
+                sessionStatusSnippet = `<div class="bg-emerald-50 border border-emerald-400 p-2 rounded-xl text-emerald-800 font-bold text-xs flex justify-between"><span>🟢 PRESENT</span><span>On Time</span></div>`;
               } else if (dayLog.status === 'late') {
-                sessionStatusSnippet = `<div class="bg-orange-50 border border-[#FF6D1F] p-2 rounded-xl text-[#FF6D1F] font-bold text-xs flex justify-between"><span>🟠 LATE</span><span>Arrived: ${dayLog.timeArrived}</span></div>`;
+                sessionStatusSnippet = `<div class="bg-orange-50 border border-[#FF6D1F] p-2 rounded-xl text-[#FF6D1F] font-bold text-xs flex justify-between"><span>🟠 LATE</span><span>Late</span></div>`;
+              } else if (dayLog.status === 'excused') {
+                sessionStatusSnippet = `<div class="bg-blue-50 border border-blue-400 p-2 rounded-xl text-blue-800 font-bold text-xs flex justify-between"><span>⚪ EXCUSED</span><span>No Strike</span></div>`;
               } else {
-                sessionStatusSnippet = `<div class="bg-rose-50 border border-rose-400 p-2 rounded-xl text-rose-700 font-bold text-xs flex justify-between"><span>🔴 ABSENT</span><span>Did not attend</span></div>`;
+                sessionStatusSnippet = `<div class="bg-rose-50 border border-rose-400 p-2 rounded-xl text-rose-700 font-bold text-xs flex justify-between"><span>🔴 ABSENT</span><span>Absent</span></div>`;
               }
             } else {
               sessionStatusSnippet = `<div class="bg-stone-100 p-2 rounded-xl text-stone-500 text-xs">No log for this practice.</div>`;
@@ -955,24 +959,25 @@
                 ${getBadge(stat.status)}
               </div>
 
-              <!-- Day specific status snippet if viewing a specific session -->
               ${sessionStatusSnippet}
-
-              <!-- Day-by-Day Visual Bar Graph -->
               ${getMemberDailyBarGraph(m.id)}
 
-              <div class="grid grid-cols-3 gap-1.5 text-center font-mono-custom text-xs">
-                <div class="bg-[#FAF3E1] p-1.5 rounded-lg border border-[#222222]/20">
-                  <span class="text-[#222222]/60 block text-[9px] font-bold">PRESENT</span>
+              <div class="grid grid-cols-4 gap-1 text-center font-mono-custom text-xs">
+                <div class="bg-[#FAF3E1] p-1 rounded-lg border border-[#222222]/20">
+                  <span class="text-[#222222]/60 block text-[8px] font-bold">PRES</span>
                   <span class="font-black text-emerald-700">${stat.presents}</span>
                 </div>
-                <div class="bg-[#FAF3E1] p-1.5 rounded-lg border border-[#222222]/20">
-                  <span class="text-[#222222]/60 block text-[9px] font-bold">LATE</span>
+                <div class="bg-[#FAF3E1] p-1 rounded-lg border border-[#222222]/20">
+                  <span class="text-[#222222]/60 block text-[8px] font-bold">LATE</span>
                   <span class="font-black text-[#FF6D1F]">${stat.lates}</span>
                 </div>
-                <div class="bg-[#FAF3E1] p-1.5 rounded-lg border border-[#222222]/20">
-                  <span class="text-[#222222]/60 block text-[9px] font-bold">ABSENT</span>
+                <div class="bg-[#FAF3E1] p-1 rounded-lg border border-[#222222]/20">
+                  <span class="text-[#222222]/60 block text-[8px] font-bold">ABS</span>
                   <span class="font-black text-rose-700">${stat.effectiveAbsents}</span>
+                </div>
+                <div class="bg-[#FAF3E1] p-1 rounded-lg border border-[#222222]/20">
+                  <span class="text-[#222222]/60 block text-[8px] font-bold">EXC</span>
+                  <span class="font-black text-blue-700">${stat.excused}</span>
                 </div>
               </div>
 
@@ -991,32 +996,39 @@
               <thead class="bg-[#F5E7C6] text-[#222222] border-b-2 border-[#222222] font-black uppercase">
                 <tr>
                   <th class="py-3 px-4">Member Name</th>
-                  ${isSessionSelected ? '<th class="py-3 px-3 text-center">Practice Arrival</th><th class="py-3 px-3 text-center">Status Today</th>' : '<th class="py-3 px-3 text-center">Timeline Graph</th>'}
+                  ${isSessionSelected ? '<th class="py-3 px-3 text-center">Status Today</th>' : '<th class="py-3 px-3 text-center">Timeline Graph</th>'}
                   <th class="py-3 px-2 text-center">Presents</th>
                   <th class="py-3 px-2 text-center">Lates</th>
                   <th class="py-3 px-2 text-center">Absents</th>
+                  <th class="py-3 px-2 text-center">Excused</th>
                   <th class="py-3 px-4 text-center">Overall Standing</th>
                 </tr>
               </thead>
               <tbody class="divide-y divide-[#222222]/20">
                 ${filtered.map(m => {
                   const stat = getMemberStats(m.id);
-                  let sessionArrivalCell = '';
                   let sessionStatusCell = '';
 
                   if (isSessionSelected && targetSession) {
                     const dayLog = attendance.find(a => a.sessionId === targetSession.id && a.memberId === m.id);
-                    sessionArrivalCell = `<td class="py-3 px-3 text-center font-bold">${dayLog ? dayLog.timeArrived : '--'}</td>`;
-                    sessionStatusCell = `<td class="py-3 px-3 text-center font-black">${dayLog ? (dayLog.status === 'present' ? '🟢 PRESENT' : (dayLog.status === 'late' ? '🟠 LATE' : '🔴 ABSENT')) : '--'}</td>`;
+                    let badge = '--';
+                    if (dayLog) {
+                      if (dayLog.status === 'present') badge = '🟢 PRESENT';
+                      else if (dayLog.status === 'late') badge = '🟠 LATE';
+                      else if (dayLog.status === 'excused') badge = '⚪ EXCUSED';
+                      else badge = '🔴 ABSENT';
+                    }
+                    sessionStatusCell = `<td class="py-3 px-3 text-center font-black">${badge}</td>`;
                   }
 
                   return `
                     <tr onclick="openReceiptModal('${m.id}')" class="hover:bg-[#FAF3E1]/60 cursor-pointer">
                       <td class="py-3 px-4 font-black text-[#222222]">${m.name}</td>
-                      ${isSessionSelected ? `${sessionArrivalCell}${sessionStatusCell}` : `<td class="py-3 px-3 w-36">${getMemberDailyBarGraph(m.id)}</td>`}
+                      ${isSessionSelected ? sessionStatusCell : `<td class="py-3 px-3 w-36">${getMemberDailyBarGraph(m.id)}</td>`}
                       <td class="py-3 px-2 text-center text-emerald-700 font-black">${stat.presents}</td>
                       <td class="py-3 px-2 text-center text-[#FF6D1F] font-black">${stat.lates}</td>
                       <td class="py-3 px-2 text-center text-rose-700 font-black">${stat.effectiveAbsents}</td>
+                      <td class="py-3 px-2 text-center text-blue-700 font-black">${stat.excused}</td>
                       <td class="py-3 px-4">${getBadge(stat.status)}</td>
                     </tr>
                   `;
@@ -1039,12 +1051,14 @@
       const presentCounts = [];
       const lateCounts = [];
       const absentCounts = [];
+      const excusedCounts = [];
 
       sessions.forEach(s => {
         const logs = attendance.filter(a => a.sessionId === s.id);
         presentCounts.push(logs.filter(l => l.status === 'present').length);
         lateCounts.push(logs.filter(l => l.status === 'late').length);
         absentCounts.push(logs.filter(l => l.status === 'absent').length);
+        excusedCounts.push(logs.filter(l => l.status === 'excused').length);
       });
 
       const indicator = document.getElementById('graphStateText');
@@ -1058,13 +1072,13 @@
           labels: labels.length ? labels : ['Day 1', 'Day 2', 'Day 3', 'Day 4'],
           datasets: [
             {
-              label: 'Present (On Time)',
+              label: 'Present',
               data: labels.length ? presentCounts : [0, 0, 0, 0],
               backgroundColor: '#15803D',
               borderRadius: 4
             },
             {
-              label: 'Late (>20m)',
+              label: 'Late',
               data: labels.length ? lateCounts : [0, 0, 0, 0],
               backgroundColor: '#FF6D1F',
               borderRadius: 4
@@ -1073,6 +1087,12 @@
               label: 'Absent',
               data: labels.length ? absentCounts : [0, 0, 0, 0],
               backgroundColor: '#222222',
+              borderRadius: 4
+            },
+            {
+              label: 'Excused',
+              data: labels.length ? excusedCounts : [0, 0, 0, 0],
+              backgroundColor: '#3B82F6',
               borderRadius: 4
             }
           ]
@@ -1112,6 +1132,7 @@
       document.getElementById('receiptPresents').innerText = stat.presents;
       document.getElementById('receiptLates').innerText = stat.lates;
       document.getElementById('receiptEffectiveAbsents').innerText = stat.effectiveAbsents;
+      document.getElementById('receiptExcused').innerText = stat.excused;
 
       const box = document.getElementById('receiptStrikeBox');
       if (stat.effectiveAbsents >= 3) {
@@ -1132,13 +1153,15 @@
         list.innerHTML = `<div class="text-xs text-[#222222]/50 py-3 text-center">No attendance logged yet.</div>`;
       } else {
         list.innerHTML = sortedLogs.map(l => {
-          let badge = l.status === 'present' ? '🟢 Present' : (l.status === 'late' ? `🟠 Late (${l.timeArrived})` : '🔴 Absent');
+          let badge = '';
+          if (l.status === 'present') badge = '<span class="text-emerald-700 font-bold">🟢 Present</span>';
+          else if (l.status === 'late') badge = '<span class="text-[#FF6D1F] font-bold">🟠 Late</span>';
+          else if (l.status === 'excused') badge = '<span class="text-blue-700 font-bold">⚪ Excused</span>';
+          else badge = '<span class="text-rose-700 font-bold">🔴 Absent</span>';
+
           return `
             <div class="bg-white p-2.5 rounded-xl border border-[#222222] flex justify-between items-center font-bold">
-              <div>
-                <div class="font-black text-[#222222]">${l.sessionLabel} • ${l.date}</div>
-                <div class="text-[#222222]/60 text-[10px]">Hours: ${l.startTime}-${l.endTime} | Arrived: ${l.timeArrived}</div>
-              </div>
+              <div class="font-black text-[#222222]">${l.sessionLabel} • ${l.date}</div>
               <div>${badge}</div>
             </div>
           `;
@@ -1153,11 +1176,10 @@
     }
 
     // -----------------------------------------------------------------
-    // Export (1-Click Group Chat Image PNG / PDF)
+    // Export (NO TIME, NO POLICY FOOTER, CLEAN 3 COLUMNS)
     // -----------------------------------------------------------------
     function openExportModal() {
       updateExportSelectors();
-      // Default to currently selected practice view or latest practice
       const sel = document.getElementById('exportSessionSelector');
       if (selectedSessionView !== 'all') {
         sel.value = selectedSessionView;
@@ -1189,8 +1211,8 @@
 
       if (mode === 'overall') {
         title.innerText = 'GROUP 3 MASTER ATTENDANCE SUMMARY';
-        meta.innerText = 'All Cumulative Practices to Date • Policy: 3 Lates = 1 Absent | 3 Absents = Drop';
-        turnoutEl.innerHTML = `<span class="px-3 py-1 bg-[#222222] text-[#FAF3E1] rounded-lg font-black text-xs">${members.length} Members Registered</span>`;
+        meta.innerText = 'All Cumulative Practices to Date';
+        turnoutEl.innerHTML = `<span class="px-3 py-1 bg-[#222222] text-[#FAF3E1] rounded-lg font-black text-xs">${members.length} Members</span>`;
 
         tbody.innerHTML = members.map(m => {
           const stat = getMemberStats(m.id);
@@ -1202,7 +1224,6 @@
           return `
             <tr class="hover:bg-[#FAF3E1]/60">
               <td class="p-2.5 font-black text-[#222222] border-r border-[#222222]">${m.name}</td>
-              <td class="p-2.5 text-center border-r border-[#222222]">P: ${stat.presents} | L: ${stat.lates}</td>
               <td class="p-2.5 text-center font-black border-r border-[#222222]">${badge}</td>
               <td class="p-2.5 text-center font-black">${stat.effectiveAbsents} / 3 Strikes</td>
             </tr>
@@ -1213,18 +1234,20 @@
         if (!s) return;
 
         title.innerText = `${s.label.toUpperCase()} ATTENDANCE SHEET`;
-        meta.innerText = `Practice Date: ${s.date} • Schedule: ${s.startTime} - ${s.endTime}`;
+        meta.innerText = `Practice Date: ${s.date}`;
 
         const logs = attendance.filter(a => a.sessionId === s.id);
         const presentCount = logs.filter(l => l.status === 'present').length;
         const lateCount = logs.filter(l => l.status === 'late').length;
         const absentCount = logs.filter(l => l.status === 'absent').length;
+        const excusedCount = logs.filter(l => l.status === 'excused').length;
 
         turnoutEl.innerHTML = `
-          <div class="flex gap-2 text-[10px] font-black">
-            <span class="px-2 py-1 bg-emerald-100 text-emerald-800 rounded border border-emerald-400">Present: ${presentCount}</span>
-            <span class="px-2 py-1 bg-orange-100 text-[#FF6D1F] rounded border border-[#FF6D1F]">Late: ${lateCount}</span>
-            <span class="px-2 py-1 bg-rose-100 text-rose-800 rounded border border-rose-400">Absent: ${absentCount}</span>
+          <div class="flex flex-wrap gap-1.5 text-[10px] font-black">
+            <span class="px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded border border-emerald-400">Present: ${presentCount}</span>
+            <span class="px-2 py-0.5 bg-orange-100 text-[#FF6D1F] rounded border border-[#FF6D1F]">Late: ${lateCount}</span>
+            <span class="px-2 py-0.5 bg-rose-100 text-rose-800 rounded border border-rose-400">Absent: ${absentCount}</span>
+            <span class="px-2 py-0.5 bg-blue-100 text-blue-800 rounded border border-blue-400">Excused: ${excusedCount}</span>
           </div>
         `;
 
@@ -1232,25 +1255,23 @@
           const dayLog = logs.find(l => l.memberId === m.id);
           const stat = getMemberStats(m.id);
 
-          let statusBadge = '<span class="text-stone-400 font-bold">Unrecorded</span>';
-          let arrival = '--';
+          let statusBadge = '<span class="text-stone-400 font-bold">N/A</span>';
 
           if (dayLog) {
-            arrival = dayLog.timeArrived || '--';
             if (dayLog.status === 'present') {
               statusBadge = '<span class="text-emerald-700 font-black">🟢 PRESENT</span>';
             } else if (dayLog.status === 'late') {
-              statusBadge = `<span class="text-[#FF6D1F] font-black">🟠 LATE (${dayLog.timeArrived})</span>`;
+              statusBadge = '<span class="text-[#FF6D1F] font-black">🟠 LATE</span>';
+            } else if (dayLog.status === 'excused') {
+              statusBadge = '<span class="text-blue-700 font-black">⚪ EXCUSED</span>';
             } else if (dayLog.status === 'absent') {
               statusBadge = '<span class="text-rose-700 font-black">🔴 ABSENT</span>';
-              arrival = 'No Show';
             }
           }
 
           return `
             <tr class="hover:bg-[#FAF3E1]/60">
               <td class="p-2.5 font-black text-[#222222] border-r border-[#222222]">${m.name}</td>
-              <td class="p-2.5 text-center font-bold border-r border-[#222222]">${arrival}</td>
               <td class="p-2.5 text-center font-black border-r border-[#222222]">${statusBadge}</td>
               <td class="p-2.5 text-center font-black ${stat.effectiveAbsents >= 2 ? 'text-rose-600' : 'text-[#222222]'}">
                 ${stat.effectiveAbsents} / 3 Strikes
