@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GROUP 3 • Attendance Monitoring System</title>
   
+  <!-- Favicon using your uploaded logo.png -->
+  <link rel="icon" type="image/png" href="./logo.png">
+
   <!-- Fonts: Plus Jakarta Sans + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,13 +44,33 @@
       font-family: 'JetBrains Mono', monospace;
     }
 
+    /* Tactile Paper Cards with Smooth Transitions */
     .linen-card {
       background: #FFFFFF;
       border: 2px solid var(--blackhole);
       box-shadow: 4px 4px 0px 0px var(--blackhole);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .linen-card:hover {
+      box-shadow: 6px 6px 0px 0px var(--blackhole);
     }
 
-    /* 3D Spheres */
+    /* Smooth View Animations */
+    .view-animate {
+      animation: fadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 3D Status Spheres */
     .sphere-grey {
       width: 9px; height: 9px; border-radius: 50%;
       background: radial-gradient(circle at 35% 35%, #ffffff, #9ca3af 60%, #4b5563);
@@ -68,10 +91,13 @@
       background: radial-gradient(circle at 35% 35%, #fca5a5, #ef4444 60%, #991b1b);
       box-shadow: 0 0 8px rgba(239, 68, 68, 0.6);
     }
-    .sphere-blue {
-      width: 9px; height: 9px; border-radius: 50%;
-      background: radial-gradient(circle at 35% 35%, #bfdbfe, #3b82f6 60%, #1d4ed8);
-      box-shadow: 0 0 8px rgba(59, 130, 246, 0.6);
+
+    /* Calendar Day Highlight */
+    .cal-day {
+      transition: all 0.2s ease;
+    }
+    .cal-day:hover {
+      background-color: var(--cotton);
     }
 
     @media print {
@@ -86,15 +112,17 @@
   <!-- =================================================================== -->
   <!-- VIEW 1: CLEAN MINIMAL LANDING PAGE                                  -->
   <!-- =================================================================== -->
-  <section id="landingView" class="min-h-screen flex flex-col justify-between items-center p-6 relative z-10">
+  <section id="landingView" class="min-h-screen flex flex-col justify-between items-center p-6 relative z-10 view-animate">
     <div class="w-full flex justify-between items-center max-w-5xl text-xs font-mono-custom text-[#222222] font-bold uppercase">
       <span>PE CULMINATING</span>
       <span>SECTION 2026</span>
     </div>
 
-    <div class="w-full max-w-sm text-center space-y-8 my-auto">
-      <div class="space-y-2">
-        <h1 class="text-6xl sm:text-7xl font-black tracking-tighter text-[#222222] uppercase">
+    <!-- Center Hero with YOUR LOGO + 2 Main Buttons -->
+    <div class="w-full max-w-sm text-center space-y-7 my-auto">
+      <div class="space-y-3 flex flex-col items-center">
+        <img src="./logo.png" alt="GE3 AMS Logo" class="w-48 sm:w-56 drop-shadow-md rounded-2xl transform hover:scale-105 transition duration-300" />
+        <h1 class="text-4xl sm:text-5xl font-black tracking-tight text-[#222222] uppercase">
           GROUP 3
         </h1>
         <p class="text-xs font-mono-custom font-extrabold uppercase tracking-widest text-[#222222]/70">
@@ -102,11 +130,12 @@
         </p>
       </div>
 
+      <!-- THE 2 BUTTONS -->
       <div class="flex flex-col gap-3 justify-center items-center w-full font-mono-custom text-xs">
-        <button onclick="navigateTo('dashboard')" class="w-full py-4 rounded-xl bg-[#222222] hover:bg-[#FF6D1F] text-[#FAF3E1] font-black uppercase tracking-widest transition transform active:scale-95 shadow-md">
+        <button onclick="navigateTo('dashboard')" class="w-full py-4 rounded-xl bg-[#222222] hover:bg-[#FF6D1F] text-[#FAF3E1] font-black uppercase tracking-widest transition-all transform active:scale-95 shadow-md">
           ENTER
         </button>
-        <button onclick="openAuthModal()" class="w-full py-4 rounded-xl bg-[#F5E7C6] hover:bg-[#EADBBE] text-[#222222] font-black uppercase tracking-widest transition transform active:scale-95 border-2 border-[#222222]">
+        <button onclick="openAuthModal()" class="w-full py-4 rounded-xl bg-[#F5E7C6] hover:bg-[#EADBBE] text-[#222222] font-black uppercase tracking-widest transition-all transform active:scale-95 border-2 border-[#222222]">
           ADMIN ACCESS
         </button>
       </div>
@@ -120,15 +149,16 @@
   <!-- =================================================================== -->
   <!-- VIEW 2: DASHBOARD VIEW                                              -->
   <!-- =================================================================== -->
-  <section id="dashboardView" class="hidden min-h-screen relative z-10 pb-20">
-    <!-- Navbar -->
+  <section id="dashboardView" class="hidden min-h-screen relative z-10 pb-20 view-animate">
+    <!-- Navbar with LOGO -->
     <header class="border-b-2 border-[#222222] sticky top-0 z-30 bg-[#FAF3E1]/95 backdrop-blur-md">
       <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center text-xs font-mono-custom">
         <button onclick="navigateTo('landing')" class="text-[#222222] font-black hover:text-[#FF6D1F] transition">
           ← HOME
         </button>
-        <div class="font-black text-[#222222] uppercase tracking-wider text-sm">
-          GROUP 3 ATTENDANCE
+        <div class="flex items-center gap-2 font-black text-[#222222] uppercase tracking-wider text-sm">
+          <img src="./logo.png" alt="Logo" class="w-7 h-7 object-contain" />
+          <span>GROUP 3 ATTENDANCE</span>
         </div>
         <div class="flex items-center gap-2">
           <button onclick="openExportModal()" class="font-bold px-3 py-1.5 rounded-lg bg-[#FF6D1F] text-white hover:bg-[#222222] transition shadow-sm">
@@ -172,7 +202,7 @@
         </div>
       </div>
 
-      <!-- PRACTICE SELECTION CAROUSEL -->
+      <!-- PRACTICE CAROUSEL (Switch between Overall and Specific Practice Days) -->
       <div class="space-y-2 font-mono-custom">
         <div class="flex justify-between items-center">
           <span class="text-xs font-black text-[#222222] uppercase tracking-wider">SELECT PRACTICE VIEW:</span>
@@ -183,39 +213,68 @@
         </div>
       </div>
 
-      <!-- PRACTICE TURNOUT BAR GRAPH + STATS -->
+      <!-- BENTO ROW: INTERACTIVE CALENDAR (Left) + TURNOUT GRAPH & STATS (Right) -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div class="lg:col-span-2 linen-card p-5 rounded-2xl space-y-3">
-          <div class="flex justify-between items-center text-xs font-mono-custom">
-            <span class="text-[#222222] font-black uppercase tracking-wider">PRACTICE TURNOUT BAR GRAPH</span>
-            <span id="graphStateText" class="text-[#222222]/60 text-[11px]">Loading...</span>
+        
+        <!-- Interactive Calendar Widget -->
+        <div class="linen-card p-4 rounded-2xl space-y-3 font-mono-custom">
+          <div class="flex justify-between items-center border-b border-[#222222]/20 pb-2">
+            <span id="calMonthYear" class="text-xs font-black uppercase text-[#222222]">NOVEMBER 2026</span>
+            <div class="flex gap-1">
+              <button onclick="changeCalMonth(-1)" class="w-6 h-6 rounded bg-[#FAF3E1] border border-[#222222] font-black text-xs hover:bg-[#FF6D1F] hover:text-white transition">‹</button>
+              <button onclick="changeCalMonth(1)" class="w-6 h-6 rounded bg-[#FAF3E1] border border-[#222222] font-black text-xs hover:bg-[#FF6D1F] hover:text-white transition">›</button>
+            </div>
           </div>
-          <div class="relative h-44 w-full">
-            <canvas id="attendanceBarChart"></canvas>
+          
+          <div class="grid grid-cols-7 text-center text-[10px] font-black text-[#222222]/60">
+            <span>SU</span><span>MO</span><span>TU</span><span>WE</span><span>TH</span><span>FR</span><span>SA</span>
+          </div>
+
+          <div id="calendarGrid" class="grid grid-cols-7 gap-1 text-center text-[11px] font-bold">
+            <!-- Injected via JS -->
+          </div>
+
+          <div class="text-[9px] text-[#222222]/50 pt-1 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-[#FF6D1F]"></span>
+            <span>Click any highlighted day to filter</span>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3 font-mono-custom">
-          <div class="linen-card p-4 rounded-2xl flex flex-col justify-between">
-            <span class="text-[#222222]/60 text-[10px] uppercase font-bold tracking-wider">PRACTICES</span>
-            <span id="statPractices" class="text-3xl font-black text-[#222222]">0</span>
+        <!-- Practice Bar Graph + Stats -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="linen-card p-4 rounded-2xl space-y-2">
+            <div class="flex justify-between items-center text-xs font-mono-custom">
+              <span class="text-[#222222] font-black uppercase tracking-wider">PRACTICE TURNOUT BAR GRAPH</span>
+              <span id="graphStateText" class="text-[#222222]/60 text-[11px]">Loading...</span>
+            </div>
+            <div class="relative h-36 w-full">
+              <canvas id="attendanceBarChart"></canvas>
+            </div>
           </div>
-          <div class="linen-card p-4 rounded-2xl flex flex-col justify-between">
-            <span class="text-[#222222]/60 text-[10px] uppercase font-bold tracking-wider">TURNOUT</span>
-            <span id="statTurnout" class="text-3xl font-black text-emerald-600">100%</span>
-          </div>
-          <div class="linen-card p-4 rounded-2xl flex flex-col justify-between">
-            <span class="text-[#222222]/60 text-[10px] uppercase font-bold tracking-wider">WARNINGS</span>
-            <span id="statWarnings" class="text-3xl font-black text-[#FF6D1F]">0</span>
-          </div>
-          <div class="linen-card p-4 rounded-2xl flex flex-col justify-between">
-            <span class="text-[#222222]/60 text-[10px] uppercase font-bold tracking-wider">DROPPED</span>
-            <span id="statDropped" class="text-3xl font-black text-rose-600">0</span>
+
+          <div class="grid grid-cols-4 gap-2 font-mono-custom text-center">
+            <div class="linen-card p-2.5 rounded-xl">
+              <span class="text-[#222222]/60 text-[9px] uppercase font-bold block">PRACTICES</span>
+              <span id="statPractices" class="text-xl font-black text-[#222222]">0</span>
+            </div>
+            <div class="linen-card p-2.5 rounded-xl">
+              <span class="text-[#222222]/60 text-[9px] uppercase font-bold block">TURNOUT</span>
+              <span id="statTurnout" class="text-xl font-black text-emerald-600">100%</span>
+            </div>
+            <div class="linen-card p-2.5 rounded-xl">
+              <span class="text-[#222222]/60 text-[9px] uppercase font-bold block">WARNINGS</span>
+              <span id="statWarnings" class="text-xl font-black text-[#FF6D1F]">0</span>
+            </div>
+            <div class="linen-card p-2.5 rounded-xl">
+              <span class="text-[#222222]/60 text-[9px] uppercase font-bold block">DROPPED</span>
+              <span id="statDropped" class="text-xl font-black text-rose-600">0</span>
+            </div>
           </div>
         </div>
+
       </div>
 
-      <!-- Controls: Search & Layout -->
+      <!-- Controls: Search & Layout Switcher -->
       <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 pt-2">
         <div class="relative flex-1 max-w-xs font-mono-custom text-xs">
           <input id="searchInput" oninput="handleSearch()" type="text" placeholder="Search member name..." class="w-full bg-white border-2 border-[#222222] px-3.5 py-2 rounded-xl text-[#222222] placeholder-[#222222]/40 focus:outline-none focus:border-[#FF6D1F]" />
@@ -241,7 +300,7 @@
   <!-- =================================================================== -->
   <!-- VIEW 3: ADMIN CONSOLE                                               -->
   <!-- =================================================================== -->
-  <section id="adminView" class="hidden min-h-screen relative z-10 pb-20">
+  <section id="adminView" class="hidden min-h-screen relative z-10 pb-20 view-animate">
     <header class="border-b-2 border-[#222222] sticky top-0 z-30 bg-[#FAF3E1]/95 backdrop-blur-md">
       <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center text-xs font-mono-custom">
         <button onclick="navigateTo('dashboard')" class="text-[#222222] font-black hover:text-[#FF6D1F] transition">
@@ -269,7 +328,7 @@
         </div>
       </div>
 
-      <!-- 2. Log Practice Session (NO TIMES NEEDED) -->
+      <!-- 2. Log Practice Session (NO TIME REQUIRED) -->
       <div class="linen-card rounded-2xl p-5 space-y-4">
         <div class="flex justify-between items-center">
           <span class="text-[#222222] font-black uppercase tracking-wider">2. LOG PRACTICE SESSION</span>
@@ -306,7 +365,7 @@
         </button>
       </div>
 
-      <!-- 3. Edit Past Sessions (CLEAN IN-APP MODAL TRIGGER) -->
+      <!-- 3. Edit Past Sessions -->
       <div class="linen-card rounded-2xl p-4 space-y-2">
         <span class="text-[#222222] font-black uppercase tracking-wider block">3. EDIT PAST SESSIONS</span>
         <div id="pastSessionsList" class="space-y-2"></div>
@@ -315,7 +374,7 @@
   </section>
 
   <!-- =================================================================== -->
-  <!-- MODAL: CLEAN IN-APP SESSION EDITOR (NO BROWSER POPUPS)             -->
+  <!-- MODAL: CLEAN IN-APP SESSION EDITOR (NO PROMPT POPUPS)               -->
   <!-- =================================================================== -->
   <div id="editSessionModal" class="hidden fixed inset-0 z-50 bg-[#222222]/85 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-[#FAF3E1] border-2 border-[#222222] w-full max-w-xl rounded-2xl p-5 space-y-4 max-h-[90vh] flex flex-col text-xs font-mono-custom shadow-2xl">
@@ -351,7 +410,7 @@
   </div>
 
   <!-- =================================================================== -->
-  <!-- MODAL: ONE-CLICK GC IMAGE & PRINT EXPORT                            -->
+  <!-- MODAL: ONE-CLICK GC IMAGE & PRINT EXPORT (WITH YOUR LOGO)           -->
   <!-- =================================================================== -->
   <div id="exportModal" class="hidden fixed inset-0 z-50 bg-[#222222]/85 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-[#FAF3E1] border-2 border-[#222222] w-full max-w-2xl rounded-2xl p-5 space-y-4 max-h-[92vh] flex flex-col text-xs font-mono-custom shadow-2xl">
@@ -378,12 +437,15 @@
       <!-- THE OFFICIAL GC SHEET CAPTURE CARD -->
       <div class="overflow-y-auto flex-1 p-1">
         <div id="exportCardArea" class="bg-white p-6 rounded-2xl border-2 border-[#222222] space-y-4 shadow-sm">
-          <!-- Header -->
-          <div class="border-b-2 border-[#222222] pb-3 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-2">
-            <div>
-              <span class="text-[10px] font-black uppercase tracking-widest text-[#FF6D1F]">PHYSICAL EDUCATION CULMINATING</span>
-              <h2 id="exportTitle" class="text-2xl font-black uppercase text-[#222222] tracking-tight">DAY 1 ATTENDANCE SHEET</h2>
-              <div id="exportMeta" class="text-xs text-[#222222] font-bold mt-0.5">Date: 11/14/2026</div>
+          <!-- Header with YOUR LOGO! -->
+          <div class="border-b-2 border-[#222222] pb-3 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3">
+            <div class="flex items-center gap-3">
+              <img src="./logo.png" alt="GE3 Logo" class="w-14 h-14 object-contain" />
+              <div>
+                <span class="text-[10px] font-black uppercase tracking-widest text-[#FF6D1F]">PHYSICAL EDUCATION CULMINATING</span>
+                <h2 id="exportTitle" class="text-2xl font-black uppercase text-[#222222] tracking-tight">DAY 1 ATTENDANCE SHEET</h2>
+                <div id="exportMeta" class="text-xs text-[#222222] font-bold mt-0.5">Date: 11/14/2026</div>
+              </div>
             </div>
             <div id="exportTurnoutPill">
               <!-- Rendered via JS -->
@@ -406,7 +468,7 @@
             </table>
           </div>
 
-          <!-- Card Footer (NO POLICY NOTE) -->
+          <!-- Footer (NO POLICY NOTE) -->
           <div class="border-t-2 border-[#222222] pt-3 text-[10px] text-[#222222] flex justify-between font-bold">
             <span>OFFICIAL ATTENDANCE RECORD</span>
             <span>GROUP 03</span>
@@ -505,6 +567,9 @@
     let attendanceBarChart = null;
     let currentEditingSessionId = null;
 
+    // Calendar state
+    let calDate = new Date();
+
     document.getElementById('sessionDate').valueAsDate = new Date();
 
     // -----------------------------------------------------------------
@@ -519,6 +584,7 @@
       if (view === 'dashboard') {
         document.getElementById('dashboardView').classList.remove('hidden');
         renderBarChart();
+        renderCalendar();
       }
       if (view === 'admin') {
         if (!currentUser) openAuthModal();
@@ -559,6 +625,7 @@
       selectedSessionView = viewId;
       renderSessionCarousel();
       renderRoster();
+      renderCalendar();
     }
 
     // -----------------------------------------------------------------
@@ -609,6 +676,7 @@
       updateExportSelectors();
       updateHUD();
       renderBarChart();
+      renderCalendar();
     });
 
     db.collection('sessions').orderBy('date', 'asc').onSnapshot(snap => {
@@ -619,6 +687,7 @@
       updateExportSelectors();
       updateHUD();
       renderBarChart();
+      renderCalendar();
     });
 
     db.collection('attendance').onSnapshot(snap => {
@@ -626,6 +695,7 @@
       renderRoster();
       updateHUD();
       renderBarChart();
+      renderCalendar();
     });
 
     // -----------------------------------------------------------------
@@ -641,7 +711,7 @@
     }
 
     // -----------------------------------------------------------------
-    // Attendance Input (NO TIME NEEDED)
+    // Attendance Input (NO TIME)
     // -----------------------------------------------------------------
     function renderAttendanceForm() {
       const tbody = document.getElementById('attendanceInputList');
@@ -706,7 +776,7 @@
     }
 
     // -----------------------------------------------------------------
-    // Clean In-App Session Editing (NO PROMPT POPUPS)
+    // Clean In-App Session Editing (NO BROWSER POPUPS)
     // -----------------------------------------------------------------
     function renderPastSessions() {
       const container = document.getElementById('pastSessionsList');
@@ -798,7 +868,7 @@
     }
 
     // -----------------------------------------------------------------
-    // Math & Stats Engine (Excused does NOT count as strike)
+    // Math & Stats Engine (Excused does NOT add strike)
     // -----------------------------------------------------------------
     function getMemberStats(memberId) {
       const logs = attendance.filter(a => a.memberId === memberId);
@@ -862,6 +932,58 @@
           ⚡ ${s.label} (${s.date})
         </button>
       `).join('');
+    }
+
+    // -----------------------------------------------------------------
+    // Interactive Calendar
+    // -----------------------------------------------------------------
+    function changeCalMonth(delta) {
+      calDate.setMonth(calDate.getMonth() + delta);
+      renderCalendar();
+    }
+
+    function renderCalendar() {
+      const year = calDate.getFullYear();
+      const month = calDate.getMonth();
+      const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+      
+      const titleEl = document.getElementById('calMonthYear');
+      if (titleEl) titleEl.innerText = `${monthNames[month]} ${year}`;
+
+      const grid = document.getElementById('calendarGrid');
+      if (!grid) return;
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      let html = '';
+
+      for (let i = 0; i < firstDay; i++) {
+        html += `<div class="p-1 text-stone-300"></div>`;
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const hasSession = sessions.find(s => s.date === formattedDate);
+        const isSelected = hasSession && selectedSessionView === hasSession.id;
+
+        if (hasSession) {
+          html += `
+            <div onclick="setSessionView('${hasSession.id}')" class="cal-day p-1 rounded-lg cursor-pointer font-black text-xs relative flex flex-col items-center justify-center ${isSelected ? 'bg-[#FF6D1F] text-white' : 'bg-[#F5E7C6] text-[#222222] border border-[#FF6D1F]'}">
+              <span>${day}</span>
+              <span class="w-1.5 h-1.5 rounded-full ${isSelected ? 'bg-white' : 'bg-[#FF6D1F]'} mt-0.5 animate-pulse"></span>
+            </div>
+          `;
+        } else {
+          html += `
+            <div class="cal-day p-1 rounded-lg text-stone-500 font-bold flex items-center justify-center">
+              <span>${day}</span>
+            </div>
+          `;
+        }
+      }
+
+      grid.innerHTML = html;
     }
 
     // -----------------------------------------------------------------
@@ -953,7 +1075,7 @@
           }
 
           return `
-            <div onclick="openReceiptModal('${m.id}')" class="linen-card cursor-pointer rounded-2xl p-4 space-y-3 transition hover:-translate-y-0.5">
+            <div onclick="openReceiptModal('${m.id}')" class="linen-card cursor-pointer rounded-2xl p-4 space-y-3 transition transform hover:-translate-y-1">
               <div class="flex justify-between items-start gap-2">
                 <span class="font-black text-[#222222] text-sm tracking-tight">${m.name}</span>
                 ${getBadge(stat.status)}
@@ -1041,7 +1163,7 @@
     }
 
     // -----------------------------------------------------------------
-    // Chart.js Practice Attendance Bar Graph
+    // Practice Turnout Bar Graph (Chart.js)
     // -----------------------------------------------------------------
     function renderBarChart() {
       const ctx = document.getElementById('attendanceBarChart');
@@ -1102,18 +1224,18 @@
           maintainAspectRatio: false,
           plugins: {
             legend: {
-              labels: { color: '#222222', font: { family: 'JetBrains Mono', size: 10, weight: 'bold' } }
+              labels: { color: '#222222', font: { family: 'JetBrains Mono', size: 9, weight: 'bold' } }
             }
           },
           scales: {
             x: {
               grid: { color: 'rgba(34, 34, 34, 0.05)' },
-              ticks: { color: '#222222', font: { family: 'JetBrains Mono', size: 9, weight: 'bold' } }
+              ticks: { color: '#222222', font: { family: 'JetBrains Mono', size: 8, weight: 'bold' } }
             },
             y: {
               beginAtZero: true,
               grid: { color: 'rgba(34, 34, 34, 0.05)' },
-              ticks: { color: '#222222', font: { family: 'JetBrains Mono', size: 9, weight: 'bold' } }
+              ticks: { color: '#222222', font: { family: 'JetBrains Mono', size: 8, weight: 'bold' } }
             }
           }
         }
@@ -1176,7 +1298,7 @@
     }
 
     // -----------------------------------------------------------------
-    // Export (NO TIME, NO POLICY FOOTER, CLEAN 3 COLUMNS)
+    // Export (WITH YOUR LOGO, NO TIME, NO POLICY FOOTER)
     // -----------------------------------------------------------------
     function openExportModal() {
       updateExportSelectors();
@@ -1210,7 +1332,7 @@
       const tbody = document.getElementById('exportContentList');
 
       if (mode === 'overall') {
-        title.innerText = 'GROUP 3 MASTER ATTENDANCE SUMMARY';
+        title.innerText = 'GROUP 3 MASTER SUMMARY';
         meta.innerText = 'All Cumulative Practices to Date';
         turnoutEl.innerHTML = `<span class="px-3 py-1 bg-[#222222] text-[#FAF3E1] rounded-lg font-black text-xs">${members.length} Members</span>`;
 
