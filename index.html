@@ -202,7 +202,7 @@
         </div>
       </div>
 
-      <!-- PRACTICE CAROUSEL (Switch between Overall and Specific Practice Days) -->
+      <!-- PRACTICE CAROUSEL -->
       <div class="space-y-2 font-mono-custom">
         <div class="flex justify-between items-center">
           <span class="text-xs font-black text-[#222222] uppercase tracking-wider">SELECT PRACTICE VIEW:</span>
@@ -236,7 +236,7 @@
 
           <div class="text-[9px] text-[#222222]/50 pt-1 flex items-center gap-1.5">
             <span class="w-2 h-2 rounded-full bg-[#FF6D1F]"></span>
-            <span>Click any highlighted day to filter</span>
+            <span>Click highlighted day to filter</span>
           </div>
         </div>
 
@@ -328,7 +328,7 @@
         </div>
       </div>
 
-      <!-- 2. Log Practice Session (NO TIME REQUIRED) -->
+      <!-- 2. Log Practice Session -->
       <div class="linen-card rounded-2xl p-5 space-y-4">
         <div class="flex justify-between items-center">
           <span class="text-[#222222] font-black uppercase tracking-wider">2. LOG PRACTICE SESSION</span>
@@ -367,40 +367,58 @@
 
       <!-- 3. Edit Past Sessions -->
       <div class="linen-card rounded-2xl p-4 space-y-2">
-        <span class="text-[#222222] font-black uppercase tracking-wider block">3. EDIT PAST SESSIONS</span>
-        <div id="pastSessionsList" class="space-y-2"></div>
+        <span class="text-[#222222] font-black uppercase tracking-wider block">3. EDIT / REMOVE PAST SESSIONS</span>
+        <p class="text-[11px] text-[#222222]/70">Made a mistake? Click Edit to fix the date, change session name, or completely delete a practice.</p>
+        <div id="pastSessionsList" class="space-y-2 pt-1"></div>
       </div>
     </main>
   </section>
 
   <!-- =================================================================== -->
-  <!-- MODAL: CLEAN IN-APP SESSION EDITOR (NO PROMPT POPUPS)               -->
+  <!-- MODAL: ADVANCED SESSION EDITOR (EDIT NAME, DATE, OR DELETE)         -->
   <!-- =================================================================== -->
   <div id="editSessionModal" class="hidden fixed inset-0 z-50 bg-[#222222]/85 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-[#FAF3E1] border-2 border-[#222222] w-full max-w-xl rounded-2xl p-5 space-y-4 max-h-[90vh] flex flex-col text-xs font-mono-custom shadow-2xl">
+    <div class="bg-[#FAF3E1] border-2 border-[#222222] w-full max-w-xl rounded-2xl p-5 space-y-4 max-h-[92vh] flex flex-col text-xs font-mono-custom shadow-2xl">
       <div class="flex justify-between items-center border-b-2 border-[#222222] pb-3">
         <div>
-          <span class="font-black text-[#222222] uppercase tracking-wider text-sm">✏️ EDIT PRACTICE RECORD</span>
-          <p id="editSessionSubtitle" class="text-[10px] text-[#222222]/70 font-bold">Session Name • Date</p>
+          <span class="font-black text-[#222222] uppercase tracking-wider text-sm">✏️ EDIT / DELETE PRACTICE RECORD</span>
+          <p class="text-[10px] text-[#222222]/70 font-bold">Modify session name, fix date, or delete session</p>
         </div>
         <button onclick="closeEditModal()" class="text-[#222222] font-black text-xl hover:text-[#FF6D1F]">&times;</button>
       </div>
 
-      <div class="overflow-y-auto flex-1 pr-1">
+      <!-- Edit Session Meta (NAME & DATE) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-white p-3 rounded-xl border-2 border-[#222222]">
+        <div>
+          <label class="text-[10px] font-black text-[#222222]/70 block mb-1">Session Label</label>
+          <input id="editSessionLabelInput" type="text" class="w-full bg-[#FAF3E1] border-2 border-[#222222] px-2.5 py-1.5 rounded-lg text-xs font-bold text-[#222222]" />
+        </div>
+        <div>
+          <label class="text-[10px] font-black text-[#222222]/70 block mb-1">Date</label>
+          <input id="editSessionDateInput" type="date" class="w-full bg-[#FAF3E1] border-2 border-[#222222] px-2.5 py-1.5 rounded-lg text-xs font-bold text-[#222222]" />
+        </div>
+      </div>
+
+      <!-- Member Statuses -->
+      <div class="overflow-y-auto flex-1 pr-1 border border-[#222222]/20 rounded-xl bg-white p-2">
         <table class="w-full text-left border-collapse">
-          <thead class="bg-[#F5E7C6] border-b-2 border-[#222222] text-[#222222] font-bold text-[10px]">
+          <thead class="bg-[#F5E7C6] border-b-2 border-[#222222] text-[#222222] font-black text-[10px]">
             <tr>
               <th class="p-2">Member</th>
-              <th class="p-2 text-right">Updated Status</th>
+              <th class="p-2 text-right">Status</th>
             </tr>
           </thead>
           <tbody id="editMemberList" class="divide-y divide-[#EADBBE]"></tbody>
         </table>
       </div>
 
-      <div class="pt-2 border-t-2 border-[#222222] flex gap-2">
+      <!-- Actions: Save, Delete, Cancel -->
+      <div class="pt-2 border-t-2 border-[#222222] flex flex-wrap gap-2">
         <button onclick="saveSessionEdits()" class="flex-1 bg-[#FF6D1F] hover:bg-[#222222] text-white font-black py-2.5 rounded-xl uppercase transition">
           💾 Save Changes
+        </button>
+        <button onclick="deleteCurrentSession()" class="px-4 bg-rose-600 hover:bg-rose-700 text-white font-black py-2.5 rounded-xl uppercase transition">
+          🗑️ Delete Practice
         </button>
         <button onclick="closeEditModal()" class="px-4 bg-white border-2 border-[#222222] text-[#222222] font-bold rounded-xl">
           Cancel
@@ -410,7 +428,7 @@
   </div>
 
   <!-- =================================================================== -->
-  <!-- MODAL: ONE-CLICK GC IMAGE & PRINT EXPORT (WITH YOUR LOGO)           -->
+  <!-- MODAL: ONE-CLICK GC IMAGE & PRINT EXPORT (CLEAN, NO LOGO IN CARD)   -->
   <!-- =================================================================== -->
   <div id="exportModal" class="hidden fixed inset-0 z-50 bg-[#222222]/85 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-[#FAF3E1] border-2 border-[#222222] w-full max-w-2xl rounded-2xl p-5 space-y-4 max-h-[92vh] flex flex-col text-xs font-mono-custom shadow-2xl">
@@ -434,18 +452,15 @@
         </button>
       </div>
 
-      <!-- THE OFFICIAL GC SHEET CAPTURE CARD -->
+      <!-- THE OFFICIAL GC SHEET CAPTURE CARD (NO LOGO HERE) -->
       <div class="overflow-y-auto flex-1 p-1">
         <div id="exportCardArea" class="bg-white p-6 rounded-2xl border-2 border-[#222222] space-y-4 shadow-sm">
-          <!-- Header with YOUR LOGO! -->
+          <!-- Header (Clean, Typographic, No Logo) -->
           <div class="border-b-2 border-[#222222] pb-3 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-3">
-            <div class="flex items-center gap-3">
-              <img src="./logo.png" alt="GE3 Logo" class="w-14 h-14 object-contain" />
-              <div>
-                <span class="text-[10px] font-black uppercase tracking-widest text-[#FF6D1F]">PHYSICAL EDUCATION CULMINATING</span>
-                <h2 id="exportTitle" class="text-2xl font-black uppercase text-[#222222] tracking-tight">DAY 1 ATTENDANCE SHEET</h2>
-                <div id="exportMeta" class="text-xs text-[#222222] font-bold mt-0.5">Date: 11/14/2026</div>
-              </div>
+            <div>
+              <span class="text-[10px] font-black uppercase tracking-widest text-[#FF6D1F]">PHYSICAL EDUCATION CULMINATING</span>
+              <h2 id="exportTitle" class="text-2xl font-black uppercase text-[#222222] tracking-tight">DAY 1 ATTENDANCE SHEET</h2>
+              <div id="exportMeta" class="text-xs text-[#222222] font-bold mt-0.5">Date: 11/14/2026</div>
             </div>
             <div id="exportTurnoutPill">
               <!-- Rendered via JS -->
@@ -542,7 +557,7 @@
   <!-- =================================================================== -->
   <script>
     // -----------------------------------------------------------------
-    // 1. FIREBASE CONFIG KEYS
+    // 1. FIREBASE CONFIG KEYS (PASTE HERE)
     // -----------------------------------------------------------------
     const firebaseConfig = {
   apiKey: "AIzaSyD29Zqlz1Oe9dNZuLX4h7jywOadUtJ5jOY",
@@ -776,7 +791,7 @@
     }
 
     // -----------------------------------------------------------------
-    // Clean In-App Session Editing (NO BROWSER POPUPS)
+    // Advanced Past Session Editing (EDIT NAME, DATE, OR DELETE)
     // -----------------------------------------------------------------
     function renderPastSessions() {
       const container = document.getElementById('pastSessionsList');
@@ -788,10 +803,10 @@
       container.innerHTML = sessions.slice(-5).reverse().map(s => `
         <div class="flex justify-between items-center bg-white p-2.5 rounded-xl border-2 border-[#222222]">
           <div>
-            <span class="font-bold text-[#222222]">${s.label}</span>
+            <span class="font-black text-[#222222]">${s.label}</span>
             <span class="text-[#222222]/60 font-semibold">(${s.date})</span>
           </div>
-          <button onclick="openEditSessionModal('${s.id}')" class="text-white bg-[#222222] hover:bg-[#FF6D1F] px-3 py-1 rounded-lg font-black transition">
+          <button onclick="openEditSessionModal('${s.id}')" class="text-white bg-[#222222] hover:bg-[#FF6D1F] px-3.5 py-1.5 rounded-lg font-black transition">
             Edit
           </button>
         </div>
@@ -803,7 +818,9 @@
       const s = sessions.find(x => x.id === sessionId);
       if (!s) return;
 
-      document.getElementById('editSessionSubtitle').innerText = `${s.label} • ${s.date}`;
+      document.getElementById('editSessionLabelInput').value = s.label;
+      document.getElementById('editSessionDateInput').value = s.date;
+
       const records = attendance.filter(a => a.sessionId === sessionId);
       const tbody = document.getElementById('editMemberList');
 
@@ -834,11 +851,25 @@
       currentEditingSessionId = null;
     }
 
+    // Save Updated Name, Date, and Member Statuses
     async function saveSessionEdits() {
       if (!currentEditingSessionId) return;
+
+      const newLabel = document.getElementById('editSessionLabelInput').value.trim() || 'Practice Session';
+      const newDate = document.getElementById('editSessionDateInput').value;
+
+      if (!newDate) return alert('Please enter a valid date!');
+
       const records = attendance.filter(a => a.sessionId === currentEditingSessionId);
       const batch = db.batch();
 
+      // Update Session Document (Label and Date)
+      batch.update(db.collection('sessions').doc(currentEditingSessionId), {
+        label: newLabel,
+        date: newDate
+      });
+
+      // Update Attendance records with new Label, Date, and Statuses
       members.forEach(m => {
         const select = document.getElementById(`edit_status_${m.id}`);
         if (!select) return;
@@ -846,14 +877,17 @@
         const rec = records.find(r => r.memberId === m.id);
 
         if (rec) {
-          batch.update(db.collection('attendance').doc(rec.id), { status: newStatus });
+          batch.update(db.collection('attendance').doc(rec.id), {
+            sessionLabel: newLabel,
+            date: newDate,
+            status: newStatus
+          });
         } else {
           const newDoc = db.collection('attendance').doc();
-          const s = sessions.find(x => x.id === currentEditingSessionId);
           batch.set(newDoc, {
             sessionId: currentEditingSessionId,
-            sessionLabel: s ? s.label : 'Practice',
-            date: s ? s.date : '',
+            sessionLabel: newLabel,
+            date: newDate,
             memberId: m.id,
             memberName: m.name,
             status: newStatus,
@@ -863,12 +897,40 @@
       });
 
       await batch.commit();
-      alert('Session updated successfully!');
+      alert('Practice session updated successfully!');
+      closeEditModal();
+    }
+
+    // Delete Entire Practice Session & all its attendance records
+    async function deleteCurrentSession() {
+      if (!currentEditingSessionId) return;
+
+      const confirmDelete = confirm('Are you sure you want to permanently delete this practice session and all its records? This cannot be undone.');
+      if (!confirmDelete) return;
+
+      const records = attendance.filter(a => a.sessionId === currentEditingSessionId);
+      const batch = db.batch();
+
+      // Delete session document
+      batch.delete(db.collection('sessions').doc(currentEditingSessionId));
+
+      // Delete all corresponding attendance records
+      records.forEach(r => {
+        batch.delete(db.collection('attendance').doc(r.id));
+      });
+
+      await batch.commit();
+      alert('Practice session deleted.');
+
+      if (selectedSessionView === currentEditingSessionId) {
+        selectedSessionView = 'all';
+      }
+
       closeEditModal();
     }
 
     // -----------------------------------------------------------------
-    // Math & Stats Engine (Excused does NOT add strike)
+    // Math & Stats Engine
     // -----------------------------------------------------------------
     function getMemberStats(memberId) {
       const logs = attendance.filter(a => a.memberId === memberId);
@@ -1298,7 +1360,7 @@
     }
 
     // -----------------------------------------------------------------
-    // Export (WITH YOUR LOGO, NO TIME, NO POLICY FOOTER)
+    // Export (NO LOGO IN PICTURE CARD, NO TIME, NO POLICY FOOTER)
     // -----------------------------------------------------------------
     function openExportModal() {
       updateExportSelectors();
